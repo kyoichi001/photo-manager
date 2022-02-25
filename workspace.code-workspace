@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "..\\..\\..\\AppData\\Roaming\\electron-test-app"
+		}
+	],
+	"settings": {}
+}

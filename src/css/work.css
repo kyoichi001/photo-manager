@@ -1,0 +1,25 @@
+.work{
+    width:180px;
+    border-radius: 3px;
+    margin:10px;
+    flex:none;
+    background-color:var(--work-bg-color);
+}
+
+.work-bg{
+  background-color:var(--work-bg-color);
+}
+
+.work:hover{
+  -webkit-box-shadow: 0 5px 30px rgb(0 0 0 / 20%);
+    box-shadow: 0 5px 30px rgb(0 0 0 / 20%);
+}
+.tags{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.work-thumb{
+  /*width: 100px;*/
+}

@@ -1,0 +1,22 @@
+.tag{
+    border-radius: 4px;
+    width: min-content;
+    padding: 2px;
+    flex: none;
+    margin:2px;
+}
+.tag:hover{
+  -webkit-box-shadow: 0px 0px 5px rgb(0 0 0 / 50%);
+    box-shadow: 0 0px 5px rgb(0 0 0 / 50%);
+}
+
+.tagname-light{
+    font-weight: bold;
+    font-size: 10px;
+    color:var(--text-color-black)
+}
+.tagname-dark{
+    font-weight: bold;
+    font-size: 10px;
+    color:var(--text-color-white)
+}
