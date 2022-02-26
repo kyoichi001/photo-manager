@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useMemo, useState } from 'react';
 import FilterTag from '../tag/filter_tag';
 import TagData from '../tag/tag_data';
+import '../../css/tag.css';
 
 
 interface WorkFilterPopoutProps {
@@ -27,8 +28,10 @@ export default function WorkFilterPopout(props: WorkFilterPopoutProps) {
     return (
         <div className='tagg-add-popout'>
             <div className='window'>
-                <h2>tags</h2>
-                {tags}
+                <p>tags</p>
+                <div className='tags'>
+                    {tags}
+                </div>
             </div>
         </div>
     )

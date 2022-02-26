@@ -14,7 +14,7 @@ export default function FilterTag(props: FilterTagProps) {
     var checked = props.isChecked ? <p>OK</p> : <></>
 
     return (
-        <div className="tag" style={{ backgroundColor: Col.toString(col) }}>
+        <div className="tag clickable-component" style={{ backgroundColor: Col.toString(col) }}>
             <div className={c}>
                 {props.data.name}
             </div>
