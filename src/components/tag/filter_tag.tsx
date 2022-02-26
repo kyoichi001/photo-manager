@@ -3,13 +3,16 @@ import Col from '../../common/col';
 import '../../css/tag.css';
 import TagData from './tag_data';
 
-interface TagProps {
+interface FilterTagProps {
     data: TagData
+    isChecked: boolean
 }
 
-export default function Tag(props: TagProps) {
-    var col = props.data.color
+export default function FilterTag(props: FilterTagProps) {
+    var col = props.isChecked ? { "r": 100, "g": 100, "b": 255, "a": 1 } : props.data.color
     var c = Col.brightness(col) < 0.5 ? "tagname-dark" : "tagname-light"
+    var checked = props.isChecked ? <p>OK</p> : <></>
+
     return (
         <div className="tag" style={{ backgroundColor: Col.toString(col) }}>
             <div className={c}>

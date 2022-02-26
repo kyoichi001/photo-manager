@@ -9,6 +9,7 @@ import FileInfo from '../window/file_info';
 import WorksWindow from '../window/works_window';
 import WorkData from '../work/work_data';
 import "../../css/common.css"
+import WorkFilterPopout from '../popout/work_filter_popout';
 
 interface MainSceneProps {
 
@@ -72,7 +73,7 @@ export default function MainScene(props: MainSceneProps) {
                 <input {...getInputProps()} />
                 <div className='view row' >
                     <div className='app-works-window col-9'>
-                        <WorksWindow works={works} onWorkSelected={(work) => selectWork(work.id)} idToTag={(id) => tagManager.idToTag(id)} onAddTag={onAddTag} />
+                        <WorksWindow works={works} tags={tags} onWorkSelected={(work) => selectWork(work.id)} idToTag={(id) => tagManager.idToTag(id)} onAddTag={onAddTag} />
                     </div>
                     <div className='app-file-info col-3'>
                         <FileInfo work={workManager.idToWork(selectedWork)} idToTag={(id) => tagManager.idToTag(id)} deleteWork={(id) => workManager.deleteWork(id)} />

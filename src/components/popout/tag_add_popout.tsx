@@ -2,13 +2,13 @@ import React, { ChangeEvent, useMemo, useState } from 'react';
 import TagData from '../tag/tag_data';
 
 
-interface TagAddWindowProps {
+interface TagAddPopoutProps {
     tags: TagData[]
     onClickTag: (tag: TagData) => void
     onCreateTag: (name: string) => void
 }
 
-export default function TagAddPopout(props: TagAddWindowProps) {
+export default function TagAddPopout(props: TagAddPopoutProps) {
 
     const [newtag, setNewTag] = useState('');
     function onChange(e: ChangeEvent<HTMLInputElement>) {
