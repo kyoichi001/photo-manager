@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useMemo, useState } from 'react';
 import TagData from '../tag/tag_data';
-
+import "../../css/common.css"
+import "../../css/popouts.css"
 
 interface TagAddPopoutProps {
     tags: TagData[]
@@ -26,8 +27,8 @@ export default function TagAddPopout(props: TagAddPopoutProps) {
         return tags
     }, [props])
     return (
-        <div className='tagg-add-popout'>
-            <div className='window'>
+        <div className='popout-bg tagg-add-popout'>
+            <div className='popout'>
                 <p>追加するタブ</p>
                 <input type="search" id="tag_search" name="tag_search" placeholder="Search or add tag" value={newtag} onChange={onChange}></input>
                 <div className='add-new-tag'>

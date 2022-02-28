@@ -2,12 +2,15 @@ import React, { ChangeEvent, useMemo, useState } from 'react';
 import FilterTag from '../tag/filter_tag';
 import TagData from '../tag/tag_data';
 import '../../css/tag.css';
+import "../../css/common.css"
+import "../../css/popouts.css"
 
 
 interface WorkFilterPopoutProps {
     tags: TagData[]
     activeTags: boolean[]
     onClickTag: (index: number, setFlag: boolean) => void
+    hidePopout: () => void
 }
 
 export default function WorkFilterPopout(props: WorkFilterPopoutProps) {
@@ -26,8 +29,8 @@ export default function WorkFilterPopout(props: WorkFilterPopoutProps) {
         return tags
     }, [props])
     return (
-        <div className='tagg-add-popout'>
-            <div className='window'>
+        <div className='popout-bg' onClick={() => props.hidePopout()}>
+            <div className='popout work-filter-popout'>
                 <p>tags</p>
                 <div className='tags'>
                     {tags}

@@ -10,6 +10,7 @@ import WorksWindow from '../window/works_window';
 import WorkData from '../work/work_data';
 import "../../css/common.css"
 import WorkFilterPopout from '../popout/work_filter_popout';
+import WorkPreviewPopout from '../popout/work_preview_popout';
 
 interface MainSceneProps {
 
@@ -48,7 +49,12 @@ export default function MainScene(props: MainSceneProps) {
     }
     function popOutDOM() {
         if (showsTagWindow) {
-            return <TagAddPopout tags={tags} onClickTag={(tag) => workManager.addTagToWork(tagTargetWork, tag.id)} onCreateTag={(name) => tagManager.addTag(name)} />
+            return <TagAddPopout
+                tags={tags}
+                onClickTag={(tag) => workManager.addTagToWork(tagTargetWork, tag.id)}
+                onCreateTag={(name) => tagManager.addTag(name)}
+                hidePopout={() => { }}
+            />
         }
         return <></>
     }
@@ -66,6 +72,18 @@ export default function MainScene(props: MainSceneProps) {
             reader.readAsArrayBuffer(file)
         })
     }, [])
+
+    var popout = <></>
+    if (true) {
+        let w = workManager.idToWork(tagTargetWork)
+        if (w)
+            popout = <WorkPreviewPopout
+                work={w}
+                idToTag={(id) => tagManager.idToTag(id)}
+                hidePopout={() => { }}
+            />
+    }
+
     const { getRootProps, getInputProps } = useDropzone({ onDrop, noClick: true })
     return (
         <div className="main-scene">
@@ -73,7 +91,13 @@ export default function MainScene(props: MainSceneProps) {
                 <input {...getInputProps()} />
                 <div className='view row' >
                     <div className='app-works-window col-9'>
-                        <WorksWindow works={works} tags={tags} onWorkSelected={(work) => selectWork(work.id)} idToTag={(id) => tagManager.idToTag(id)} onAddTag={onAddTag} />
+                        <WorksWindow
+                            works={works}
+                            tags={tags}
+                            onWorkSelected={(work) => selectWork(work.id)}
+                            idToTag={(id) => tagManager.idToTag(id)}
+                            onAddTag={onAddTag}
+                        />
                     </div>
                     <div className='app-file-info col-3'>
                         <FileInfo work={workManager.idToWork(selectedWork)} idToTag={(id) => tagManager.idToTag(id)} deleteWork={(id) => workManager.deleteWork(id)} />
