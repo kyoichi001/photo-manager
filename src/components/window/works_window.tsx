@@ -15,7 +15,8 @@ interface WorksWindowProps {
     tags: TagData[]
     idToTag: (id: string) => TagData | undefined
     onWorkSelected?: (data: WorkData) => void
-    onAddTag?: (data: WorkData) => void
+    addTagToWork: (work: string, tag: string) => void
+    createTag: (name: string) => void
 }
 
 export default function WorksWindow(props: WorksWindowProps) {
@@ -32,7 +33,15 @@ export default function WorksWindow(props: WorksWindowProps) {
         }
         return false
     }).map((work) => {
-        return <Work key={work.id} data={work} onSelected={props.onWorkSelected} idToTag={props.idToTag} onAddTag={props.onAddTag} />
+        return <Work
+            key={work.id}
+            data={work}
+            all_tags={props.tags}
+            onSelected={props.onWorkSelected}
+            idToTag={props.idToTag}
+            addTagToWork={props.addTagToWork}
+            createTag={props.createTag}
+        />
     })
     function setFlag(index: number, flag: boolean) {
         var s = activeTags

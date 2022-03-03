@@ -96,7 +96,12 @@ export default function MainScene(props: MainSceneProps) {
                             tags={tags}
                             onWorkSelected={(work) => selectWork(work.id)}
                             idToTag={(id) => tagManager.idToTag(id)}
-                            onAddTag={onAddTag}
+                            addTagToWork={(work: string, tag: string) => {
+                                workManager.addTagToWork(work, tag)
+                            }}
+                            createTag={(name: string) => {
+                                tagManager.addTag(name)
+                            }}
                         />
                     </div>
                     <div className='app-file-info col-3'>

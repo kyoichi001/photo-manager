@@ -28,9 +28,9 @@ export default function TagAddPopout(props: TagAddPopoutProps) {
         return tags
     }, [props])
     return (
-        <div className='popout-bg tagg-add-popout' onClick={() => props.hidePopout()}>
-            <div className='popout'>
-                <p>追加するタブ</p>
+        <div className='popout-bg-col tagg-add-popout' onClick={() => props.hidePopout()}>
+            <div className=''>
+                <p>追加するタグ</p>
                 <input type="search" id="tag_search" name="tag_search" placeholder="Search or add tag" value={newtag} onChange={onChange}></input>
                 <div className='add-new-tag'>
                     <button onClick={() => { props.onCreateTag(newtag) }}>新規作成：{newtag}</button>
