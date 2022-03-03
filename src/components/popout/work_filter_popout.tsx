@@ -3,7 +3,7 @@ import FilterTag from '../tag/filter_tag';
 import TagData from '../tag/tag_data';
 import '../../css/tag.css';
 import "../../css/common.css"
-import "../../css/popouts.css"
+//import "../../css/popouts.css"
 
 
 interface WorkFilterPopoutProps {
@@ -29,8 +29,8 @@ export default function WorkFilterPopout(props: WorkFilterPopoutProps) {
         return tags
     }, [props])
     return (
-        <div className='popout-bg' onClick={() => props.hidePopout()}>
-            <div className='popout work-filter-popout'>
+        <div className='popout-bg-col' onClick={() => props.hidePopout()}>
+            <div className=''>
                 <p>tags</p>
                 <div className='tags'>
                     {tags}

@@ -11,6 +11,7 @@ import "../../css/popouts.css"
 interface WorkPreviewPopoutProps {
     idToTag: (id: string) => TagData | undefined
     work: WorkData
+    hidePopout: () => void
 }
 
 export default function WorkPreviewPopout(props: WorkPreviewPopoutProps) {
@@ -28,7 +29,7 @@ export default function WorkPreviewPopout(props: WorkPreviewPopoutProps) {
     }, [props.work.tags])
 
     return (
-        <div className='work-preview popout-bg popout-bg-col'>
+        <div className='work-preview popout-bg popout-bg-col' onClick={() => props.hidePopout()}>
             <div className='popout-fixed'>
                 <img className='work-thumb' src={props.work.image} alt="t" />
             </div>

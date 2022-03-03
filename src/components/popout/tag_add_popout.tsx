@@ -7,6 +7,7 @@ interface TagAddPopoutProps {
     tags: TagData[]
     onClickTag: (tag: TagData) => void
     onCreateTag: (name: string) => void
+    hidePopout: () => void
 }
 
 export default function TagAddPopout(props: TagAddPopoutProps) {
@@ -27,7 +28,7 @@ export default function TagAddPopout(props: TagAddPopoutProps) {
         return tags
     }, [props])
     return (
-        <div className='popout-bg tagg-add-popout'>
+        <div className='popout-bg tagg-add-popout' onClick={() => props.hidePopout()}>
             <div className='popout'>
                 <p>追加するタブ</p>
                 <input type="search" id="tag_search" name="tag_search" placeholder="Search or add tag" value={newtag} onChange={onChange}></input>

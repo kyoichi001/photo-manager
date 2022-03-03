@@ -1,10 +1,12 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
+import { usePopper } from 'react-popper';
 import '../../css/works_window.css'
 import WorkFilterPopout from '../popout/work_filter_popout';
-import WorkPreviewPopout from '../popout/work_preview_popout';
+//import WorkPreviewPopout from '../popout/work_preview_popout';
 import TagData from '../tag/tag_data';
 import Work from '../work/work';
 import WorkData from '../work/work_data';
+import { useClickAway, useDisclosure, useKeypress } from './idk';
 import WorkMenubar from './work_menubar';
 
 
@@ -21,7 +23,6 @@ export default function WorksWindow(props: WorksWindowProps) {
 
     const defaultTags: boolean[] = (new Array(props.tags.length)).fill(false)
     const [activeTags, setActiveTags] = useState(defaultTags);
-    const [filterActive, setFilterActive] = useState(false)
     const works = props.works.filter((work) => {
         if (activeTags.every((t) => t === false)) return true
         for (let i = 0; i < props.tags.length; i++) {
@@ -39,15 +40,12 @@ export default function WorksWindow(props: WorksWindowProps) {
         console.log("filter tag clicked")
         setActiveTags([...s])
     }
-    let workFilter = filterActive ?
-        <WorkFilterPopout tags={props.tags} onClickTag={(i, flag) => { setFlag(i, flag); }} activeTags={activeTags} hidePopout={() => setFilterActive(false)}></WorkFilterPopout> :
-        <></>
+
 
     return (
         <div className='works-window'>
             <div className='window'>
-                <WorkMenubar onFilterActive={() => setFilterActive(true)} />
-                {workFilter}
+                <WorkMenubar tags={props.tags} setFlag={setFlag} activeTags={activeTags} />
                 <div className='works'>
                     {works}
                 </div>
