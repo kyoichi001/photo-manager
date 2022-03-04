@@ -1,37 +1,26 @@
 import React, { ChangeEvent, useMemo, useState } from 'react';
-import FilterTag from '../tag/filter_tag';
 import TagData from '../tag/tag_data';
 import '../../css/work.css';
 import '../../css/common.css';
 import WorkData from '../work/work_data';
-import Tag from '../tag/tag';
 import "../../css/popouts.css"
 
 
 interface WorkPreviewPopoutProps {
     idToTag: (id: string) => TagData | undefined
     work: WorkData
-    hidePopout: () => void
+    onClickPrev: (currentWorkId: string) => void
+    onClickNext: (currentWorkId: string) => void
 }
 
 export default function WorkPreviewPopout(props: WorkPreviewPopoutProps) {
 
-    const tags = useMemo(() => {
-        const tags: JSX.Element[] = []
-        for (let tag of props.work.tags) {
-            var dat = props.idToTag(tag)
-            if (!dat) continue
-            tags.push(
-                <Tag key={dat.id} data={dat} />
-            )
-        }
-        return tags
-    }, [props.work.tags])
-
     return (
-        <div className='work-preview popout-bg popout-bg-col' onClick={() => props.hidePopout()}>
-            <div className='popout-fixed'>
-                <img className='work-thumb' src={props.work.image} alt="t" />
+        <div className='work-preview popout-bg-col'>
+            <div className='row'>
+                <button onClick={() => props.onClickPrev(props.work.id)}>prev</button>
+                <img className='work-preview-thumb col-11' src={props.work.image} alt="t" />
+                <button onClick={() => props.onClickNext(props.work.id)}>next</button>
             </div>
         </div>
     )

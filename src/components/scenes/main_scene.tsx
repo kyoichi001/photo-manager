@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import DataLoader from '../../dataloader';
 import TagManager from '../../tag_manager';
@@ -7,10 +7,12 @@ import TagAddPopout from '../popout/tag_add_popout';
 import TagData from '../tag/tag_data';
 import FileInfo from '../window/file_info';
 import WorksWindow from '../window/works_window';
-import WorkData from '../work/work_data';
+import WorkData, { __errorWork } from '../work/work_data';
 import "../../css/common.css"
 import WorkFilterPopout from '../popout/work_filter_popout';
 import WorkPreviewPopout from '../popout/work_preview_popout';
+import { usePopper } from 'react-popper';
+import { useClickAway, useDisclosure, useKeypress } from '../window/idk';
 
 interface MainSceneProps {
 
@@ -19,9 +21,7 @@ interface MainSceneProps {
 export default function MainScene(props: MainSceneProps) {
     const [works, setWorks] = useState(DataLoader.LoadWorks())
     const [tags, setTags] = useState(DataLoader.LoadTags())
-    const [showsTagWindow, showTagWindow] = useState(false);
     const [selectedWork, selectWork] = useState('');
-    const [tagTargetWork, setTargetWork] = useState('');
 
     useEffect(() => {
         DataLoader.SaveWorks(works)
@@ -43,22 +43,6 @@ export default function MainScene(props: MainSceneProps) {
         }
     )
 
-    function onAddTag(work: WorkData) {
-        showTagWindow(true)
-        setTargetWork(work.id)
-    }
-    function popOutDOM() {
-        if (showsTagWindow) {
-            return <TagAddPopout
-                tags={tags}
-                onClickTag={(tag) => workManager.addTagToWork(tagTargetWork, tag.id)}
-                onCreateTag={(name) => tagManager.addTag(name)}
-                hidePopout={() => { }}
-            />
-        }
-        return <></>
-    }
-
     //https://react-dropzone.js.org/
     const onDrop = useCallback((acceptedFiles: File[]) => {
         acceptedFiles.forEach((file: File) => {
@@ -73,16 +57,7 @@ export default function MainScene(props: MainSceneProps) {
         })
     }, [])
 
-    var popout = <></>
-    if (true) {
-        let w = workManager.idToWork(tagTargetWork)
-        if (w)
-            popout = <WorkPreviewPopout
-                work={w}
-                idToTag={(id) => tagManager.idToTag(id)}
-                hidePopout={() => { }}
-            />
-    }
+
 
     const { getRootProps, getInputProps } = useDropzone({ onDrop, noClick: true })
     return (
@@ -106,11 +81,6 @@ export default function MainScene(props: MainSceneProps) {
                     </div>
                     <div className='app-file-info col-3'>
                         <FileInfo work={workManager.idToWork(selectedWork)} idToTag={(id) => tagManager.idToTag(id)} deleteWork={(id) => workManager.deleteWork(id)} />
-                    </div>
-                    <div>
-                        {
-                            popOutDOM()
-                        }
                     </div>
                 </div>
             </div>

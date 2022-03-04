@@ -2,10 +2,11 @@ import React, { useMemo, useRef, useState } from 'react';
 import { usePopper } from 'react-popper';
 import '../../css/works_window.css'
 import WorkFilterPopout from '../popout/work_filter_popout';
+import WorkPreviewPopout from '../popout/work_preview_popout';
 //import WorkPreviewPopout from '../popout/work_preview_popout';
 import TagData from '../tag/tag_data';
 import Work from '../work/work';
-import WorkData from '../work/work_data';
+import WorkData, { __errorWork } from '../work/work_data';
 import { useClickAway, useDisclosure, useKeypress } from './idk';
 import WorkMenubar from './work_menubar';
 
@@ -24,7 +25,7 @@ export default function WorksWindow(props: WorksWindowProps) {
 
     const defaultTags: boolean[] = (new Array(props.tags.length)).fill(false)
     const [activeTags, setActiveTags] = useState(defaultTags);
-    const works = props.works.filter((work) => {
+    const filteredWorks = props.works.filter((work) => {
         if (activeTags.every((t) => t === false)) return true
         for (let i = 0; i < props.tags.length; i++) {
             if (activeTags[i] && work.tags.find((t) => t === props.tags[i].id)) {
@@ -32,7 +33,8 @@ export default function WorksWindow(props: WorksWindowProps) {
             }
         }
         return false
-    }).map((work) => {
+    })
+    const works = filteredWorks.map((work, index) => {
         return <Work
             key={work.id}
             data={work}
@@ -41,6 +43,10 @@ export default function WorksWindow(props: WorksWindowProps) {
             idToTag={props.idToTag}
             addTagToWork={props.addTagToWork}
             createTag={props.createTag}
+            onWorkPreview={(data) => {
+                open()
+                setTargetWorkIndex(index)
+            }}
         />
     })
     function setFlag(index: number, flag: boolean) {
@@ -49,6 +55,26 @@ export default function WorksWindow(props: WorksWindowProps) {
         console.log("filter tag clicked")
         setActiveTags([...s])
     }
+    const [targetWorkIndex, setTargetWorkIndex] = useState<number>(-1);
+    const popperRef = useRef<HTMLDivElement | null>(null);
+    const { styles, attributes } = usePopper(
+        null,
+        popperRef.current,
+        {
+            placement: 'bottom',
+            modifiers: [
+                {
+                    name: 'offset',
+                    options: {
+                        offset: [20, 0]
+                    },
+                },
+            ],
+        }
+    );
+    const { isOpen, open, close } = useDisclosure(false);
+    useClickAway(popperRef, close);
+    useKeypress('Escape', close);
 
 
     return (
@@ -58,6 +84,17 @@ export default function WorksWindow(props: WorksWindowProps) {
                 <div className='works'>
                     {works}
                 </div>
+            </div>
+            <div ref={popperRef} style={styles.popper} {...attributes.popper}>
+                {
+                    isOpen &&
+                    <WorkPreviewPopout
+                        work={filteredWorks[targetWorkIndex]}
+                        idToTag={(id) => props.idToTag(id)}
+                        onClickPrev={(id) => { setTargetWorkIndex(targetWorkIndex - 1) }}
+                        onClickNext={(id) => { setTargetWorkIndex(targetWorkIndex + 1) }}
+                    />
+                }
             </div>
         </div>
     )

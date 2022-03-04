@@ -14,6 +14,7 @@ interface WorkProps {
     onSelected?: (data: WorkData) => void
     addTagToWork: (work: string, tag: string) => void
     createTag: (name: string) => void
+    onWorkPreview: (data: WorkData) => void
 }
 
 export default function Work(props: WorkProps) {
@@ -53,7 +54,10 @@ export default function Work(props: WorkProps) {
     return (
         <div className='work'>
             <div className='clickable-component p-2 work-bg' onClick={() => { if (props.onSelected) props.onSelected(props.data) }}>
-                <img className='work-thumb' src={props.data.image} alt="t" />
+                <div className=''>
+                    <img className='work-thumb' src={props.data.image} alt="t" />
+                    <button onClick={() => props.onWorkPreview(props.data)}>+</button>
+                </div>
                 <div className='work-title'><p>{props.data.title}</p></div>
                 <div className='tags'>
                     {tags}
