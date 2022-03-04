@@ -91,8 +91,9 @@ export default function WorksWindow(props: WorksWindowProps) {
                     <WorkPreviewPopout
                         work={filteredWorks[targetWorkIndex]}
                         idToTag={(id) => props.idToTag(id)}
-                        onClickPrev={(id) => { setTargetWorkIndex(targetWorkIndex - 1) }}
-                        onClickNext={(id) => { setTargetWorkIndex(targetWorkIndex + 1) }}
+                        onClickPrev={(id) => { setTargetWorkIndex((targetWorkIndex - 1 + works.length) % works.length) }}
+                        onClickNext={(id) => { setTargetWorkIndex((targetWorkIndex + 1) % works.length) }}
+                        onClose={() => close()}
                     />
                 }
             </div>
