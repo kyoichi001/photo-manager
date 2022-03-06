@@ -2,7 +2,7 @@ import React, { useMemo, useRef, useState } from 'react';
 import { usePopper } from 'react-popper';
 import WorkFilterPopout from '../popout/work_filter_popout';
 import TagData from '../tag/tag_data';
-import { useClickAway, useDisclosure, useKeypress } from './idk';
+import { useClickAway, useDisclosure, useKeypress } from '../popout/popout_hooks';
 
 
 interface WorkMenubarProps {
@@ -55,7 +55,6 @@ export default function WorkMenubar(props: WorkMenubarProps) {
                             tags={props.tags}
                             onClickTag={(i, flag) => { props.setFlag(i, flag); }}
                             activeTags={props.activeTags}
-                            hidePopout={() => { }}
                         />
                         <div ref={setArrowElement} style={styles.arrow} />
                     </>

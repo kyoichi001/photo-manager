@@ -25,3 +25,25 @@
 .popout-bg-col{
     background-color: rgba(0, 0, 0, 0.8);
 }
+
+.workpreview-popout{
+    width:100vw;
+}
+
+.workpreview-thumb{
+    width: auto;
+    /*max-width: 90vw;*/
+    height: 80vh;
+  image-rendering: pixelated;
+}
+
+.workpreview-button{
+   /* height: 100%;*/
+}
+
+.workpreview-closebutton{
+    position: fixed;
+    left:0;
+    top:0;
+
+}

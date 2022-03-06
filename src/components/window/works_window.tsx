@@ -1,13 +1,11 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { usePopper } from 'react-popper';
 import '../../css/works_window.css'
-import WorkFilterPopout from '../popout/work_filter_popout';
 import WorkPreviewPopout from '../popout/work_preview_popout';
-//import WorkPreviewPopout from '../popout/work_preview_popout';
 import TagData from '../tag/tag_data';
 import Work from '../work/work';
 import WorkData, { __errorWork } from '../work/work_data';
-import { useClickAway, useDisclosure, useKeypress } from './idk';
+import { useClickAway, useDisclosure, useKeypress } from '../popout/popout_hooks';
 import WorkMenubar from './work_menubar';
 
 

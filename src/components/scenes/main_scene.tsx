@@ -12,7 +12,7 @@ import "../../css/common.css"
 import WorkFilterPopout from '../popout/work_filter_popout';
 import WorkPreviewPopout from '../popout/work_preview_popout';
 import { usePopper } from 'react-popper';
-import { useClickAway, useDisclosure, useKeypress } from '../window/idk';
+import { useClickAway, useDisclosure, useKeypress } from '../popout/popout_hooks';
 
 interface MainSceneProps {
 

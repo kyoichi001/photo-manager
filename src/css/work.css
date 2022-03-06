@@ -23,3 +23,13 @@
 .work-thumb{
   image-rendering: pixelated;
 }
+
+.work-preview-button{
+  position: absolute;
+  left:0;
+  bottom: 7px;
+}
+
+.work-thumb-container{
+  position: relative;
+}

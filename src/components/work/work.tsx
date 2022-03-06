@@ -4,7 +4,7 @@ import '../../css/work.css';
 import WorkData from './work_data';
 import TagData from '../tag/tag_data';
 import { usePopper } from 'react-popper';
-import { useClickAway, useDisclosure, useKeypress } from '../window/idk';
+import { useClickAway, useDisclosure, useKeypress } from '../popout/popout_hooks';
 import TagAddPopout from '../popout/tag_add_popout';
 
 interface WorkProps {
@@ -54,9 +54,9 @@ export default function Work(props: WorkProps) {
     return (
         <div className='work'>
             <div className='clickable-component p-2 work-bg' onClick={() => { if (props.onSelected) props.onSelected(props.data) }}>
-                <div className=''>
+                <div className='work-thumb-container'>
                     <img className='work-thumb' src={props.data.image} alt="t" />
-                    <button onClick={() => props.onWorkPreview(props.data)}>+</button>
+                    <button className='work-preview-button' onClick={() => props.onWorkPreview(props.data)}>+</button>
                 </div>
                 <div className='work-title'><p>{props.data.title}</p></div>
                 <div className='tags'>
@@ -73,7 +73,6 @@ export default function Work(props: WorkProps) {
                             tags={props.all_tags}
                             onClickTag={(tag) => props.addTagToWork(props.data.id, tag.id)}
                             onCreateTag={(name) => props.createTag(name)}
-                            hidePopout={() => { }}
                         />
                         <div ref={setArrowElement} style={styles.arrow} />
                     </>

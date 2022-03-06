@@ -10,26 +10,17 @@ interface WorkFilterPopoutProps {
     tags: TagData[]
     activeTags: boolean[]
     onClickTag: (index: number, setFlag: boolean) => void
-    hidePopout: () => void
 }
 
 export default function WorkFilterPopout(props: WorkFilterPopoutProps) {
 
-
-    const tags = useMemo(() => {
-        const tags: JSX.Element[] = []
-        if (!props.tags) return []
-        props.tags.forEach((p, i) => {
-            tags.push(
-                <div key={p.id} onClick={() => { props.onClickTag(i, !props.activeTags[i]) }}>
-                    <FilterTag data={p} isChecked={props.activeTags[i]} ></FilterTag>
-                </div>
-            )
-        })
-        return tags
-    }, [props])
+    const tags = props.tags.map((p, i) => {
+        return <div key={p.id} onClick={() => { props.onClickTag(i, !props.activeTags[i]) }}>
+            <FilterTag data={p} isChecked={props.activeTags[i]} ></FilterTag>
+        </div>
+    })
     return (
-        <div className='popout-bg-col' onClick={() => props.hidePopout()}>
+        <div className='popout-bg-col'>
             <div className=''>
                 <p>tags</p>
                 <div className='tags'>

@@ -7,31 +7,21 @@ interface TagAddPopoutProps {
     tags: TagData[]
     onClickTag: (tag: TagData) => void
     onCreateTag: (name: string) => void
-    hidePopout: () => void
 }
 
 export default function TagAddPopout(props: TagAddPopoutProps) {
 
     const [newtag, setNewTag] = useState('');
-    function onChange(e: ChangeEvent<HTMLInputElement>) {
-        setNewTag(e.target.value)
-    }
 
-    const tags = useMemo(() => {
-        const tags: JSX.Element[] = []
-        if (!props.tags) return []
-        props.tags.forEach((p, i) => {
-            tags.push(
-                <button key={p.id} onClick={() => { props.onClickTag(p) }}>{p.name}</button>
-            )
-        })
-        return tags
-    }, [props])
+    const tags = props.tags.map((p, i) => {
+        return <button key={p.id} onClick={() => { props.onClickTag(p) }}>{p.name}</button>
+    })
+
     return (
-        <div className='popout-bg-col tagg-add-popout' onClick={() => props.hidePopout()}>
+        <div className='popout-bg-col tagg-add-popout'>
             <div className=''>
                 <p>追加するタグ</p>
-                <input type="search" id="tag_search" name="tag_search" placeholder="Search or add tag" value={newtag} onChange={onChange}></input>
+                <input type="search" id="tag_search" name="tag_search" placeholder="Search or add tag" value={newtag} onChange={(e) => setNewTag(e.target.value)}></input>
                 <div className='add-new-tag'>
                     <button onClick={() => { props.onCreateTag(newtag) }}>新規作成：{newtag}</button>
                 </div>

@@ -17,12 +17,14 @@ interface WorkPreviewPopoutProps {
 export default function WorkPreviewPopout(props: WorkPreviewPopoutProps) {
 
     return (
-        <div className='work-preview popout-bg-col'>
-            <button onClick={() => props.onClose()}>x</button>
+        <div className='workpreview-popout popout-bg-col'>
+            <button className='workpreview-closebutton' onClick={() => props.onClose()}>x</button>
             <div className='row'>
-                <button onClick={() => props.onClickPrev(props.work.id)}>prev</button>
-                <img className='work-preview-thumb col-11' src={props.work.image} alt="t" />
-                <button onClick={() => props.onClickNext(props.work.id)}>next</button>
+                <button className='workpreview-button' onClick={() => props.onClickPrev(props.work.id)}>prev</button>
+                <div className='col-11' onClick={() => props.onClose()}>
+                    <img className='workpreview-thumb' src={props.work.image} alt="t" />
+                </div>
+                <button className='workpreview-button' onClick={() => props.onClickNext(props.work.id)}>next</button>
             </div>
         </div>
     )

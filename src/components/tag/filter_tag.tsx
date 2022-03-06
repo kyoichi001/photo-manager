@@ -11,7 +11,6 @@ interface FilterTagProps {
 export default function FilterTag(props: FilterTagProps) {
     var col = props.isChecked ? { "r": 100, "g": 100, "b": 255, "a": 1 } : props.data.color
     var c = Col.brightness(col) < 0.5 ? "tagname-dark" : "tagname-light"
-    var checked = props.isChecked ? <p>OK</p> : <></>
 
     return (
         <div className="tag clickable-component" style={{ backgroundColor: Col.toString(col) }}>

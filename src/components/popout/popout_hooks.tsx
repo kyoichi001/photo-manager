@@ -58,38 +58,3 @@ export function useKeypress(key: string, handler: () => void) {
         return () => document.removeEventListener('keyup', onKeyup);
     }, []);
 }
-
-export const Example = () => {
-    const referenceRef = useRef<HTMLButtonElement | null>(null);
-    const popperRef = useRef<HTMLDivElement | null>(null);
-    const { styles, attributes } = usePopper(
-        referenceRef.current,
-        popperRef.current,
-        {
-            placement: 'bottom',
-            modifiers: [
-                {
-                    name: 'offset',
-                    options: {
-                        offset: [0, 16],
-                    },
-                },
-            ],
-        }
-    );
-
-    const { isOpen, open, close } = useDisclosure(false);
-    useClickAway(popperRef, close);
-    useKeypress('Escape', close);
-
-    return (
-        <div>
-            <button onClick={open} ref={referenceRef}>
-                open
-            </button>
-            <div ref={popperRef} style={styles.popper} {...attributes.popper}>
-                {isOpen && <p>content</p>}
-            </div>
-        </div>
-    );
-};
