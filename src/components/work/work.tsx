@@ -15,6 +15,7 @@ interface WorkProps {
     addTagToWork: (work: string, tag: string) => void
     createTag: (name: string) => void
     onWorkPreview: (data: WorkData) => void
+    onRemoveTag: (work: WorkData, tag: TagData) => void
 }
 
 export default function Work(props: WorkProps) {
@@ -46,16 +47,16 @@ export default function Work(props: WorkProps) {
             var dat = props.idToTag(tag)
             if (!dat) continue
             tags.push(
-                <Tag key={dat.id} data={dat} />
+                <Tag key={dat.id} data={dat} onTagRemove={(data_) => { props.onRemoveTag(props.data, data_) }} />
             )
         }
         return tags
     }, [props.data.tags])
     return (
         <div className='work'>
-            <div className='clickable-component p-2 work-bg' onClick={() => { if (props.onSelected) props.onSelected(props.data) }}>
+            <div className=' p-2 work-bg' onClick={() => { if (props.onSelected) props.onSelected(props.data) }}>
                 <div className='work-thumb-container'>
-                    <img className='work-thumb' src={props.data.image} alt="t" />
+                    <img className='work-thumb clickable-component' src={props.data.image} alt="t" />
                     <button className='work-preview-button' onClick={() => props.onWorkPreview(props.data)}>+</button>
                 </div>
                 <div className='work-title'><p>{props.data.title}</p></div>
@@ -63,7 +64,7 @@ export default function Work(props: WorkProps) {
                     {tags}
                     <button onClick={open} ref={referenceRef}>+</button>
                 </div>
-                <div className='work-time'><p>{props.data.createdAt}</p></div>
+                <div className='work-time'><p>{Date.parse(props.data.createdAt)}</p></div>
             </div>
             <div ref={popperRef} style={styles.popper} {...attributes.popper}>
                 {

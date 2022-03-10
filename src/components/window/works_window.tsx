@@ -15,6 +15,7 @@ interface WorksWindowProps {
     idToTag: (id: string) => TagData | undefined
     onWorkSelected?: (data: WorkData) => void
     addTagToWork: (work: string, tag: string) => void
+    onRemoveTagFromWork: (work: WorkData, tag: TagData) => void
     createTag: (name: string) => void
 }
 
@@ -44,6 +45,9 @@ export default function WorksWindow(props: WorksWindowProps) {
             onWorkPreview={(data) => {
                 open()
                 setTargetWorkIndex(index)
+            }}
+            onRemoveTag={(work, tag) => {
+                props.onRemoveTagFromWork(work, tag)
             }}
         />
     })

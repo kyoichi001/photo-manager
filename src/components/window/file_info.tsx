@@ -26,7 +26,7 @@ export default function FileInfo(props: FileInfoProps) {
     for (var tag of props.work.tags) {
         var dat = props.idToTag(tag)
         if (!dat) continue
-        tags.push(<Tag data={dat} key={dat.id} />)
+        tags.push(<Tag data={dat} key={dat.id} onTagRemove={() => { }} />)
     }
 
     return (

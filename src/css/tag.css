@@ -13,10 +13,16 @@
 .tagname-light{
     font-weight: bold;
     font-size: 10px;
-    color:var(--text-color-black)
+    color:var(--text-color-black);
+    display: flex;
+    flex-direction: row;
+    /*flex-wrap: wrap;*/
 }
 .tagname-dark{
     font-weight: bold;
     font-size: 10px;
-    color:var(--text-color-white)
+    color:var(--text-color-white);
+    display: flex;
+    flex-direction: row;
+    /*flex-wrap: wrap;*/
 }

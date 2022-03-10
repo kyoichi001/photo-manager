@@ -59,10 +59,53 @@ export default function MainScene(props: MainSceneProps) {
 
 
 
-    const { getRootProps, getInputProps } = useDropzone({ onDrop, noClick: true })
+    const {
+        getRootProps,
+        getInputProps,
+        isFocused,
+        isDragAccept,
+        isDragReject,
+    } = useDropzone({
+        onDrop,
+        noClick: true,
+        accept: 'image/jpeg,image/png,image/jfif,image/gif'
+    })
+    const baseStyle: React.CSSProperties = {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: 0,
+        margin: 0,
+        borderWidth: 2,
+        borderRadius: 2,
+        outline: 'none',
+        transition: 'border .24s ease-in-out'
+    };
+
+    const acceptStyle: React.CSSProperties = {
+        borderColor: '#00e676',
+        borderStyle: 'dashed',
+    };
+
+    const rejectStyle: React.CSSProperties = {
+        borderColor: '#ff1744',
+        borderStyle: 'dashed',
+    };
+
+    const style: React.CSSProperties = useMemo(() => ({
+        ...baseStyle,
+        ...(isDragAccept ? acceptStyle : {}),
+        ...(isDragReject ? rejectStyle : {})
+    }), [
+        isFocused,
+        isDragAccept,
+        isDragReject
+    ]);
+
     return (
         <div className="main-scene">
-            <div {...getRootProps({ className: 'dropzone' })}>
+            <div {...getRootProps({ style })}>
                 <input {...getInputProps()} />
                 <div className='view row' >
                     <div className='app-works-window col-9'>
@@ -76,6 +119,9 @@ export default function MainScene(props: MainSceneProps) {
                             }}
                             createTag={(name: string) => {
                                 tagManager.addTag(name)
+                            }}
+                            onRemoveTagFromWork={(work, tag) => {
+                                workManager.deleteTagFromWork(work.id, tag.id)
                             }}
                         />
                     </div>
