@@ -17,7 +17,7 @@ interface WorkPreviewPopoutProps {
 export default function WorkPreviewPopout(props: WorkPreviewPopoutProps) {
 
     return (
-        <div className='workpreview-popout popout-bg-col'>
+        <div className='popout workpreview-popout popout-bg-col'>
             <button className='workpreview-closebutton' onClick={() => props.onClose()}>x</button>
             <div className='row'>
                 <button className='workpreview-button' onClick={() => props.onClickPrev(props.work.id)}>prev</button>

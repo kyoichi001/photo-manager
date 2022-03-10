@@ -5,7 +5,7 @@ export default interface WorkData {
     title: string
     image: string
     tags: string[]
-    createdAt: string
+    createdAt: number
     extention?: string
 }
 
@@ -14,5 +14,5 @@ export const __errorWork: WorkData = {
     title: "",
     image: "",
     tags: [],
-    createdAt: ""
+    createdAt: 0
 }

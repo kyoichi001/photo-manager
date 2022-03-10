@@ -24,7 +24,7 @@ export default function TagManageScene(props: TagManageSceneProps) {
 
     return (
         <div className="tag-manage-scene">
-
+            まだ未実装だよ！
         </div>
     )
 }

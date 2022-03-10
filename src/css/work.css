@@ -22,6 +22,7 @@
 
 .work-thumb{
   image-rendering: pixelated;
+  z-index: 0;
 }
 
 .work-preview-button{

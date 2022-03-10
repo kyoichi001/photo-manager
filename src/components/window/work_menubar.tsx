@@ -1,7 +1,8 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { CSSProperties, useMemo, useRef, useState } from 'react';
 import { usePopper } from 'react-popper';
 import WorkFilterPopout from '../popout/work_filter_popout';
 import TagData from '../tag/tag_data';
+import "../../css/popouts.css"
 import { useClickAway, useDisclosure, useKeypress } from '../popout/popout_hooks';
 
 
@@ -33,11 +34,13 @@ export default function WorkMenubar(props: WorkMenubarProps) {
         }
     );
 
+
     function onFilterActive() {
 
     }
 
     const { isOpen, open, close } = useDisclosure(false);
+    const popout_style: CSSProperties = { zIndex: 100 }
     useClickAway(popperRef, close);
     useKeypress('Escape', close);
 
@@ -47,7 +50,10 @@ export default function WorkMenubar(props: WorkMenubarProps) {
             <div onClick={() => { open() }} ref={referenceRef}>
                 フィルター
             </div>
-            <div ref={popperRef} style={styles.popper} {...attributes.popper}>
+            <div ref={popperRef} style={{
+                ...styles.popper,
+                ...popout_style
+            }} {...attributes.popper}>
                 {
                     isOpen &&
                     <>

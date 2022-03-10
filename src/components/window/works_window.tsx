@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { usePopper } from 'react-popper';
 import '../../css/works_window.css'
+import '../../css/popouts.css'
 import WorkPreviewPopout from '../popout/work_preview_popout';
 import TagData from '../tag/tag_data';
 import Work from '../work/work';

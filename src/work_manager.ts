@@ -17,7 +17,7 @@ export default class WorkManager {
         if (file.path === "") return
         let works = this.loadWorks()
         if (works.some((work) => work.image === file.path)) return//2重追加防止
-        let w: WorkData = { id: Library.generateUuid(), title: file.name, image: file.path, createdAt: Date.now().toString(), tags: [] }
+        let w: WorkData = { id: Library.generateUuid(), title: file.name, image: file.path, createdAt: Date.now(), tags: [] }
         this.saveWorks([...works, w])
     }
     deleteWork(id: string) {

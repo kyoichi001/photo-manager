@@ -70,7 +70,7 @@ export default class DataLoader {
                 id: work["id"],
                 title: work["title"],
                 image: work["image"],
-                createdAt: work["createdAt"] ?? Date.now().toString(),
+                createdAt: work["createdAt"] ?? Date.now(),
                 tags: work["tags"]
             }
             works.push(w)

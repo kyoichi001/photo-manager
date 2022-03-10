@@ -20,7 +20,7 @@ export default function WorkFilterPopout(props: WorkFilterPopoutProps) {
         </div>
     })
     return (
-        <div className='popout-bg-col'>
+        <div className='popout popout-bg-col'>
             <div className=''>
                 <p>tags</p>
                 <div className='tags'>

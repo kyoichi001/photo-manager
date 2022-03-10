@@ -1,6 +1,7 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { CSSProperties, useMemo, useRef, useState } from 'react';
 import Tag from '../tag/tag';
 import '../../css/work.css';
+import '../../css/popouts.css';
 import WorkData from './work_data';
 import TagData from '../tag/tag_data';
 import { usePopper } from 'react-popper';
@@ -40,7 +41,7 @@ export default function Work(props: WorkProps) {
     const { isOpen, open, close } = useDisclosure(false);
     useClickAway(popperRef, close);
     useKeypress('Escape', close);
-
+    const popout_style: CSSProperties = { zIndex: 100 }
     const tags = useMemo(() => {
         const tags: JSX.Element[] = []
         for (let tag of props.data.tags) {
@@ -64,9 +65,15 @@ export default function Work(props: WorkProps) {
                     {tags}
                     <button onClick={open} ref={referenceRef}>+</button>
                 </div>
-                <div className='work-time'><p>{Date.parse(props.data.createdAt)}</p></div>
+                <div className='work-time'><p>{(new Date(props.data.createdAt)).toLocaleDateString("ja")}</p></div>
             </div>
-            <div ref={popperRef} style={styles.popper} {...attributes.popper}>
+            <div ref={popperRef} style={{
+                ...styles.popper,
+                ...popout_style
+            }
+            } {
+                ...attributes.popper
+                }>
                 {
                     isOpen &&
                     <>
