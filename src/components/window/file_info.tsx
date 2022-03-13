@@ -16,7 +16,9 @@ export default function FileInfo(props: FileInfoProps) {
         return (
             <div className='file-info'>
                 <div className='window'>
-                    <div className='work-title'><p>{"no file"}</p></div>
+                    <div className='work-title'>
+                        <p>作品が選択されていません</p>
+                    </div>
                 </div>
             </div>
         )

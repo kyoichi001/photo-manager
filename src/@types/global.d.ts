@@ -9,4 +9,5 @@ export interface IMyAPI {
   loadJSON: (filename: string) => any;
   writeFile: (filename: string, content: string) => void;
   getRoaming: () => string;
+  createDirectory: (path: string) => void;
 }

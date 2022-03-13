@@ -27,5 +27,10 @@ contextBridge.exposeInMainWorld('myAPI', {
   },
   getRoaming: () => {
     return process.env.APPDATA
+  },
+  createDirectory: (path: string) => {
+    if (!fs.existsSync(path)) {
+      fs.mkdirSync(path);
+    }
   }
 });

@@ -19,12 +19,15 @@ export default function WorkFilterPopout(props: WorkFilterPopoutProps) {
             <FilterTag data={p} isChecked={props.activeTags[i]} ></FilterTag>
         </div>
     })
+    const noTags = <div className='no-tags'>
+        <p>タグがありません</p>
+    </div>
     return (
         <div className='popout popout-bg-col'>
             <div className=''>
-                <p>tags</p>
+                <p>フィルター</p>
                 <div className='tags'>
-                    {tags}
+                    {tags.length === 0 ? noTags : tags}
                 </div>
             </div>
         </div>

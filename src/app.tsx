@@ -7,6 +7,7 @@ import MainScene from './components/scenes/main_scene';
 import SettingsScene from './components/scenes/settings_scene';
 import TagManageScene from './components/scenes/tag_manage_scene';
 import { SceneName } from './common/context';
+import DataLoader from './dataloader';
 
 const { myAPI } = window;
 
@@ -15,6 +16,7 @@ function App() {
   const [dom, setDom] = useState(<></>);
 
   console.log("rendering")
+  DataLoader.SetupDirectory()
   useEffect(() => {
     // イベントリスナーを追加
     const removeListener = myAPI.onReceiveMessage(

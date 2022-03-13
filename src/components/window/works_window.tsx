@@ -79,13 +79,17 @@ export default function WorksWindow(props: WorksWindowProps) {
     useClickAway(popperRef, close);
     useKeypress('Escape', close);
 
+    const NoWorks = <div className='no-works'>
+        <p>作品がありません</p>
+        <p>ここにドラッグアンドドロップ</p>
+    </div>
 
     return (
         <div className='works-window'>
             <div className='window'>
                 <WorkMenubar tags={props.tags} setFlag={setFlag} activeTags={activeTags} />
                 <div className='works'>
-                    {works}
+                    {works.length === 0 ? NoWorks : works}
                 </div>
             </div>
             <div ref={popperRef} style={styles.popper} {...attributes.popper}>

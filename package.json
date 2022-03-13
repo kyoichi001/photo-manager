@@ -1,7 +1,7 @@
 {
-  "name": "electron-test-app",
+  "name": "photo-manager",
   "version": "1.0.0",
-  "description": "",
+  "description": "初期ビルド",
   "main": "dist/main.js",
   "scripts": {
     "predev": "rimraf dist",
@@ -9,10 +9,29 @@
     "dev:tsc": "tsc -w -p tsconfig.main.json",
     "dev:webpack": "cross-env NODE_ENV=\"development\" webpack",
     "dev:electron": "wait-on ./dist/index.html && cross-env NODE_ENV=\"development\" electron .",
-    "build": "cross-env NODE_ENV=\"production\" webpack --progress"
+    "build": "cross-env NODE_ENV=\"production\" webpack --progress",
+    "build-win": "electron-builder --win --x64",
+    "build-mac": "electron-builder --mac  --x64"
   },
+  "build": {
+    "appId": "net.kyoichi.photo-manager",
+    "files": [
+      "dist/"
+    ],
+    "mac": {
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "author": "kyoichi",
   "keywords": [],
-  "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^17.0.16",

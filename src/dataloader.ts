@@ -6,8 +6,16 @@ import WorkData from "./components/work/work_data"
 
 export default class DataLoader {
 
+    static SetupDirectory() {
+        window.myAPI.createDirectory(window.myAPI.getRoaming() + "/photo-manager/data/")
+        const p1 = this.WorksPath()
+        const p2 = this.TagsPath()
+        window.myAPI.writeFile(p1, JSON.stringify({ works: [] }))
+        window.myAPI.writeFile(p2, JSON.stringify({ tags: [] }))
+
+    }
     static TagsPath(): string {
-        return window.myAPI.getRoaming() + "/electron-test-app/data/tags.json"
+        return window.myAPI.getRoaming() + "/photo-manager/data/tags.json"
     }
     static LoadTags(): TagData[] {
         const data = JSON.parse(window.myAPI.loadJSON(this.TagsPath()))["tags"]
