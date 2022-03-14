@@ -6,7 +6,7 @@ export default class Col {
             r: Col.clamp(r, 0, 255),
             g: Col.clamp(g, 0, 255),
             b: Col.clamp(b, 0, 255),
-            a: Col.clamp(a ?? 0, 0, 1.0),
+            a: Col.clamp(a ?? 1, 0, 1.0),
         }
     }
 
