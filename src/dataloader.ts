@@ -6,16 +6,16 @@ import WorkData from "./components/work/work_data"
 
 export default class DataLoader {
 
-    static SetupDirectory() {
-        window.myAPI.createDirectory(window.myAPI.getRoaming() + "/photo-manager/data/")
-        const p1 = this.WorksPath()
-        const p2 = this.TagsPath()
-        window.myAPI.writeFile(p1, JSON.stringify({ works: [] }))
-        window.myAPI.writeFile(p2, JSON.stringify({ tags: [] }))
-
+    static GetDataDirectory() {
+        return window.myAPI.getRoaming() + "/photo-manager/data/"
     }
+
+    static SetupDirectory() {
+        window.myAPI.createDirectory(this.GetDataDirectory())
+    }
+
     static TagsPath(): string {
-        return window.myAPI.getRoaming() + "/photo-manager/data/tags.json"
+        return this.GetDataDirectory() + "tags.json"
     }
     static LoadTags(): TagData[] {
         const data = JSON.parse(window.myAPI.loadJSON(this.TagsPath()))["tags"]
@@ -67,7 +67,7 @@ export default class DataLoader {
 
 
     static WorksPath(): string {
-        return window.myAPI.getRoaming() + "/electron-test-app/data/works.json"
+        return this.GetDataDirectory() + "works.json"
     }
     static LoadWorks(): WorkData[] {
         const data = JSON.parse(window.myAPI.loadJSON(this.WorksPath()))["works"]
@@ -107,7 +107,8 @@ export default class DataLoader {
             works: works
         }
         var j = JSON.stringify(res)
-        //console.log(j)
+        console.log(j)
+        console.log(p)
         window.myAPI.writeFile(p, j)
     }
     static SaveWork(work_: WorkData) {

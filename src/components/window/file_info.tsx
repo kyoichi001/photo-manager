@@ -8,6 +8,7 @@ interface FileInfoProps {
     work?: WorkData
     idToTag: (id: string) => TagData | undefined
     deleteWork: (id: string) => void
+    removeTag: (workId: string, tagId: string) => void
 }
 
 export default function FileInfo(props: FileInfoProps) {
@@ -28,7 +29,7 @@ export default function FileInfo(props: FileInfoProps) {
     for (var tag of props.work.tags) {
         var dat = props.idToTag(tag)
         if (!dat) continue
-        tags.push(<Tag data={dat} key={dat.id} onTagRemove={() => { }} />)
+        tags.push(<Tag data={dat} key={dat.id} onTagRemove={(tag) => { props.removeTag(props.work?.id ?? "", tag.id) }} />)
     }
 
     return (
@@ -39,7 +40,7 @@ export default function FileInfo(props: FileInfoProps) {
                 <div className='tags'>
                     {tags}
                 </div>
-                <div className='work-time'><p>{props.work.createdAt}</p></div>
+                <div className='work-time'><p>{(new Date(props.work.createdAt)).toLocaleDateString("ja")}</p></div>
                 <button onClick={() => props.deleteWork(props.work?.id ?? "")}>
                     削除
                 </button>

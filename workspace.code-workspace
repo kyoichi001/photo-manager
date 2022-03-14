@@ -4,7 +4,7 @@
 			"path": "."
 		},
 		{
-			"path": "..\\..\\..\\AppData\\Roaming\\electron-test-app"
+			"path": "..\\..\\..\\AppData\\Roaming\\photo-manager"
 		}
 	],
 	"settings": {}

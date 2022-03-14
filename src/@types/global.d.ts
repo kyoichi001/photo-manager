@@ -10,4 +10,5 @@ export interface IMyAPI {
   writeFile: (filename: string, content: string) => void;
   getRoaming: () => string;
   createDirectory: (path: string) => void;
+  existsFile: (path: string) => boolean;
 }

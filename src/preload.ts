@@ -32,5 +32,8 @@ contextBridge.exposeInMainWorld('myAPI', {
     if (!fs.existsSync(path)) {
       fs.mkdirSync(path);
     }
+  },
+  existsFile: (path: string) => {
+    return fs.existsSync(path)
   }
 });

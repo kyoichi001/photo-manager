@@ -20,6 +20,16 @@ export default class WorkManager {
         let w: WorkData = { id: Library.generateUuid(), title: file.name, image: file.path, createdAt: Date.now(), tags: [] }
         this.saveWorks([...works, w])
     }
+    addWorks(files: File[]) {
+        let works = this.loadWorks()
+        for (var f of files) {
+            if (f.path === "") return
+            if (works.some((work) => work.image === f.path)) return//2重追加防止
+            let w: WorkData = { id: Library.generateUuid(), title: f.name, image: f.path, createdAt: Date.now(), tags: [] }
+            works.push(w)
+        }
+        this.saveWorks([...works])
+    }
     deleteWork(id: string) {
         let works = this.loadWorks()
         var t = works.filter((work) => work.id !== id)
