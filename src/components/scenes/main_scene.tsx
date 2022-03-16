@@ -12,20 +12,24 @@ import "../../css/common.css"
 export default function MainScene() {
     const [works, setWorks] = useState(DataLoader.LoadWorks())
     const [tags, setTags] = useState(DataLoader.LoadTags())
+    useEffect(() => {
+        DataLoader.SaveWorks(works)
+    }, [works])
+    useEffect(() => {
+        DataLoader.SaveTags(tags)
+    }, [tags])
     const [selectedWork, selectWork] = useState('');
 
     let tagManager = new TagManager(
-        () => tags,
+        () => DataLoader.LoadTags(),
         (tags_: TagData[]) => {
-            setTags([...tags_])
             console.log("save " + tags_.length + " tag")
             DataLoader.SaveTags(tags_)
         }
     )
     let workManager = new WorkManager(
-        () => works,
+        () => DataLoader.LoadWorks(),
         (works_: WorkData[]) => {
-            setWorks([...works_])
             console.log("save " + works_.length + " work")
             DataLoader.SaveWorks(works_)
         }
@@ -97,19 +101,9 @@ export default function MainScene() {
                 <div className='view row' >
                     <div className='app-works-window col-9'>
                         <WorksWindow
-                            works={works}
-                            tags={tags}
+                            workManager={workManager}
+                            tagManager={tagManager}
                             onWorkSelected={(work) => selectWork(work.id)}
-                            idToTag={(id) => tagManager.idToTag(id)}
-                            addTagToWork={(work: string, tag: string) => {
-                                workManager.addTagToWork(work, tag)
-                            }}
-                            createTag={(name: string) => {
-                                tagManager.addTag(name)
-                            }}
-                            onRemoveTagFromWork={(work, tag) => {
-                                workManager.deleteTagFromWork(work.id, tag.id)
-                            }}
                         />
                     </div>
                     <div className='app-file-info col-3'>

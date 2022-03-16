@@ -12,6 +12,12 @@ export default class DataLoader {
 
     static SetupDirectory() {
         window.myAPI.createDirectory(this.GetDataDirectory())
+        if (!window.myAPI.existsFile(this.TagsPath())) {
+            window.myAPI.writeFile(this.TagsPath(), JSON.stringify({ tags: [] }))
+        }
+        if (!window.myAPI.existsFile(this.WorksPath())) {
+            window.myAPI.writeFile(this.WorksPath(), JSON.stringify({ works: [] }))
+        }
     }
 
     static TagsPath(): string {

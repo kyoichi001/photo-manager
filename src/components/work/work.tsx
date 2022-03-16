@@ -10,11 +10,9 @@ import TagAddPopout from '../popout/tag_add_popout';
 
 interface WorkProps {
     data: WorkData
-    all_tags: TagData[]
+    tagAddPopout: JSX.Element
     idToTag: (id: string) => TagData | undefined
     onSelected?: (data: WorkData) => void
-    addTagToWork: (work: string, tag: string) => void
-    createTag: (name: string) => void
     onWorkPreview: (data: WorkData) => void
     onRemoveTag: (work: WorkData, tag: TagData) => void
 }
@@ -77,11 +75,9 @@ export default function Work(props: WorkProps) {
                 {
                     isOpen &&
                     <>
-                        <TagAddPopout
-                            tags={props.all_tags}
-                            onClickTag={(tag) => props.addTagToWork(props.data.id, tag.id)}
-                            onCreateTag={(name) => props.createTag(name)}
-                        />
+                        {
+                            props.tagAddPopout
+                        }
                         <div ref={setArrowElement} style={styles.arrow} />
                     </>
                 }
