@@ -127,6 +127,7 @@ contextBridge.exposeInMainWorld('myAPI', {
           })
         })
       })
+      db.close()
     })
     return p
   },
@@ -171,6 +172,7 @@ contextBridge.exposeInMainWorld('myAPI', {
           resolve(tag)
         })
       })
+      db.close()
     })
     return p
   },
