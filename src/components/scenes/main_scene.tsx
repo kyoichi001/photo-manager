@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import DataLoader from '../../dataloader';
 import TagManager from '../../tag_manager';
 import WorkManager from '../../work_manager';
 import TagData from '../tag/tag_data';
@@ -10,30 +9,28 @@ import WorkData, { __errorWork } from '../work/work_data';
 import "../../css/common.css"
 
 export default function MainScene() {
-    const [works, setWorks] = useState(DataLoader.LoadWorks())
-    const [tags, setTags] = useState(DataLoader.LoadTags())
-    useEffect(() => {
-        DataLoader.SaveWorks(works)
-    }, [works])
-    useEffect(() => {
-        DataLoader.SaveTags(tags)
-    }, [tags])
-    const [selectedWork, selectWork] = useState('');
+    const [renderFlag, setRenderFlag] = useState(false)
+    const [selectedWork, selectWork] = useState<WorkData | undefined>(undefined);
 
-    let tagManager = new TagManager(
-        () => DataLoader.LoadTags(),
-        (tags_: TagData[]) => {
-            console.log("save " + tags_.length + " tag")
-            DataLoader.SaveTags(tags_)
+    let tagManager = new TagManager(() => {
+        setRenderFlag(renderFlag ? false : true)
+    })
+    let workManager = new WorkManager(() => {
+        setRenderFlag(renderFlag ? false : true)
+    })
+
+    const [tags, setTags] = useState<TagData[]>([])
+    const [works, setWorks] = useState<WorkData[]>([])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const w = await workManager.getWorks()
+            setWorks(w)
+            const t = await tagManager.getTags()
+            setTags(t)
         }
-    )
-    let workManager = new WorkManager(
-        () => DataLoader.LoadWorks(),
-        (works_: WorkData[]) => {
-            console.log("save " + works_.length + " work")
-            DataLoader.SaveWorks(works_)
-        }
-    )
+        fetchData()
+    })
 
     //https://react-dropzone.js.org/
     const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -103,13 +100,15 @@ export default function MainScene() {
                         <WorksWindow
                             workManager={workManager}
                             tagManager={tagManager}
-                            onWorkSelected={(work) => selectWork(work.id)}
+                            works={works}
+                            tags={tags}
+                            onWorkSelected={(work) => selectWork(work)}
                         />
                     </div>
                     <div className='app-file-info col-3'>
                         <FileInfo
-                            work={workManager.idToWork(selectedWork)}
-                            idToTag={(id) => tagManager.idToTag(id)}
+                            work={selectedWork}
+                            idToTag={(id) => tags.find((t) => t.id === id)}
                             deleteWork={(id) => workManager.deleteWork(id)}
                             removeTag={(work, tag) => workManager.deleteTagFromWork(work, tag)}
                         />

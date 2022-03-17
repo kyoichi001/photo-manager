@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { usePopper } from 'react-popper';
 import '../../css/works_window.css'
 import '../../css/popouts.css'
@@ -10,18 +10,21 @@ import WorkMenubar from './work_menubar';
 import WorkManager from '../../work_manager';
 import TagManager from '../../tag_manager';
 import TagAddPopout from '../popout/tag_add_popout';
+import TagData from '../tag/tag_data';
 
 
 interface WorksWindowProps {
     workManager: WorkManager
     tagManager: TagManager
+    works: WorkData[]
+    tags: TagData[]
     onWorkSelected?: (data: WorkData) => void
 }
 
 export default function WorksWindow(props: WorksWindowProps) {
-    const tags = props.tagManager.loadTags()
-    const works = props.workManager.loadWorks()
 
+    const tags = props.tags
+    const works = props.works
     const defaultTags: boolean[] = (new Array(tags.length)).fill(false)
     const [activeTags, setActiveTags] = useState(defaultTags);
     const filteredWorks = works.filter((work) => {
@@ -38,7 +41,7 @@ export default function WorksWindow(props: WorksWindowProps) {
             key={work.id}
             data={work}
             onSelected={props.onWorkSelected}
-            idToTag={props.tagManager.idToTag}
+            idToTag={(id) => tags.find((t) => t.id === id)}
             onWorkPreview={(data) => {
                 open()
                 setTargetWorkIndex(index)
@@ -48,7 +51,7 @@ export default function WorksWindow(props: WorksWindowProps) {
             }}
             tagAddPopout={
                 <TagAddPopout
-                    tags={props.tagManager.loadTags()}
+                    tags={tags}
                     onClickTag={(tag) => props.workManager.addTagToWork(work.id, tag.id)}
                     onCreateTag={(name) => props.tagManager.addTag(name)}
                 />
@@ -90,7 +93,7 @@ export default function WorksWindow(props: WorksWindowProps) {
     return (
         <div className='works-window'>
             <div className='window'>
-                <WorkMenubar tags={props.tagManager.loadTags()} setFlag={setFlag} activeTags={activeTags} />
+                <WorkMenubar tags={tags} setFlag={setFlag} activeTags={activeTags} />
                 <div className='works'>
                     {worksDOM.length === 0 ? NoWorks : worksDOM}
                 </div>
@@ -100,7 +103,7 @@ export default function WorksWindow(props: WorksWindowProps) {
                     isOpen &&
                     <WorkPreviewPopout
                         work={filteredWorks[targetWorkIndex]}
-                        idToTag={(id) => props.tagManager.idToTag(id)}
+                        idToTag={(id) => tags.find((t) => t.id === id)}
                         onClickPrev={(id) => { setTargetWorkIndex((targetWorkIndex - 1 + worksDOM.length) % worksDOM.length) }}
                         onClickNext={(id) => { setTargetWorkIndex((targetWorkIndex + 1) % worksDOM.length) }}
                         onClose={() => close()}
