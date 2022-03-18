@@ -159,7 +159,7 @@ contextBridge.exposeInMainWorld('myAPI', {
           if (err) throw err
           var tag: TagData = {
             id: row["id"],
-            name: row['title'],
+            name: row['name'],
             color: Col.generate(row['r'], row['g'], row['b'])
           }
           res.push(tag)
@@ -230,7 +230,7 @@ contextBridge.exposeInMainWorld('myAPI', {
       var db = new sqlite3.Database(dbName);
       db.serialize(function () {
         db.run("insert into tags(id, name, r, g, b,createdAt) values ($id, $name, $r, $g, $b,$createdAt)",
-          { '$id': tag.id, '$title': tag.name, '$r': tag.color.r, '$g': tag.color.g, '$b': tag.color.b, '$createdAt': 0 },
+          { '$id': tag.id, '$name': tag.name, '$r': tag.color.r, '$g': tag.color.g, '$b': tag.color.b, '$createdAt': 0 },
           (err) => {
             if (err) reject(err)
             else resolve()

@@ -34,3 +34,7 @@
 .work-thumb-container{
   position: relative;
 }
+
+.work-title{
+  word-break: break-all
+}

@@ -21,7 +21,20 @@ export default function TagManageScene(props: TagManageSceneProps) {
     })
 
     const [tags, setTags] = useState<TagData[]>([])
-    const [works, setWorks] = useState<WorkData[]>([])
+
+    const fetchData = async () => {
+        console.log("fetch data")
+        try {
+            const t = await tagManager.getTags()
+            setTags(t)
+        } catch (error) {
+            console.log("tags")
+            console.log(error)
+        }
+    }
+    useEffect(() => {
+        fetchData()
+    }, [renderFlag])
 
     const tagDOMs: JSX.Element[] = tags.map(
         (t) => <Tag key={t.id} data={t} onTagRemove={(data) => tagManager.deleteTag(data.id)} />
