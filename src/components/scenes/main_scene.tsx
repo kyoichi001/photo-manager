@@ -7,6 +7,7 @@ import FileInfo from '../window/file_info';
 import WorksWindow from '../window/works_window';
 import WorkData, { __errorWork } from '../work/work_data';
 import "../../css/common.css"
+import "../../css/main_scene.css"
 
 export default function MainScene() {
     const [renderFlag, setRenderFlag] = useState(false)
@@ -22,28 +23,30 @@ export default function MainScene() {
     const [tags, setTags] = useState<TagData[]>([])
     const [works, setWorks] = useState<WorkData[]>([])
 
-    useEffect(() => {
-        const fetchData = async () => {
+    const fetchData = async () => {
+        console.log("fetch data")
+        try {
             const w = await workManager.getWorks()
             setWorks(w)
+        } catch (error) {
+            console.log(error)
+        }
+        try {
             const t = await tagManager.getTags()
             setTags(t)
+        } catch (error) {
+            console.log("tags")
+            console.log(error)
         }
+    }
+    useEffect(() => {
         fetchData()
-    })
+    }, [renderFlag])
 
     //https://react-dropzone.js.org/
     const onDrop = useCallback((acceptedFiles: File[]) => {
-        for (var f of acceptedFiles) {
-            const reader = new FileReader()
-            reader.onabort = () => console.log('file reading was aborted')
-            reader.onerror = () => console.log('file reading has failed')
-            reader.onload = () => {//コールバックなので，複数のファイルを同時に追加しようとすると上書きされてうまくできない
-                console.log(f.name)
-                workManager.addWork(f)
-            }
-            reader.readAsArrayBuffer(f)
-        }
+        console.log("on drop " + acceptedFiles.map((f) => f.name))
+        workManager.addWorks(acceptedFiles)
     }, [])
 
 

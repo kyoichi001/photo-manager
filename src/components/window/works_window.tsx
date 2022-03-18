@@ -93,9 +93,11 @@ export default function WorksWindow(props: WorksWindowProps) {
     return (
         <div className='works-window'>
             <div className='window'>
-                <WorkMenubar tags={tags} setFlag={setFlag} activeTags={activeTags} />
-                <div className='works'>
-                    {worksDOM.length === 0 ? NoWorks : worksDOM}
+                <div className='works-window-container'>
+                    <WorkMenubar tags={tags} setFlag={setFlag} activeTags={activeTags} />
+                    <div className='works'>
+                        {worksDOM.length === 0 ? NoWorks : worksDOM}
+                    </div>
                 </div>
             </div>
             <div ref={popperRef} style={styles.popper} {...attributes.popper}>

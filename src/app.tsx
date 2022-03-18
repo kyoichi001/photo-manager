@@ -8,17 +8,18 @@ import SettingsScene from './components/scenes/settings_scene';
 import TagManageScene from './components/scenes/tag_manage_scene';
 import { SceneName } from './common/context';
 
-const { myAPI } = window;
-
 function App() {
   const [_, setState] = useState('');
   const [dom, setDom] = useState(<></>);
 
-  console.log("rendering")
-  window.myAPI.createTable()
+
   useEffect(() => {
+    //非同期処理はuseEffect内で書くべき（useEffectが書かれているコンポーネントは２回実行されるらしい）
+    console.log("rendering")
+    window.myAPI.createTable()
+    console.log("app create finished")
     // イベントリスナーを追加
-    const removeListener = myAPI.onReceiveMessage(
+    const removeListener = window.myAPI.onReceiveMessage(
       (message: string) => {
         setState(message);
       },

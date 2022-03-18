@@ -21,9 +21,11 @@ export default class TagManager {
     async addTag(name: string) {
         const tag = { id: Library.generateUuid(), name: name, color: Col.generate(255, 255, 255) }
         await window.myAPI.insertTag(tag)
+        this.onDataSaved()
     }
     async deleteTag(id: string) {
         await window.myAPI.deleteTag(id)
+        this.onDataSaved()
     }
     async editTag(id: string, name?: string, color?: Color) {
         let tag = await this.idToTag(id)
@@ -31,5 +33,6 @@ export default class TagManager {
         if (name) tag.name = name
         if (color) tag.color = color
         await window.myAPI.updateTag(id, tag.name, tag.color)
+        this.onDataSaved()
     }
 }

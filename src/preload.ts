@@ -2,7 +2,7 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import { IPCKeys } from './common/constants';
 import fs from "fs"
-import sqlite3 from 'sqlite3'
+import sqlite3 from '@vscode/sqlite3'
 import Color from './common/color';
 import WorkData from './components/work/work_data';
 import TagData from './components/tag/tag_data';
@@ -44,20 +44,38 @@ contextBridge.exposeInMainWorld('myAPI', {
   existsFile: (path: string) => {
     return fs.existsSync(path)
   },
+
+
+
   createTable: () => {
+    console.log("call func")
     const p = new Promise<void>((resolve, reject) => {
       var db = new sqlite3.Database(dbName);
-      db.serialize(async function () {
-        const dbRunAsync = util.promisify<string, void>(db.run)
-        try {
-          await dbRunAsync("create table works (id text, title text,image text, createdAt int)")
-          await dbRunAsync("create table tags (id text, name text, r int, g int, b int,createdAt int)")
-          await dbRunAsync("create table tagworks (workid text, tagid text)");
-        } catch (e: any) {
-          reject(e)
-          return
-        }
-        resolve()
+      db.serialize(function () {
+        console.log("creating")
+        db.run("create table works (id text, title text,image text, createdAt int)",
+          (err) => {
+            if (err) reject()
+            console.log("reject create works table")
+          }
+        )
+        db.run("create table tags (id text, name text, r int, g int, b int,createdAt int)",
+          (err) => {
+            if (err) reject()
+            console.log("reject create tags table")
+          }
+        )
+        db.run("create table tagworks (workid text, tagid text)",
+          (err) => {
+            if (err) {
+              reject()
+              console.log("reject create tagworks table")
+              return
+            }
+            resolve()
+            console.log("finish creating tables")
+          }
+        );
       })
       db.close()
     })
@@ -68,32 +86,33 @@ contextBridge.exposeInMainWorld('myAPI', {
       var db = new sqlite3.Database(dbName);
       db.serialize(async function () {
         var res: WorkData[] = []
-        const dbAllAsync = util.promisify<string, ((this: sqlite3.Statement, err: Error | null, rows: any[]) => void) | undefined, number>(db.all)
-        try {
-          await dbAllAsync("select * from works", (err, rows) => {
-            if (err) throw err
-            res = rows.map((row) => {
-              return {
-                id: row["id"],
-                title: row['title'],
-                image: row['image'],
-                tags: [],
-                createdAt: row['createdAt']
-              }
-            })
-          })
-          await dbAllAsync("select * from tagworks", (err, rows) => {
-            if (err) throw err
-            for (var row of rows) {
-              var w = res.find((w) => w.id === row['workid'])
-              if (w !== undefined) w.tags.push(row['tagid'])
+        db.all("select * from works", (err, rows) => {
+          if (err) {
+            reject()
+            return
+          }
+          console.log("load works " + rows.length)
+          res = rows.map((row) => {
+            return {
+              id: row["id"],
+              title: row['title'],
+              image: row['image'],
+              tags: [],
+              createdAt: row['createdAt']
             }
           })
-        } catch (e: any) {
-          reject(e)
-          return
-        }
-        resolve(res)
+        })
+        db.all("select * from tagworks", (err, rows) => {
+          if (err) {
+            reject()
+            return
+          }
+          for (var row of rows) {
+            var w = res.find((w) => w.id === row['workid'])
+            if (w !== undefined) w.tags.push(row['tagid'])
+          }
+          resolve(res)
+        })
       });
       db.close()
     })
@@ -177,25 +196,32 @@ contextBridge.exposeInMainWorld('myAPI', {
     return p
   },
   insertWork: (work: WorkData) => {
+    console.log("start inserting")
     const p = new Promise<void>((resolve, reject) => {
       var db = new sqlite3.Database(dbName);
       db.serialize(async function () {
-        const dbRunAsync = util.promisify<string, any, void>(db.run)
-        try {
-          await dbRunAsync("insert into works(id text, title text,image text, createdAt int) values ($id, $title, $image, $createdAt)",
-            { '$id': work.id, '$title': work.title, '$image': work.image, '$createdAt': work.createdAt });
+        db.run("insert into works(id, title,image,createdAt) values ($id, $title, $image, $createdAt)",
+          { '$id': work.id, '$title': work.title, '$image': work.image, '$createdAt': work.createdAt },
+          (e) => {
+            if (e) reject(e)
+          });
 
-          for (var tag of work.tags) {
-            await dbRunAsync("insert into tagworks(workid text, tagid text) values ($workid, $tagid)",
-              { '$workid': work.id, '$tagid': tag })
-          }
-        } catch (e: any) {
-          reject(e)
+        for (var tag of work.tags) {
+          db.run("insert into tagworks(workid text, tagid text) values ($workid, $tagid)",
+            { '$workid': work.id, '$tagid': tag },
+            (e) => {
+              if (e) reject(e)
+            })
+        }
+      });
+      db.close((err) => {
+        if (err) {
+          reject()
           return
         }
+        console.log("finished")
         resolve()
-      });
-      db.close()
+      })
     })
     return p
   },
@@ -203,8 +229,8 @@ contextBridge.exposeInMainWorld('myAPI', {
     const p = new Promise<void>((resolve, reject) => {
       var db = new sqlite3.Database(dbName);
       db.serialize(function () {
-        db.run("insert into tags(id text, name text, r int, g int, b int,createdAt int) values ($id, $name, $r, $g, $b)",
-          { '$id': tag.id, '$title': tag.name, '$r': tag.color.r, '$g': tag.color.g, '$b': tag.color.b },
+        db.run("insert into tags(id, name, r, g, b,createdAt) values ($id, $name, $r, $g, $b,$createdAt)",
+          { '$id': tag.id, '$title': tag.name, '$r': tag.color.r, '$g': tag.color.g, '$b': tag.color.b, '$createdAt': 0 },
           (err) => {
             if (err) reject(err)
             else resolve()
@@ -214,11 +240,11 @@ contextBridge.exposeInMainWorld('myAPI', {
     })
     return p
   },
-  insertTagToWork: (workId: string, tagId: string, callback: (err: Error | null, res: TagData[]) => void) => {
+  insertTagToWork: (workId: string, tagId: string) => {
     const p = new Promise<void>((resolve, reject) => {
       var db = new sqlite3.Database(dbName);
       db.serialize(function () {
-        db.run("insert into tagworks(workid text, tagid text) values ($workid, $tagid)",
+        db.run("insert into tagworks(workid, tagid) values ($workid, $tagid)",
           { '$workid': workId, '$tagid': tagId },
           (err) => {
             if (err) reject(err)
