@@ -109,8 +109,10 @@ contextBridge.exposeInMainWorld('myAPI', {
           }
           for (var row of rows) {
             var w = res.find((w) => w.id === row['workid'])
-            if (w !== undefined) w.tags.push(row['tagid'])
+            if (w !== undefined) w.tags = [...w.tags, row['tagid']]
           }
+
+          console.log(res)
           resolve(res)
         })
       });

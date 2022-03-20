@@ -41,15 +41,16 @@ export default function Work(props: WorkProps) {
     useKeypress('Escape', close);
     const popout_style: CSSProperties = { zIndex: 100 }
     const tags = useMemo(() => {
-        const tags: JSX.Element[] = []
+        console.log("generate tags " + props.data.tags.length)
+        const t: JSX.Element[] = []
         for (let tag of props.data.tags) {
             var dat = props.idToTag(tag)
             if (!dat) continue
-            tags.push(
+            t.push(
                 <Tag key={dat.id} data={dat} onTagRemove={(data_) => { props.onRemoveTag(props.data, data_) }} />
             )
         }
-        return tags
+        return t
     }, [props.data.tags])
     return (
         <div className='work'>

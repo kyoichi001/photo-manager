@@ -33,6 +33,7 @@ export default function MainScene() {
         }
         try {
             const t = await tagManager.getTags()
+            console.log(t)
             setTags(t)
         } catch (error) {
             console.log("tags")

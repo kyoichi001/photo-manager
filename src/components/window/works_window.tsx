@@ -25,6 +25,7 @@ export default function WorksWindow(props: WorksWindowProps) {
 
     const tags = props.tags
     const works = props.works
+    console.log("tags " + tags.length)
     const defaultTags: boolean[] = (new Array(tags.length)).fill(false)
     const [activeTags, setActiveTags] = useState(defaultTags);
     const filteredWorks = works.filter((work) => {
