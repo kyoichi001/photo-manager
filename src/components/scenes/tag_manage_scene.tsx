@@ -5,6 +5,7 @@ import TagData from '../tag/tag_data';
 import '../../css/common.css'
 import WorkManager from '../../work_manager';
 import WorkData from '../work/work_data';
+import TagInfo from '../window/tag_info';
 
 interface TagManageSceneProps {
 
@@ -20,7 +21,15 @@ export default function TagManageScene(props: TagManageSceneProps) {
         setRenderFlag(renderFlag ? false : true)
     })
 
+
     const [tags, setTags] = useState<TagData[]>([])
+    const [selectedTag, setSelectedTag] = useState<TagData | undefined>(undefined)
+
+    useEffect(() => {
+        if (selectedTag) {
+            tagManager.editTag(selectedTag.id, selectedTag?.name, selectedTag.color)
+        }
+    }, [selectedTag])
 
     const fetchData = async () => {
         console.log("fetch data")
@@ -37,20 +46,42 @@ export default function TagManageScene(props: TagManageSceneProps) {
     }, [renderFlag])
 
     const tagDOMs: JSX.Element[] = tags.map(
-        (t) => <Tag key={t.id} data={t} onTagRemove={(data) => tagManager.deleteTag(data.id)} />
+        (t) => {
+            return <div onClick={() => setSelectedTag(t)} key={t.id}>
+                <Tag data={t} onTagRemove={(data) => tagManager.deleteTag(data.id)} />
+            </div>
+        }
     )
 
     return (
         <div className="tag-manage-scene">
-            <div className='row'>
-                <div className='col-9'>
-                    <p>タグ管理</p>
-                    <div className='wrap-container'>
-                        {tagDOMs}
+            <div className='window'>
+                <div className='row'>
+                    <div className='col-9'>
+                        <p>タグ管理</p>
+                        <div className='wrap-container'>
+                            {tagDOMs}
+                            <button onClick={(e) => tagManager.addTag("new tag")}>+</button>
+                        </div>
                     </div>
-                </div>
-                <div className='col-3'>
-
+                    <div className='col-3'>
+                        <TagInfo
+                            tag={selectedTag}
+                            onChangeTagName={(tag, newValue) => {
+                                if (selectedTag) {
+                                    selectedTag.name = newValue
+                                    setSelectedTag({ ...selectedTag })
+                                }
+                            }}
+                            deleteTag={(tag) => { tagManager.deleteTag(tag?.id ?? "") }}
+                            onChangeColor={(tag, newValue) => {
+                                if (selectedTag) {
+                                    selectedTag.color = newValue
+                                    setSelectedTag({ ...selectedTag })
+                                }
+                            }}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

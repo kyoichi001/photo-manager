@@ -10,7 +10,7 @@ import { SceneName } from './common/context';
 
 function App() {
   const [_, setState] = useState('');
-  const [dom, setDom] = useState(<></>);
+  const [dom, setDom] = useState(<MainScene />);
 
 
   useEffect(() => {

@@ -16,7 +16,11 @@ export default class TagManager {
         return await window.myAPI.getTags()
     }
     async idToTag(id: string): Promise<TagData | undefined> {
-        return await window.myAPI.getTag(id)
+        try {
+            return await window.myAPI.getTag(id)
+        } catch (e: any) {
+            return undefined
+        }
     }
     async addTag(name: string) {
         const tag = { id: Library.generateUuid(), name: name, color: Col.generate(255, 255, 255) }

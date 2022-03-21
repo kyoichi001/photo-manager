@@ -121,6 +121,7 @@ contextBridge.exposeInMainWorld('myAPI', {
     return p
   },
   getWork: (id: string) => {
+    if (id == "") return undefined
     const p = new Promise<WorkData>((resolve, reject) => {
       var db = new sqlite3.Database(dbName);
       db.serialize(async function () {
@@ -177,6 +178,7 @@ contextBridge.exposeInMainWorld('myAPI', {
     return p
   },
   getTag: (id: string) => {
+    if (id == "") return undefined
     const p = new Promise<TagData>((resolve, reject) => {
       var db = new sqlite3.Database(dbName);
       db.serialize(async function () {

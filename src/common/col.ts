@@ -12,7 +12,6 @@ export default class Col {
 
     ///#FFFFFFなどの文字列からColorクラスへ変換
     static str2Color(str: string): Color {
-        console.log(str)
         var r = str.slice(1, 3)
         var g = str.slice(3, 5)
         var b = str.slice(5)
@@ -35,6 +34,9 @@ export default class Col {
 
     static toString(color: Color): string {
         return "rgba(" + color.r + "," + color.g + "," + color.b + "," + color.a + ")"
+    }
+    static toHexString(color: Color): string {
+        return "#" + ('0' + color.r.toString(16)).substr(-2) + ('0' + color.g.toString(16)).substr(-2) + ('0' + color.b.toString(16)).substr(-2)
     }
     ///色の明度を0.0~1.0までの間で返す
     static brightness(color: Color): number {

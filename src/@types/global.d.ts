@@ -19,9 +19,9 @@ export interface IMyAPI {
 
   createTable: () => Promise<void>
   getWorks: () => Promise<WorkData[]>
-  getWork: (id: string) => Promise<WorkData>
+  getWork: (id: string) => Promise<WorkData | undefined>
   getTags: () => Promise<TagData[]>
-  getTag: (id: string) => Promise<TagData>
+  getTag: (id: string) => Promise<TagData | undefined>
   insertWork: (work: WorkData) => Promise<void>
   insertTag: (tag: TagData) => Promise<void>
   insertTagToWork: (workId: string, tagId: string) => Promise<void>
