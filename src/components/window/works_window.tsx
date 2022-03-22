@@ -28,10 +28,14 @@ export default function WorksWindow(props: WorksWindowProps) {
     console.log("tags " + tags.length)
     const defaultTags: boolean[] = (new Array(tags.length)).fill(false)
     const [activeTags, setActiveTags] = useState(defaultTags);
+    const [activeKeyword, setActiveKeyword] = useState("")
     const filteredWorks = works.filter((work) => {
-        if (activeTags.every((t) => t === false)) return true
+        if (activeTags.every((t) => t === false) && activeKeyword === "") return true
         for (let i = 0; i < tags.length; i++) {
             if (activeTags[i] && work.tags.find((t) => t === tags[i].id)) {
+                return true
+            }
+            if (work.title.indexOf(activeKeyword) != -1) {
                 return true
             }
         }
@@ -60,10 +64,9 @@ export default function WorksWindow(props: WorksWindowProps) {
         />
     })
     function setFlag(index: number, flag: boolean) {
-        var s = activeTags
-        s[index] = flag
+        activeTags[index] = flag
         console.log("filter tag clicked")
-        setActiveTags([...s])
+        setActiveTags([...activeTags])
     }
     const [targetWorkIndex, setTargetWorkIndex] = useState<number>(-1);
     const popperRef = useRef<HTMLDivElement | null>(null);
@@ -95,7 +98,12 @@ export default function WorksWindow(props: WorksWindowProps) {
         <div className='works-window'>
             <div className='window'>
                 <div className='works-window-container'>
-                    <WorkMenubar tags={tags} setFlag={setFlag} activeTags={activeTags} />
+                    <WorkMenubar
+                        tags={tags}
+                        setFlag={setFlag}
+                        setKeyword={setActiveKeyword}
+                        activeTags={activeTags}
+                    />
                     <div className='works'>
                         {worksDOM.length === 0 ? NoWorks : worksDOM}
                     </div>

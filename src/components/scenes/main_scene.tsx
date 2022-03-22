@@ -9,6 +9,11 @@ import WorkData, { __errorWork } from '../work/work_data';
 import "../../css/common.css"
 import "../../css/main_scene.css"
 
+interface MainSceneData {
+    tags: TagData[]
+    works: WorkData[]
+}
+
 export default function MainScene() {
     const [renderFlag, setRenderFlag] = useState(false)
     const [selectedWork, selectWork] = useState<WorkData | undefined>(undefined);
@@ -20,28 +25,34 @@ export default function MainScene() {
         setRenderFlag(renderFlag ? false : true)
     })
 
-    const [tags, setTags] = useState<TagData[]>([])
-    const [works, setWorks] = useState<WorkData[]>([])
+    const [data, setData] = useState<MainSceneData>({ tags: [], works: [] })
 
     const fetchData = async () => {
         console.log("fetch data")
+        var w: WorkData[] = []
+        var t: TagData[] = []
         try {
-            const w = await workManager.getWorks()
-            setWorks(w)
+            w = await workManager.getWorks()
         } catch (error) {
             console.log(error)
         }
         try {
-            const t = await tagManager.getTags()
+            t = await tagManager.getTags()
             console.log(t)
-            setTags(t)
         } catch (error) {
             console.log("tags")
             console.log(error)
         }
+        return { tags: t, works: w }
     }
+    //https://zenn.dev/coa00/articles/d3db140113b165
+    //メモリリーク対策
     useEffect(() => {
-        fetchData()
+        let isMounted = true; // note this flag denote mount status
+        fetchData().then((value) => {
+            if (isMounted) setData(value);
+        })
+        return () => { isMounted = false }; // use effect cleanup to set flag false, if unmounted
     }, [renderFlag])
 
     //https://react-dropzone.js.org/
@@ -104,15 +115,15 @@ export default function MainScene() {
                         <WorksWindow
                             workManager={workManager}
                             tagManager={tagManager}
-                            works={works}
-                            tags={tags}
+                            works={data.works}
+                            tags={data.tags}
                             onWorkSelected={(work) => selectWork(work)}
                         />
                     </div>
                     <div className='app-file-info col-3'>
                         <FileInfo
                             work={selectedWork}
-                            idToTag={(id) => tags.find((t) => t.id === id)}
+                            idToTag={(id) => data.tags.find((t) => t.id === id)}
                             deleteWork={(id) => workManager.deleteWork(id)}
                             removeTag={(work, tag) => workManager.deleteTagFromWork(work, tag)}
                         />

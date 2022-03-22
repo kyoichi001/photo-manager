@@ -9,6 +9,7 @@ import { useClickAway, useDisclosure, useKeypress } from '../popout/popout_hooks
 interface WorkMenubarProps {
     tags: TagData[]
     setFlag: (index: number, flag: boolean) => void
+    setKeyword: (keyword: string) => void
     activeTags: boolean[]
 }
 
@@ -34,19 +35,28 @@ export default function WorkMenubar(props: WorkMenubarProps) {
         }
     );
 
-
-    function onFilterActive() {
-
-    }
-
     const { isOpen, open, close } = useDisclosure(false);
     const popout_style: CSSProperties = { zIndex: 100 }
     useClickAway(popperRef, close);
     useKeypress('Escape', close);
 
+    const [searchKeyword, setSearchKeyword] = useState("")
+
     return (
         <div className='work-menubar'>
             <p>検索</p>
+            <input type="text" id='text' name='text'
+                value={searchKeyword}
+                onChange={(e) => setSearchKeyword(e.target.value)}
+                onKeyPress={(e) => {
+                    if (e.key == 'Enter') {
+                        console.log("press enter")
+                        e.preventDefault()
+                        props.setKeyword(searchKeyword)
+                    }
+                }
+                }>
+            </input>
             <div onClick={() => { open() }} ref={referenceRef}>
                 フィルター
             </div>

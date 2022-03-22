@@ -64,7 +64,6 @@ export default function Work(props: WorkProps) {
                     {tags}
                     <button onClick={open} ref={referenceRef}>+</button>
                 </div>
-                <div className='work-time'><p>{(new Date(props.data.createdAt)).toLocaleDateString("ja")}</p></div>
             </div>
             <div ref={popperRef} style={{
                 ...styles.popper,
