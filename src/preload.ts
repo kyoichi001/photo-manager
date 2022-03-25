@@ -8,6 +8,7 @@ import WorkData from './components/work/work_data';
 import TagData from './components/tag/tag_data';
 import Col from './common/col';
 import util from 'util'
+import TagGroup from './components/tag/tag_group';
 
 const dbName = 'testdata.db'
 
@@ -55,14 +56,18 @@ contextBridge.exposeInMainWorld('myAPI', {
         console.log("creating")
         db.run("create table works (id text, title text,image text, createdAt int)",
           (err) => {
-            if (err) reject()
-            console.log("reject create works table")
+            if (err) {
+              console.log("reject create works table")
+              reject()
+            }
           }
         )
         db.run("create table tags (id text, name text, r int, g int, b int,createdAt int)",
           (err) => {
-            if (err) reject()
-            console.log("reject create tags table")
+            if (err) {
+              console.log("reject create tags table")
+              reject()
+            }
           }
         )
         db.run("create table tagworks (workid text, tagid text)",
@@ -70,6 +75,22 @@ contextBridge.exposeInMainWorld('myAPI', {
             if (err) {
               reject()
               console.log("reject create tagworks table")
+            }
+          }
+        );
+        db.run("create table taggroups (id text, name text)",
+          (err) => {
+            if (err) {
+              reject()
+              console.log("reject create taggroup table")
+            }
+          }
+        );
+        db.run("create table taggrouptags (groupid text, tagid text)",
+          (err) => {
+            if (err) {
+              reject()
+              console.log("reject create taggrouptags table")
               return
             }
             resolve()
@@ -199,6 +220,105 @@ contextBridge.exposeInMainWorld('myAPI', {
     })
     return p
   },
+  getTagGroups: () => {
+    const p = new Promise<TagGroup[]>((resolve, reject) => {
+      var db = new sqlite3.Database(dbName);
+      db.serialize(function () {
+        var res: TagGroup[] = []
+        db.each("select * from taggroups", (err, row) => {
+          if (err) throw err
+          var tagGroup: TagGroup = {
+            id: row["id"],
+            name: row['name'],
+            tags: []
+          }
+          res.push(tagGroup)
+        });
+        db.each("select * from taggrouptags", (err, row) => {
+          if (err) throw err
+          res.find((t) => t.id === row["groupid"])?.tags.push(row["tagid"])
+        }, (err, count) => {
+          if (err) reject()
+          else resolve(res)
+        });
+      });
+      db.close()
+    })
+    return p
+  },
+  getTagGroup: (id: string) => {
+    if (id == "") return undefined
+    const p = new Promise<TagGroup>((resolve, reject) => {
+      var db = new sqlite3.Database(dbName);
+      var res: TagGroup = {
+        id: '',
+        name: '',
+        tags: []
+      }
+      db.serialize(async function () {
+        db.get("select * from taggroups where id=$id", { '$id': id }, (err, row) => {
+          if (err) {
+            reject(err)
+            return
+          }
+          res = {
+            id: row['id'],
+            name: row['name'],
+            tags: []
+          }
+        })
+      })
+      db.each("select * from taggrouptags where groupid=$groupid", { '$groupid': id }, (err, row) => {
+        if (err) throw err
+        res.tags.push(row["tagid"])
+      }, (err, count) => {
+        if (err) reject()
+        else resolve(res)
+      });
+      db.close()
+    })
+    return p
+  },
+
+  getWorksFromTags: (ids: string[]) => {
+    /*const p = new Promise<WorkData[]>((resolve, reject) => {
+      var db = new sqlite3.Database(dbName);
+      db.serialize(async function () {
+          db.all("select * from tagworks where tagid=$tagid", { '$workid': id }, (err, rows) => {
+            if (err) {
+              reject(err)
+              return
+            }
+            for (var row of rows) {
+              work.tags.push(row['tagid'])
+            }
+            resolve(work)
+          })
+      })
+      db.close()
+    })
+    return p*/
+  },
+  getTagsFromTagGroup: (id: string) => {
+    const p = new Promise<TagData[]>((resolve, reject) => {
+      var db = new sqlite3.Database(dbName);
+      db.serialize(async function () {
+        db.all("select * from taggrouptags where groupid=$groupid", { '$groupid': id }, (err, rows) => {
+          if (err) {
+            reject(err)
+            return
+          }
+          var res: TagData[] = []
+          for (var row of rows) {
+            res.push(row['tagid'])
+          }
+          resolve(res)
+        })
+      })
+      db.close()
+    })
+    return p
+  },
   insertWork: (work: WorkData) => {
     console.log("start inserting")
     const p = new Promise<void>((resolve, reject) => {
@@ -259,6 +379,36 @@ contextBridge.exposeInMainWorld('myAPI', {
     })
     return p
   },
+  insertTagGroup: (tagGroup: TagGroup) => {
+    const p = new Promise<void>((resolve, reject) => {
+      var db = new sqlite3.Database(dbName);
+      db.serialize(function () {
+        db.run("insert into taggroups(id, name) values ($id, $name)",
+          { '$id': tagGroup.id, '$name': tagGroup.name },
+          (err) => {
+            if (err) reject(err)
+            else resolve()
+          });
+      });
+      db.close()
+    })
+    return p
+  },
+  insertTagToTagGroup: (groupId: string, tagId: string) => {
+    const p = new Promise<void>((resolve, reject) => {
+      var db = new sqlite3.Database(dbName);
+      db.serialize(function () {
+        db.run("insert into taggrouptags(groupid, tagid) values ($groupid, $tagid)",
+          { '$groupid': groupId, '$tagid': tagId },
+          (err) => {
+            if (err) reject(err)
+            else resolve()
+          });
+      });
+      db.close()
+    })
+    return p
+  },
   updateWork: (id: string, title: string) => {
     const p = new Promise<void>((resolve, reject) => {
       var db = new sqlite3.Database(dbName);
@@ -280,6 +430,21 @@ contextBridge.exposeInMainWorld('myAPI', {
       db.serialize(function () {
         db.run("update tags set name=$name,r=$r,g=$g,b=$b where id=$id",
           { '$id': id, '$name': name, '$r': color.r, '$g': color.g, '$b': color.b },
+          (err) => {
+            if (err) reject(err)
+            else resolve()
+          });
+      });
+      db.close()
+    })
+    return p
+  },
+  updateTagGroup: (id: string, name: string) => {
+    const p = new Promise<void>((resolve, reject) => {
+      var db = new sqlite3.Database(dbName);
+      db.serialize(function () {
+        db.run("update taggroups set name=$name where id=$id",
+          { '$id': id, '$name': name },
           (err) => {
             if (err) reject(err)
             else resolve()
@@ -325,6 +490,36 @@ contextBridge.exposeInMainWorld('myAPI', {
       db.serialize(function () {
         db.run("delete from tagworks where workid=$workid and tagid=$tagid",
           { '$workid': workId, '$tagid': tagId },
+          (err) => {
+            if (err) reject(err)
+            else resolve()
+          });
+      });
+      db.close()
+    })
+    return p
+  },
+  deleteTagGroup: (id: string) => {
+    const p = new Promise<void>((resolve, reject) => {
+      var db = new sqlite3.Database(dbName);
+      db.serialize(function () {
+        db.run("delete from taggroups where id=$id",
+          { '$id': id },
+          (err) => {
+            if (err) reject(err)
+            else resolve()
+          });
+      });
+      db.close()
+    })
+    return p
+  },
+  deleteTagFromTagGroup: (groupId: string, tagId: string) => {
+    const p = new Promise<void>((resolve, reject) => {
+      var db = new sqlite3.Database(dbName);
+      db.serialize(function () {
+        db.run("delete from taggrouptags where groupid=$groupid and tagid=$tagid",
+          { '$groupid': groupId, '$tagid': tagId },
           (err) => {
             if (err) reject(err)
             else resolve()
