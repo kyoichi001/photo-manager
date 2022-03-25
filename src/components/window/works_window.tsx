@@ -48,11 +48,11 @@ export default function WorksWindow(props: WorksWindowProps) {
             onSelected={props.onWorkSelected}
             idToTag={(id) => tags.find((t) => t.id === id)}
             onWorkPreview={(data) => {
-                open()
-                setTargetWorkIndex(index)
+                open();
+                setTargetWorkIndex(index);
             }}
             onRemoveTag={(work, tag) => {
-                props.workManager.deleteTagFromWork(work.id, tag.id)
+                props.workManager.deleteTagFromWork(work.id, tag.id);
             }}
             tagAddPopout={
                 <TagAddPopout
@@ -61,7 +61,9 @@ export default function WorksWindow(props: WorksWindowProps) {
                     onCreateTag={(name) => props.tagManager.addTag(name)}
                 />
             }
-        />
+            onDeleteWork={(work) => {
+                props.workManager.deleteWork(work.id)
+            }} />
     })
     function setFlag(index: number, flag: boolean) {
         activeTags[index] = flag

@@ -44,8 +44,8 @@ export default function WorkMenubar(props: WorkMenubarProps) {
 
     return (
         <div className='work-menubar'>
-            <p>検索</p>
             <input type="text" id='text' name='text'
+                placeholder="ファイル名検索"
                 value={searchKeyword}
                 onChange={(e) => setSearchKeyword(e.target.value)}
                 onKeyPress={(e) => {
