@@ -18,7 +18,7 @@ interface WorksWindowProps {
     tagManager: TagManager
     works: WorkData[]
     tags: TagData[]
-    onWorkSelected?: (data: WorkData) => void
+    onWorkSelected: (data: WorkData) => void
 }
 
 export default function WorksWindow(props: WorksWindowProps) {
