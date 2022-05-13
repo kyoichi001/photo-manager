@@ -13,10 +13,6 @@ export default function TagAddPopout(props: TagAddPopoutProps) {
 
     const [newtag, setNewTag] = useState('');
 
-    const tags = props.tags.map((p, i) => {
-        return <button key={p.id} onClick={() => { props.onClickTag(p) }}>{p.name}</button>
-    })
-
     return (
         <div className='popout popout-bg-col tagg-add-popout'>
             <div className=''>
@@ -26,7 +22,11 @@ export default function TagAddPopout(props: TagAddPopoutProps) {
                     <button onClick={() => { props.onCreateTag(newtag) }}>新規作成：{newtag}</button>
                 </div>
                 <div className='tags'>
-                    {tags}
+                    {
+                        props.tags.map((p) =>
+                            <button key={p.id} onClick={() => { props.onClickTag(p) }}>{p.name}</button>
+                        )
+                    }
                 </div>
             </div>
         </div>

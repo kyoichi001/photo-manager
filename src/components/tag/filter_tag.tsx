@@ -1,5 +1,5 @@
 import React from 'react';
-import Col from '../../common/col';
+import { Col } from '../../common/color';
 import '../../css/tag.css';
 import TagData from './tag_data';
 

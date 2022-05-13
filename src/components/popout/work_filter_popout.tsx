@@ -14,20 +14,24 @@ interface WorkFilterPopoutProps {
 
 export default function WorkFilterPopout(props: WorkFilterPopoutProps) {
 
-    const tags = props.tags.map((p, i) => {
-        return <div key={p.id} onClick={() => { props.onClickTag(i, !props.activeTags[i]) }}>
-            <FilterTag data={p} isChecked={props.activeTags[i]} ></FilterTag>
+    if (props.tags.length === 0) {
+        return <div className='no-tags'>
+            <p>タグがありません</p>
         </div>
-    })
-    const noTags = <div className='no-tags'>
-        <p>タグがありません</p>
-    </div>
+    }
+
     return (
         <div className='popout popout-bg-col'>
             <div className=''>
                 <p>フィルター</p>
                 <div className='tags'>
-                    {tags.length === 0 ? noTags : tags}
+                    {
+                        props.tags.map((p, i) =>
+                            <div key={p.id} onClick={() => { props.onClickTag(i, !props.activeTags[i]) }}>
+                                <FilterTag data={p} isChecked={props.activeTags[i]} ></FilterTag>
+                            </div>
+                        )
+                    }
                 </div>
             </div>
         </div>

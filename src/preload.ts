@@ -7,10 +7,61 @@ import Color from './common/color';
 import WorkData from './components/work/work_data';
 import TagData from './components/tag/tag_data';
 import Col from './common/col';
-import util from 'util'
-import TagGroup from './components/tag/tag_group';
 
 const dbName = 'testdata.db'
+
+
+function DBAll(db: sqlite3.Database, query: string, replacement?: any): Promise<any[]> {
+  return new Promise<any[]>((resolve, reject) => {
+    if (replacement) {
+      db.all(query, replacement, (err, rows) => {
+        if (err) reject(err)
+        else
+          resolve(rows)
+      })
+    } else {
+      db.all(query, (err, rows) => {
+        if (err) reject(err)
+        else
+          resolve(rows)
+      })
+    }
+  })
+}
+function DBRun(db: sqlite3.Database, query: string, replacement?: any): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
+    if (replacement) {
+      db.run(query, replacement, (err) => {
+        if (err) reject(err)
+        else
+          resolve()
+      })
+    } else {
+      db.run(query, (err) => {
+        if (err) reject(err)
+        else
+          resolve()
+      })
+    }
+  })
+}
+function DBGet(db: sqlite3.Database, query: string, replacement?: any): Promise<any> {
+  return new Promise<any[]>((resolve, reject) => {
+    if (replacement) {
+      db.get(query, replacement, (err, row) => {
+        if (err) reject(err)
+        else
+          resolve(row)
+      })
+    } else {
+      db.get(query, (err, row) => {
+        if (err) reject(err)
+        else
+          resolve(row)
+      })
+    }
+  })
+}
 
 contextBridge.exposeInMainWorld('myAPI', {
   // 関数で包んで部分的に公開する
@@ -46,487 +97,199 @@ contextBridge.exposeInMainWorld('myAPI', {
     return fs.existsSync(path)
   },
 
+  //===============================================================================
+  //initialize
+  //===============================================================================
+  createTable: async () => {
+    var db = new sqlite3.Database(dbName);
+    console.log("creating")
+    try {
+      await DBRun(db, "create table works (id text, title text,image text, createdAt int)")
+      await DBRun(db, "create table works (id text, title text,image text, createdAt int)")
+      await DBRun(db, "create table tags (id text, name text, r int, g int, b int,createdAt int)")
+      await DBRun(db, "create table tagworks (workid text, tagid text)")
+      await DBRun(db, "create table tagtree (parentid text, childid text)")
+    } catch (e: any) {
+      console.log("reject create taggrouptags table")
+      return
+    }
+    console.log("finish creating tables")
+    db.close()
+  },
 
 
-  createTable: () => {
-    console.log("call func")
-    const p = new Promise<void>((resolve, reject) => {
-      var db = new sqlite3.Database(dbName);
-      db.serialize(function () {
-        console.log("creating")
-        db.run("create table works (id text, title text,image text, createdAt int)",
-          (err) => {
-            if (err) {
-              console.log("reject create works table")
-              reject()
-            }
-          }
-        )
-        db.run("create table tags (id text, name text, r int, g int, b int,createdAt int)",
-          (err) => {
-            if (err) {
-              console.log("reject create tags table")
-              reject()
-            }
-          }
-        )
-        db.run("create table tagworks (workid text, tagid text)",
-          (err) => {
-            if (err) {
-              reject()
-              console.log("reject create tagworks table")
-            }
-          }
-        );
-        db.run("create table taggroups (id text, name text)",
-          (err) => {
-            if (err) {
-              reject()
-              console.log("reject create taggroup table")
-            }
-          }
-        );
-        db.run("create table taggrouptags (groupid text, tagid text)",
-          (err) => {
-            if (err) {
-              reject()
-              console.log("reject create taggrouptags table")
-              return
-            }
-            resolve()
-            console.log("finish creating tables")
-          }
-        );
-      })
-      db.close()
-    })
-    return p
-  },
-  getWorks: () => {
-    const p = new Promise<WorkData[]>((resolve, reject) => {
-      var db = new sqlite3.Database(dbName);
-      db.serialize(async function () {
-        var res: WorkData[] = []
-        db.all("select * from works", (err, rows) => {
-          if (err) {
-            reject()
-            return
-          }
-          console.log("load works " + rows.length)
-          res = rows.map((row) => {
-            return {
-              id: row["id"],
-              title: row['title'],
-              image: row['image'],
-              tags: [],
-              createdAt: row['createdAt']
-            }
-          })
-        })
-        db.all("select * from tagworks", (err, rows) => {
-          if (err) {
-            reject()
-            return
-          }
-          for (var row of rows) {
-            var w = res.find((w) => w.id === row['workid'])
-            if (w !== undefined) w.tags = [...w.tags, row['tagid']]
-          }
-
-          console.log(res)
-          resolve(res)
-        })
-      });
-      db.close()
-    })
-    return p
-  },
-  getWork: (id: string) => {
-    if (id == "") return undefined
-    const p = new Promise<WorkData>((resolve, reject) => {
-      var db = new sqlite3.Database(dbName);
-      db.serialize(async function () {
-        db.get("select * from works where id=$id", { '$id': id }, (err, row) => {
-          if (err) {
-            reject(err)
-            return
-          }
-          const work: WorkData = {
-            id: row['id'],
-            title: row['title'],
-            image: row['image'],
-            tags: [],
-            createdAt: row['createdAt']
-          }
-          db.all("select * from tagworks where workid=$workid", { '$workid': id }, (err, rows) => {
-            if (err) {
-              reject(err)
-              return
-            }
-            for (var row of rows) {
-              work.tags.push(row['tagid'])
-            }
-            resolve(work)
-          })
-        })
-      })
-      db.close()
-    })
-    return p
-  },
-  getTags: () => {
-    const p = new Promise<TagData[]>((resolve, reject) => {
-      var db = new sqlite3.Database(dbName);
-      db.serialize(function () {
-        var res: TagData[] = []
-        db.each("select * from tags", (err, row) => {
-          if (err) throw err
-          var tag: TagData = {
-            id: row["id"],
-            name: row['name'],
-            color: Col.generate(row['r'], row['g'], row['b'])
-          }
-          res.push(tag)
-        }, (err, count) => {
-          if (err)
-            reject(err)
-          else
-            resolve(res)
-        });
-      });
-      db.close()
-    })
-    return p
-  },
-  getTag: (id: string) => {
-    if (id == "") return undefined
-    const p = new Promise<TagData>((resolve, reject) => {
-      var db = new sqlite3.Database(dbName);
-      db.serialize(async function () {
-        db.get("select * from tags where id=$id", { '$id': id }, (err, row) => {
-          if (err) {
-            reject(err)
-            return
-          }
-          const tag: TagData = {
-            id: row['id'],
-            name: row['name'],
-            color: Col.generate(row['r'], row['g'], row['b'])
-          }
-          resolve(tag)
-        })
-      })
-      db.close()
-    })
-    return p
-  },
-  getTagGroups: () => {
-    const p = new Promise<TagGroup[]>((resolve, reject) => {
-      var db = new sqlite3.Database(dbName);
-      db.serialize(function () {
-        var res: TagGroup[] = []
-        db.each("select * from taggroups", (err, row) => {
-          if (err) throw err
-          var tagGroup: TagGroup = {
-            id: row["id"],
-            name: row['name'],
-            tags: []
-          }
-          res.push(tagGroup)
-        });
-        db.each("select * from taggrouptags", (err, row) => {
-          if (err) throw err
-          res.find((t) => t.id === row["groupid"])?.tags.push(row["tagid"])
-        }, (err, count) => {
-          if (err) reject()
-          else resolve(res)
-        });
-      });
-      db.close()
-    })
-    return p
-  },
-  getTagGroup: (id: string) => {
-    if (id == "") return undefined
-    const p = new Promise<TagGroup>((resolve, reject) => {
-      var db = new sqlite3.Database(dbName);
-      var res: TagGroup = {
-        id: '',
-        name: '',
-        tags: []
+  //===============================================================================
+  //get
+  //===============================================================================
+  getWorks: async () => {
+    var db = new sqlite3.Database(dbName);
+    var rows = await DBAll(db, "select * from works")
+    console.log("load works " + rows.length)
+    var res: WorkData[] = rows.map((row) => {
+      return {
+        id: row["id"],
+        title: row['title'],
+        image: row['image'],
+        tags: [],
+        createdAt: row['createdAt']
       }
-      db.serialize(async function () {
-        db.get("select * from taggroups where id=$id", { '$id': id }, (err, row) => {
-          if (err) {
-            reject(err)
-            return
-          }
-          res = {
-            id: row['id'],
-            name: row['name'],
-            tags: []
-          }
-        })
-      })
-      db.each("select * from taggrouptags where groupid=$groupid", { '$groupid': id }, (err, row) => {
-        if (err) throw err
-        res.tags.push(row["tagid"])
-      }, (err, count) => {
-        if (err) reject()
-        else resolve(res)
-      });
-      db.close()
     })
-    return p
+    var tagWorks = await DBAll(db, "select * from tagworks")
+    for (var row of tagWorks) {
+      var w = res.find((w) => w.id === row['workid'])
+      if (w !== undefined) w.tags = [...w.tags, row['tagid']]
+    }
+    db.close()
+    return res
+  },
+  getWork: async (id: string) => {
+    if (id == "") return undefined
+    var db = new sqlite3.Database(dbName);
+    var workDat = await DBGet(db, "select * from works where id=$id", { '$id': id })
+    var rows = await DBAll(db, "select * from tagworks where workid=$workid", { '$workid': id })
+    var work: WorkData = {
+      id: workDat['id'],
+      title: workDat['title'],
+      image: workDat['image'],
+      tags: rows.map((row) => row['tagid']),
+      createdAt: workDat['createdAt']
+    }
+    db.close()
+    return work
+  },
+  getTags: async () => {
+    var db = new sqlite3.Database(dbName);
+    var rows = await DBAll(db, "select * from tags")
+    var res: TagData[] = rows.map((row) => {
+      return {
+        id: row["id"],
+        name: row['name'],
+        color: Col.generate(row['r'], row['g'], row['b']),
+        children: []
+      }
+    })
+    db.close()
+    return res
+  },
+  getTag: async (id: string) => {
+    if (id == "") return undefined
+    var db = new sqlite3.Database(dbName);
+    var row = await DBGet(db, "select * from tags where id=$id", { '$id': id })
+    var tag: TagData = {
+      id: row['id'],
+      name: row['name'],
+      color: Col.generate(row['r'], row['g'], row['b']),
+      children: []
+    }
+    db.close()
+    return tag
+  },
+  getWorksFromTags: async (ids: string[]) => {
+    /*var db = new sqlite3.Database(dbName);
+    var query = ids.map((t, i) => "tagid=? and ")
+    var rows = await DBAll(db, "select * from tagworks where " + query, [ids])
+    var res: string[] = rows.map((row) => row["workid"])
+    db.close()
+    return res*/
+    return []
+  },
+  getRootTags: async () => {
+    var db = new sqlite3.Database(dbName);
+    var rows = await DBAll(db, "select * from tagchildren where parentid=$id", { '$id': "root" })
+    var res: string[] = rows.map((row) => row['childid'])
+    db.close()
+    return res
+  },
+  getChildTags: async (tagId: string) => {
+    var db = new sqlite3.Database(dbName);
+    var rows = await DBAll(db, "select * from tagchildren where parentid=$id", { '$id': tagId })
+    var res: string[] = rows.map((row) => row['childid'])
+    db.close()
+    return res
+  },
+  getParentTag: async (tagId: string) => {
+    var db = new sqlite3.Database(dbName);
+    var row = await DBGet(db, "select * from tagchildren where childid=$id", { '$id': tagId })
+    db.close()
+    var res: string = row['parentid']
+    return res
   },
 
-  getWorksFromTags: (ids: string[]) => {
-    /*const p = new Promise<WorkData[]>((resolve, reject) => {
-      var db = new sqlite3.Database(dbName);
-      db.serialize(async function () {
-          db.all("select * from tagworks where tagid=$tagid", { '$workid': id }, (err, rows) => {
-            if (err) {
-              reject(err)
-              return
-            }
-            for (var row of rows) {
-              work.tags.push(row['tagid'])
-            }
-            resolve(work)
-          })
-      })
-      db.close()
-    })
-    return p*/
-  },
-  getTagsFromTagGroup: (id: string) => {
-    const p = new Promise<TagData[]>((resolve, reject) => {
-      var db = new sqlite3.Database(dbName);
-      db.serialize(async function () {
-        db.all("select * from taggrouptags where groupid=$groupid", { '$groupid': id }, (err, rows) => {
-          if (err) {
-            reject(err)
-            return
-          }
-          var res: TagData[] = []
-          for (var row of rows) {
-            res.push(row['tagid'])
-          }
-          resolve(res)
-        })
-      })
-      db.close()
-    })
-    return p
-  },
-  insertWork: (work: WorkData) => {
+
+  //===============================================================================
+  //insert (add)
+  //===============================================================================
+  insertWork: async (work: WorkData) => {
     console.log("start inserting")
-    const p = new Promise<void>((resolve, reject) => {
-      var db = new sqlite3.Database(dbName);
-      db.serialize(async function () {
-        db.run("insert into works(id, title,image,createdAt) values ($id, $title, $image, $createdAt)",
-          { '$id': work.id, '$title': work.title, '$image': work.image, '$createdAt': work.createdAt },
-          (e) => {
-            if (e) reject(e)
-          });
+    var db = new sqlite3.Database(dbName);
+    await DBRun(db, "insert into works(id, title,image,createdAt) values ($id, $title, $image, $createdAt)",
+      { '$id': work.id, '$title': work.title, '$image': work.image, '$createdAt': work.createdAt })
+    for (var tag of work.tags) {
+      await DBRun(db, "insert into tagworks(workid text, tagid text) values ($workid, $tagid)",
+        { '$workid': work.id, '$tagid': tag })
+    }
+    db.close()
+  },
+  insertTag: async (tag: TagData) => {
+    var db = new sqlite3.Database(dbName)
+    await DBRun(db, "insert into tags(id, name, r, g, b,createdAt) values ($id, $name, $r, $g, $b,$createdAt)",
+      { '$id': tag.id, '$name': tag.name, '$r': tag.color.r, '$g': tag.color.g, '$b': tag.color.b, '$createdAt': 0 })
+    db.close()
+  },
+  insertTagToWork: async (workId: string, tagId: string) => {
+    var db = new sqlite3.Database(dbName)
+    await DBRun(db, "insert into tagworks(workid, tagid) values ($workid, $tagid)",
+      { '$workid': workId, '$tagid': tagId })
+    db.close()
+  },
+  addTagToParentTag: async (parentId: string, childId: string) => {
+    var db = new sqlite3.Database(dbName)
+    await DBRun(db, `insert into tagchildren(parentid, childid) values ($parentid, $childid)`,
+      { '$parentid': parentId, '$childid': childId })
+    db.close()
+  },
 
-        for (var tag of work.tags) {
-          db.run("insert into tagworks(workid text, tagid text) values ($workid, $tagid)",
-            { '$workid': work.id, '$tagid': tag },
-            (e) => {
-              if (e) reject(e)
-            })
-        }
-      });
-      db.close((err) => {
-        if (err) {
-          reject()
-          return
-        }
-        console.log("finished")
-        resolve()
-      })
-    })
-    return p
+
+  //===============================================================================
+  //update
+  //===============================================================================
+  updateWork: async (id: string, title: string) => {
+    var db = new sqlite3.Database(dbName)
+    await DBRun(db, "update works set title=$title where id=$id",
+      { '$id': id, '$title': title })
+    db.close()
   },
-  insertTag: (tag: TagData) => {
-    const p = new Promise<void>((resolve, reject) => {
-      var db = new sqlite3.Database(dbName);
-      db.serialize(function () {
-        db.run("insert into tags(id, name, r, g, b,createdAt) values ($id, $name, $r, $g, $b,$createdAt)",
-          { '$id': tag.id, '$name': tag.name, '$r': tag.color.r, '$g': tag.color.g, '$b': tag.color.b, '$createdAt': 0 },
-          (err) => {
-            if (err) reject(err)
-            else resolve()
-          });
-      });
-      db.close()
-    })
-    return p
+  updateTag: async (id: string, name: string, color: Color) => {
+    var db = new sqlite3.Database(dbName)
+    await DBRun(db, "update tags set name=$name,r=$r,g=$g,b=$b where id=$id",
+      { '$id': id, '$name': name, '$r': color.r, '$g': color.g, '$b': color.b })
+    db.close()
   },
-  insertTagToWork: (workId: string, tagId: string) => {
-    const p = new Promise<void>((resolve, reject) => {
-      var db = new sqlite3.Database(dbName);
-      db.serialize(function () {
-        db.run("insert into tagworks(workid, tagid) values ($workid, $tagid)",
-          { '$workid': workId, '$tagid': tagId },
-          (err) => {
-            if (err) reject(err)
-            else resolve()
-          });
-      });
-      db.close()
-    })
-    return p
+
+
+  //===============================================================================
+  //delete
+  //===============================================================================
+  deleteWork: async (id: string) => {
+    var db = new sqlite3.Database(dbName)
+    await DBRun(db, "delete from works where id=$id", { '$id': id })
+    db.close()
   },
-  insertTagGroup: (tagGroup: TagGroup) => {
-    const p = new Promise<void>((resolve, reject) => {
-      var db = new sqlite3.Database(dbName);
-      db.serialize(function () {
-        db.run("insert into taggroups(id, name) values ($id, $name)",
-          { '$id': tagGroup.id, '$name': tagGroup.name },
-          (err) => {
-            if (err) reject(err)
-            else resolve()
-          });
-      });
-      db.close()
-    })
-    return p
+  deleteTag: async (id: string) => {
+    var db = new sqlite3.Database(dbName);
+    await DBRun(db, "delete from tags where id=$id", { '$id': id })
+    db.close()
   },
-  insertTagToTagGroup: (groupId: string, tagId: string) => {
-    const p = new Promise<void>((resolve, reject) => {
-      var db = new sqlite3.Database(dbName);
-      db.serialize(function () {
-        db.run("insert into taggrouptags(groupid, tagid) values ($groupid, $tagid)",
-          { '$groupid': groupId, '$tagid': tagId },
-          (err) => {
-            if (err) reject(err)
-            else resolve()
-          });
-      });
-      db.close()
-    })
-    return p
+  deleteTagFromWork: async (workId: string, tagId: string) => {
+    var db = new sqlite3.Database(dbName);
+    await DBRun(db, "delete from tagworks where workid=$workid and tagid=$tagid",
+      { '$workid': workId, '$tagid': tagId })
+    db.close()
   },
-  updateWork: (id: string, title: string) => {
-    const p = new Promise<void>((resolve, reject) => {
-      var db = new sqlite3.Database(dbName);
-      db.serialize(function () {
-        db.run("update works set title=$title where id=$id",
-          { '$id': id, '$title': title },
-          (err) => {
-            if (err) reject(err)
-            else resolve()
-          });
-      });
-      db.close()
-    })
-    return p
-  },
-  updateTag: (id: string, name: string, color: Color) => {
-    const p = new Promise<void>((resolve, reject) => {
-      var db = new sqlite3.Database(dbName);
-      db.serialize(function () {
-        db.run("update tags set name=$name,r=$r,g=$g,b=$b where id=$id",
-          { '$id': id, '$name': name, '$r': color.r, '$g': color.g, '$b': color.b },
-          (err) => {
-            if (err) reject(err)
-            else resolve()
-          });
-      });
-      db.close()
-    })
-    return p
-  },
-  updateTagGroup: (id: string, name: string) => {
-    const p = new Promise<void>((resolve, reject) => {
-      var db = new sqlite3.Database(dbName);
-      db.serialize(function () {
-        db.run("update taggroups set name=$name where id=$id",
-          { '$id': id, '$name': name },
-          (err) => {
-            if (err) reject(err)
-            else resolve()
-          });
-      });
-      db.close()
-    })
-    return p
-  },
-  deleteWork: (id: string) => {
-    const p = new Promise<void>((resolve, reject) => {
-      var db = new sqlite3.Database(dbName);
-      db.serialize(function () {
-        db.run("delete from works where id=$id",
-          { '$id': id },
-          (err) => {
-            if (err) reject(err)
-            else resolve()
-          });
-      });
-      db.close()
-    })
-    return p
-  },
-  deleteTag: (id: string) => {
-    const p = new Promise<void>((resolve, reject) => {
-      var db = new sqlite3.Database(dbName);
-      db.serialize(function () {
-        db.run("delete from tags where id=$id",
-          { '$id': id },
-          (err) => {
-            if (err) reject(err)
-            else resolve()
-          });
-      });
-      db.close()
-    })
-    return p
-  },
-  deleteTagFromWork: (workId: string, tagId: string) => {
-    const p = new Promise<void>((resolve, reject) => {
-      var db = new sqlite3.Database(dbName);
-      db.serialize(function () {
-        db.run("delete from tagworks where workid=$workid and tagid=$tagid",
-          { '$workid': workId, '$tagid': tagId },
-          (err) => {
-            if (err) reject(err)
-            else resolve()
-          });
-      });
-      db.close()
-    })
-    return p
-  },
-  deleteTagGroup: (id: string) => {
-    const p = new Promise<void>((resolve, reject) => {
-      var db = new sqlite3.Database(dbName);
-      db.serialize(function () {
-        db.run("delete from taggroups where id=$id",
-          { '$id': id },
-          (err) => {
-            if (err) reject(err)
-            else resolve()
-          });
-      });
-      db.close()
-    })
-    return p
-  },
-  deleteTagFromTagGroup: (groupId: string, tagId: string) => {
-    const p = new Promise<void>((resolve, reject) => {
-      var db = new sqlite3.Database(dbName);
-      db.serialize(function () {
-        db.run("delete from taggrouptags where groupid=$groupid and tagid=$tagid",
-          { '$groupid': groupId, '$tagid': tagId },
-          (err) => {
-            if (err) reject(err)
-            else resolve()
-          });
-      });
-      db.close()
-    })
-    return p
+  removeTagFromParentTag: async (parentId: string, childId: string) => {
+    var db = new sqlite3.Database(dbName);
+    await DBRun(db, "delete from tagchildren where parentid=$parentid and childid=$childid",
+      { '$parentid': parentId, '$childid': childId })
+    db.close()
   }
 });

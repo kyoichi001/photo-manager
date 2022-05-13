@@ -41,30 +41,6 @@ export default function WorksWindow(props: WorksWindowProps) {
         }
         return false
     })
-    const worksDOM = filteredWorks.map((work, index) => {
-        return <Work
-            key={work.id}
-            data={work}
-            onSelected={props.onWorkSelected}
-            idToTag={(id) => tags.find((t) => t.id === id)}
-            onWorkPreview={(data) => {
-                open();
-                setTargetWorkIndex(index);
-            }}
-            onRemoveTag={(work, tag) => {
-                props.workManager.deleteTagFromWork(work.id, tag.id);
-            }}
-            tagAddPopout={
-                <TagAddPopout
-                    tags={tags}
-                    onClickTag={(tag) => props.workManager.addTagToWork(work.id, tag.id)}
-                    onCreateTag={(name) => props.tagManager.addTag(name)}
-                />
-            }
-            onDeleteWork={(work) => {
-                props.workManager.deleteWork(work.id)
-            }} />
-    })
     function setFlag(index: number, flag: boolean) {
         activeTags[index] = flag
         console.log("filter tag clicked")
@@ -95,6 +71,30 @@ export default function WorksWindow(props: WorksWindowProps) {
         <p>作品がありません</p>
         <p>ここにドラッグアンドドロップ</p>
     </div>
+    const worksDOM = filteredWorks.map((work, index) => {
+        return <Work
+            key={work.id}
+            data={work}
+            onSelected={props.onWorkSelected}
+            idToTag={(id) => tags.find((t) => t.id === id)}
+            onWorkPreview={(data) => {
+                open();
+                setTargetWorkIndex(index);
+            }}
+            onRemoveTag={(work, tag) => {
+                props.workManager.deleteTagFromWork(work.id, tag.id);
+            }}
+            tagAddPopout={
+                <TagAddPopout
+                    tags={tags}
+                    onClickTag={(tag) => props.workManager.addTagToWork(work.id, tag.id)}
+                    onCreateTag={(name) => props.tagManager.addTag(name)}
+                />
+            }
+            onDeleteWork={(work) => {
+                props.workManager.deleteWork(work.id)
+            }} />
+    })
 
     return (
         <div className='works-window'>

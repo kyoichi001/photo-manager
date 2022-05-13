@@ -19,26 +19,16 @@ export default function WorkClickMenuPopout(props: WorkClickMenuPopoutProps) {
 
     const tagAddreferenceRef = useRef<HTMLLIElement | null>(null);
     const tagAddpopperRef = useRef<HTMLDivElement | null>(null);
-    const [tagAddarrowElement, setArrowElement] = useState<HTMLDivElement | null>(null);
     const { styles, attributes } = usePopper(
         tagAddreferenceRef.current,
         tagAddpopperRef.current,
         {
             placement: 'bottom',
-            modifiers: [
-                {
-                    name: 'arrow',
-                    options: {
-                        element: tagAddarrowElement
-                    },
-                },
-            ],
         }
     );
     const { isOpen: istagAddOpen, open: tagAddopen, close: tagAddclose } = useDisclosure(false);
     useClickAway(tagAddpopperRef, tagAddclose);
     useKeypress('Escape', tagAddclose);
-    const popout_style: CSSProperties = { zIndex: 100 }
 
     return (
         <div className='popout popout-bg-col'>
@@ -48,8 +38,7 @@ export default function WorkClickMenuPopout(props: WorkClickMenuPopoutProps) {
             </ul>
 
             <div ref={tagAddpopperRef} style={{
-                ...styles.popper,
-                ...popout_style
+                ...styles.popper
             }
             } {
                 ...attributes.popper
@@ -60,7 +49,6 @@ export default function WorkClickMenuPopout(props: WorkClickMenuPopoutProps) {
                         {
                             props.tagAddPopout
                         }
-                        <div ref={setArrowElement} style={styles.arrow} />
                     </>
                 }
             </div>

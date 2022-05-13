@@ -15,23 +15,13 @@ interface WorkMenubarProps {
 
 export default function WorkMenubar(props: WorkMenubarProps) {
 
-
     const referenceRef = useRef<HTMLDivElement | null>(null);
     const popperRef = useRef<HTMLDivElement | null>(null);
-    const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>(null);
     const { styles, attributes } = usePopper(
         referenceRef.current,
         popperRef.current,
         {
             placement: 'bottom',
-            modifiers: [
-                {
-                    name: 'arrow',
-                    options: {
-                        element: arrowElement
-                    },
-                },
-            ],
         }
     );
 
@@ -72,7 +62,6 @@ export default function WorkMenubar(props: WorkMenubarProps) {
                             onClickTag={(i, flag) => { props.setFlag(i, flag); }}
                             activeTags={props.activeTags}
                         />
-                        <div ref={setArrowElement} style={styles.arrow} />
                     </>
                 }
             </div>

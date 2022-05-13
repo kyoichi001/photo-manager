@@ -45,14 +45,6 @@ export default function TagManageScene(props: TagManageSceneProps) {
         fetchData()
     }, [renderFlag])
 
-    const tagDOMs: JSX.Element[] = tags.map(
-        (t) => {
-            return <div onClick={() => setSelectedTag(t)} key={t.id}>
-                <Tag data={t} onTagRemove={(data) => tagManager.deleteTag(data.id)} />
-            </div>
-        }
-    )
-
     return (
         <div className="tag-manage-scene">
             <div className='window'>
@@ -60,7 +52,14 @@ export default function TagManageScene(props: TagManageSceneProps) {
                     <div className='col-9'>
                         <p>タグ管理</p>
                         <div className='wrap-container'>
-                            {tagDOMs}
+                            {
+                                tags.map(
+                                    (t) =>
+                                        <div onClick={() => setSelectedTag(t)} key={t.id}>
+                                            <Tag data={t} onTagRemove={(data) => tagManager.deleteTag(data.id)} />
+                                        </div>
+                                )
+                            }
                             <button onClick={(e) => tagManager.addTag("new tag")}>+</button>
                         </div>
                     </div>

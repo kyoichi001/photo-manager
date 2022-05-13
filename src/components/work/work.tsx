@@ -22,20 +22,11 @@ interface WorkProps {
 export default function Work(props: WorkProps) {
     const menureferenceRef = useRef<HTMLDivElement | null>(null);
     const menupopperRef = useRef<HTMLDivElement | null>(null);
-    const [menuarrowElement, setmenuArrowElement] = useState<HTMLDivElement | null>(null);
     const { styles: menustyles, attributes: menuattributes } = usePopper(
         menureferenceRef.current,
         menupopperRef.current,
         {
             placement: 'bottom',
-            modifiers: [
-                {
-                    name: 'arrow',
-                    options: {
-                        element: menuarrowElement
-                    },
-                },
-            ],
         }
     );
     const { isOpen: ismenuOpen, open: menuopen, close: menuclose } = useDisclosure(false);
@@ -44,35 +35,29 @@ export default function Work(props: WorkProps) {
 
     const tagAddreferenceRef = useRef<HTMLButtonElement | null>(null);
     const tagAddpopperRef = useRef<HTMLDivElement | null>(null);
-    const [tagAddarrowElement, setArrowElement] = useState<HTMLDivElement | null>(null);
     const { styles, attributes } = usePopper(
         tagAddreferenceRef.current,
         tagAddpopperRef.current,
         {
             placement: 'bottom',
-            modifiers: [
-                {
-                    name: 'arrow',
-                    options: {
-                        element: tagAddarrowElement
-                    },
-                },
-            ],
         }
     );
     const { isOpen: istagAddOpen, open: tagAddopen, close: tagAddclose } = useDisclosure(false);
     useClickAway(tagAddpopperRef, tagAddclose);
     useKeypress('Escape', tagAddclose);
-    const popout_style: CSSProperties = { zIndex: 100 }
 
     const tags = useMemo(() => {
         console.log("generate tags " + props.data.tags.length)
-        const t: JSX.Element[] = []
+        var t: JSX.Element[] = []
         for (let tag of props.data.tags) {
             var dat = props.idToTag(tag)
             if (!dat) continue
             t.push(
-                <Tag key={dat.id} data={dat} onTagRemove={(data_) => { props.onRemoveTag(props.data, data_) }} />
+                <Tag
+                    key={dat.id}
+                    data={dat}
+                    onTagRemove={(data_) => { props.onRemoveTag(props.data, data_) }}
+                />
             )
         }
         return t
@@ -98,7 +83,6 @@ export default function Work(props: WorkProps) {
             </div>
             <div ref={tagAddpopperRef} style={{
                 ...styles.popper,
-                ...popout_style
             }
             } {
                 ...attributes.popper
@@ -109,13 +93,11 @@ export default function Work(props: WorkProps) {
                         {
                             props.tagAddPopout
                         }
-                        <div ref={setArrowElement} style={styles.arrow} />
                     </>
                 }
             </div>
             <div ref={menupopperRef} style={{
                 ...menustyles.popper,
-                ...popout_style
             }
             } {
                 ...menuattributes.popper
@@ -130,7 +112,6 @@ export default function Work(props: WorkProps) {
                                 tagAddPopout={props.tagAddPopout}
                             />
                         }
-                        <div ref={setmenuArrowElement} style={menustyles.arrow} />
                     </>
                 }
             </div>
