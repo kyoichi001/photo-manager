@@ -5,7 +5,8 @@ import '../../css/tag.css';
 import "../../css/common.css"
 import WorkData from '../work/work_data';
 import { useClickAway, useDisclosure, useKeypress } from './popout_hooks';
-import { usePopper } from 'react-popper';
+import { Popper, usePopper } from 'react-popper';
+import Popout from './popout';
 //import "../../css/popouts.css"
 
 
@@ -18,30 +19,10 @@ interface TagClickMenuPopoutProps {
 export default function TagClickMenuPopout(props: TagClickMenuPopoutProps) {
 
     const renamereferenceRef = useRef<HTMLLIElement | null>(null);
-    const renamepopperRef = useRef<HTMLDivElement | null>(null);
-    const { styles: renamestyles, attributes: renameattributes } = usePopper(
-        renamereferenceRef.current,
-        renamepopperRef.current,
-        {
-            placement: 'bottom',
-        }
-    );
     const { isOpen: isrenameOpen, open: renameopen, close: renameclose } = useDisclosure(false);
-    useClickAway(renamepopperRef, renameclose);
-    useKeypress('Escape', renameclose);
 
     const tagAddreferenceRef = useRef<HTMLLIElement | null>(null);
-    const tagAddpopperRef = useRef<HTMLDivElement | null>(null);
-    const { styles, attributes } = usePopper(
-        tagAddreferenceRef.current,
-        tagAddpopperRef.current,
-        {
-            placement: 'bottom',
-        }
-    );
     const { isOpen: isgroupAddOpen, open: groupAddopen, close: groupAddclose } = useDisclosure(false);
-    useClickAway(tagAddpopperRef, groupAddclose);
-    useKeypress('Escape', groupAddclose);
 
     const [newName, setNewName] = useState(props.tag.name)
 
@@ -53,34 +34,13 @@ export default function TagClickMenuPopout(props: TagClickMenuPopoutProps) {
                 <li onClick={() => { props.onDelete(props.tag) }}><p>削除</p></li>
             </ul>
 
-            <div ref={tagAddpopperRef} style={{
-                ...styles.popper,
-            }
-            } {
-                ...attributes.popper
-                }>
-                {
-                    isgroupAddOpen &&
-                    <>
-                        {
-                            // props.groupAddPopout
-                        }
-                    </>
-                }
-            </div>
-            <div ref={renamepopperRef} style={{
-                ...renamestyles.popper,
-            }
-            } {
-                ...renameattributes.popper
-                }>
-                {
-                    isrenameOpen &&
-                    <div className='popout'>
-                        <input type="text" value={newName} onChange={(e) => setNewName(e.target.value)} ></input>
-                    </div>
-                }
-            </div>
+            <Popout targetRef={tagAddreferenceRef} isOpen={isgroupAddOpen} close={groupAddclose}>
+            </Popout>
+            <Popout targetRef={renamereferenceRef} isOpen={isrenameOpen} close={renameclose}>
+                <div className='popout'>
+                    <input type="text" value={newName} onChange={(e) => setNewName(e.target.value)} ></input>
+                </div>
+            </Popout>
         </div>
     )
 }

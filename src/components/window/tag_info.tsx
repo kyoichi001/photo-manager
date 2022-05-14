@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
-import Col from '../../common/col';
-import Color from '../../common/color';
+import { Color, Col } from '../../common/color';
 import '../../css/file_info.css'
 import Tag from '../tag/tag';
 import TagData from '../tag/tag_data';

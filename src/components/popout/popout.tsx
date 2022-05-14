@@ -3,28 +3,28 @@ import { useClickAway, useDisclosure, useKeypress } from './popout_hooks';
 import { usePopper } from 'react-popper';
 
 interface PopoutProps {
-    children: ReactNode
+    targetRef: React.MutableRefObject<Element | null>
+    children?: ReactNode
     isOpen: boolean
     close: () => void
 }
 
 export default function Popout(props: PopoutProps) {
 
-    const renamereferenceRef = useRef<HTMLLIElement | null>(null);
-    const renamepopperRef = useRef<HTMLDivElement | null>(null);
+    const popperRef = useRef<HTMLDivElement | null>(null);
     const { styles: renamestyles, attributes: renameattributes } = usePopper(
-        renamereferenceRef.current,
-        renamepopperRef.current,
+        props.targetRef.current,
+        popperRef.current,
         {
             placement: 'bottom',
         }
     );
-    useClickAway(renamepopperRef, props.close);
+    useClickAway(popperRef, props.close);
     useKeypress('Escape', props.close);
 
     return (
         <div className='popout popout-bg-col'>
-            <div ref={renamepopperRef} style={{
+            <div ref={popperRef} style={{
                 ...renamestyles.popper,
             }
             } {

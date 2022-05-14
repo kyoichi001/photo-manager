@@ -1,15 +1,13 @@
 //https://zenn.dev/rakim_stayfresh/articles/2928ac74a153a5
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import { IPCKeys } from './common/constants';
-import fs from "fs"
-import sqlite3 from '@vscode/sqlite3'
-import Color from './common/color';
+import fs from "fs";
+import { Color, Col } from './common/color';
+import sqlite3 from '@vscode/sqlite3';
 import WorkData from './components/work/work_data';
 import TagData from './components/tag/tag_data';
-import Col from './common/col';
 
 const dbName = 'testdata.db'
-
 
 function DBAll(db: sqlite3.Database, query: string, replacement?: any): Promise<any[]> {
   return new Promise<any[]>((resolve, reject) => {
