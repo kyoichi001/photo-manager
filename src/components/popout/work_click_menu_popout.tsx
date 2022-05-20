@@ -6,6 +6,7 @@ import "../../css/common.css"
 import WorkData from '../work/work_data';
 import { useClickAway, useDisclosure, useKeypress } from './popout_hooks';
 import { usePopper } from 'react-popper';
+import Popout from './popout';
 //import "../../css/popouts.css"
 
 
@@ -18,17 +19,7 @@ interface WorkClickMenuPopoutProps {
 export default function WorkClickMenuPopout(props: WorkClickMenuPopoutProps) {
 
     const tagAddreferenceRef = useRef<HTMLLIElement | null>(null);
-    const tagAddpopperRef = useRef<HTMLDivElement | null>(null);
-    const { styles, attributes } = usePopper(
-        tagAddreferenceRef.current,
-        tagAddpopperRef.current,
-        {
-            placement: 'bottom',
-        }
-    );
     const { isOpen: istagAddOpen, open: tagAddopen, close: tagAddclose } = useDisclosure(false);
-    useClickAway(tagAddpopperRef, tagAddclose);
-    useKeypress('Escape', tagAddclose);
 
     return (
         <div className='popout popout-bg-col'>
@@ -37,21 +28,11 @@ export default function WorkClickMenuPopout(props: WorkClickMenuPopoutProps) {
                 <li onClick={() => { tagAddopen() }} ref={tagAddreferenceRef}><p>タグの追加</p></li>
             </ul>
 
-            <div ref={tagAddpopperRef} style={{
-                ...styles.popper
-            }
-            } {
-                ...attributes.popper
-                }>
+            <Popout targetRef={tagAddreferenceRef} isOpen={istagAddOpen} close={tagAddclose}>
                 {
-                    istagAddOpen &&
-                    <>
-                        {
-                            props.tagAddPopout
-                        }
-                    </>
+                    props.tagAddPopout
                 }
-            </div>
+            </Popout>
         </div>
     )
 }

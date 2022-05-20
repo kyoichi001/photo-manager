@@ -3,7 +3,7 @@ import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import { IPCKeys } from './common/constants';
 import fs from "fs";
 import { Color, Col } from './common/color';
-import sqlite3 from '@vscode/sqlite3';
+import sqlite3 from 'sqlite3';
 import WorkData from './components/work/work_data';
 import TagData from './components/tag/tag_data';
 
