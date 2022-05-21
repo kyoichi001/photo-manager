@@ -66,6 +66,22 @@ export class Col {
     static toHexString(color: Color): string {
         return "#" + ('0' + color.r.toString(16)).substr(-2) + ('0' + color.g.toString(16)).substr(-2) + ('0' + color.b.toString(16)).substr(-2)
     }
+    /**
+     * 
+     * @param color 
+     * @returns "#XXXXXX"
+     */
+    static numbertoHexString(color: number): string {
+        return "#" + color.toString(16)
+    }
+    /**
+         * 
+         * @param color "#XXXXXX"
+         * @returns "#XXXXXX"
+         */
+    static hexstringToColor(color: string): number {
+        return parseInt(color.slice(1), 16)
+    }
 
     /**
      * 色の明度を0.0~1.0までの間で返す

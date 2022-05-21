@@ -2,6 +2,7 @@
 import { Color, Col } from "./common/color"
 import TagData from "./components/tag/tag_data"
 import Library from "./common/constants"
+import { getSaveFileDirectory } from "./saveload"
 
 export default class TagManager {
 
@@ -11,27 +12,77 @@ export default class TagManager {
         this.onDataSaved = onDataSaved
     }
 
-    async getTags(): Promise<TagData[]> {
-        return await window.myAPI.getTags()
+    getSaveFilePath() {
+        return getSaveFileDirectory() + "\\tags.json"
     }
+
+    async writeTagData(data: TagData[]) {
+        let path = this.getSaveFilePath()
+        if (!window.myAPI.existsFile(path)) {
+        }
+        let jsonData = {
+            "meta": {
+                "save_format_version": "0.0.1"
+            },
+            "tags": data
+        }
+        await window.myAPI.writeFileAsync(path, JSON.stringify(jsonData))
+    }
+
+    jsonToData(data: any): TagData[] {
+        let tags: any[] = data["tags"]
+        let res: TagData[] = tags.map((v) => {
+            return {
+                id: v["id"],
+                name: v["name"],
+                createdAt: v["created_at"],
+                color: v["color"],
+                children: []
+            }
+        })
+        return res
+    }
+
+    async getTags(): Promise<TagData[]> {
+        let path = this.getSaveFilePath()
+        if (!window.myAPI.existsFile(path)) {
+            return []
+        }
+        let file = await window.myAPI.readFileAsync(path)
+        let data = this.jsonToData(JSON.parse(file))
+        return data
+    }
+
     async idToTag(id: string): Promise<TagData | undefined> {
-        return await window.myAPI.getTag(id)
+        try {
+            let data = await this.getTags()
+            return data.find((t) => t.id === id)
+        } catch (e) {
+            return undefined
+        }
     }
     async addTag(name: string) {
-        const tag: TagData = { id: Library.generateUuid(), name: name, color: Col.generate(255, 255, 255), children: [] }
-        await window.myAPI.insertTag(tag)
+        let tags = await this.getTags()
+        const tag: TagData = { id: Library.generateUuid(), name: name, color: 0xFFFFFF, children: [] }
+        tags.push(tag)
+        await this.writeTagData(tags)
         this.onDataSaved()
     }
     async deleteTag(id: string) {
-        await window.myAPI.deleteTag(id)
+        let tags = await this.getTags()
+        tags = tags.filter((t) => t.id !== id)
+        await this.writeTagData(tags)
         this.onDataSaved()
     }
-    async editTag(id: string, name?: string, color?: Color) {
-        let tag = await this.idToTag(id)
-        if (!tag) return
-        if (name) tag.name = name
-        if (color) tag.color = color
-        await window.myAPI.updateTag(id, tag.name, tag.color)
+    async editTag(id: string, name?: string, color?: number) {
+        let tags = await this.getTags()
+        tags.map((t) => {
+            if (t.id === id) {
+                if (name) t.name = name
+                if (color) t.color = color
+            }
+        })
+        await this.writeTagData(tags)
         this.onDataSaved()
     }
 }

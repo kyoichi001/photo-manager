@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
+import { DropEvent, useDropzone } from 'react-dropzone';
 import TagManager from '../../tag_manager';
 import WorkManager from '../../work_manager';
 import TagData from '../tag/tag_data';
@@ -71,8 +71,10 @@ export default function MainScene() {
     } = useDropzone({
         onDrop,
         noClick: true,
-        accept: 'image/jpeg,image/png,image/jfif,image/gif'
+        accept: 'image/jpeg,image/png,image/jfif,image/gif',
+        multiple: true,
     })
+
     const baseStyle: React.CSSProperties = {
         flex: 1,
         display: 'flex',

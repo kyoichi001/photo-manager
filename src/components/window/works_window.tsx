@@ -11,6 +11,7 @@ import WorkManager from '../../work_manager';
 import TagManager from '../../tag_manager';
 import TagAddPopout from '../popout/tag_add_popout';
 import TagData from '../tag/tag_data';
+import Popout from '../popout/popout';
 
 
 interface WorksWindowProps {
@@ -47,25 +48,9 @@ export default function WorksWindow(props: WorksWindowProps) {
         setActiveTags([...activeTags])
     }
     const [targetWorkIndex, setTargetWorkIndex] = useState<number>(-1);
-    const popperRef = useRef<HTMLDivElement | null>(null);
-    const { styles, attributes } = usePopper(
-        null,
-        popperRef.current,
-        {
-            placement: 'bottom',
-            modifiers: [
-                {
-                    name: 'offset',
-                    options: {
-                        offset: [20, 0]
-                    },
-                },
-            ],
-        }
-    );
+
+    const popoutRef = useRef<HTMLDivElement | null>(null);
     const { isOpen, open, close } = useDisclosure(false);
-    useClickAway(popperRef, close);
-    useKeypress('Escape', close);
 
     const NoWorks = <div className='no-works'>
         <p>作品がありません</p>
@@ -111,18 +96,15 @@ export default function WorksWindow(props: WorksWindowProps) {
                     </div>
                 </div>
             </div>
-            <div ref={popperRef} style={styles.popper} {...attributes.popper}>
-                {
-                    isOpen &&
-                    <WorkPreviewPopout
-                        work={filteredWorks[targetWorkIndex]}
-                        idToTag={(id) => tags.find((t) => t.id === id)}
-                        onClickPrev={(id) => { setTargetWorkIndex((targetWorkIndex - 1 + worksDOM.length) % worksDOM.length) }}
-                        onClickNext={(id) => { setTargetWorkIndex((targetWorkIndex + 1) % worksDOM.length) }}
-                        onClose={() => close()}
-                    />
-                }
-            </div>
+            <Popout targetRef={popoutRef} isOpen={isOpen} close={close}>
+                <WorkPreviewPopout
+                    work={filteredWorks[targetWorkIndex]}
+                    idToTag={(id) => tags.find((t) => t.id === id)}
+                    onClickPrev={(id) => { setTargetWorkIndex((targetWorkIndex - 1 + worksDOM.length) % worksDOM.length) }}
+                    onClickNext={(id) => { setTargetWorkIndex((targetWorkIndex + 1) % worksDOM.length) }}
+                    onClose={() => close()}
+                />
+            </Popout>
         </div>
     )
 }

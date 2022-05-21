@@ -4,10 +4,11 @@ import '../../css/work.css';
 import '../../css/popouts.css';
 import WorkData from './work_data';
 import TagData from '../tag/tag_data';
-import { usePopper } from 'react-popper';
+import { Popper, usePopper } from 'react-popper';
 import { useClickAway, useDisclosure, useKeypress } from '../popout/popout_hooks';
 import TagAddPopout from '../popout/tag_add_popout';
 import WorkClickMenuPopout from '../popout/work_click_menu_popout';
+import Popout from '../popout/popout';
 
 interface WorkProps {
     data: WorkData
@@ -21,30 +22,10 @@ interface WorkProps {
 
 export default function Work(props: WorkProps) {
     const menureferenceRef = useRef<HTMLDivElement | null>(null);
-    const menupopperRef = useRef<HTMLDivElement | null>(null);
-    const { styles: menustyles, attributes: menuattributes } = usePopper(
-        menureferenceRef.current,
-        menupopperRef.current,
-        {
-            placement: 'bottom',
-        }
-    );
     const { isOpen: ismenuOpen, open: menuopen, close: menuclose } = useDisclosure(false);
-    useClickAway(menupopperRef, menuclose);
-    useKeypress('Escape', menuclose);
 
     const tagAddreferenceRef = useRef<HTMLButtonElement | null>(null);
-    const tagAddpopperRef = useRef<HTMLDivElement | null>(null);
-    const { styles, attributes } = usePopper(
-        tagAddreferenceRef.current,
-        tagAddpopperRef.current,
-        {
-            placement: 'bottom',
-        }
-    );
     const { isOpen: istagAddOpen, open: tagAddopen, close: tagAddclose } = useDisclosure(false);
-    useClickAway(tagAddpopperRef, tagAddclose);
-    useKeypress('Escape', tagAddclose);
 
     const tags = useMemo(() => {
         console.log("generate tags " + props.data.tags.length)
@@ -63,8 +44,6 @@ export default function Work(props: WorkProps) {
         return t
     }, [props.data.tags])
 
-
-
     return (
         <div className='work' onClick={() => { props.onSelected(props.data) }} onContextMenu={(e) => {
             e.preventDefault();
@@ -81,40 +60,18 @@ export default function Work(props: WorkProps) {
                     <button onClick={tagAddopen} ref={tagAddreferenceRef}>+</button>
                 </div>
             </div>
-            <div ref={tagAddpopperRef} style={{
-                ...styles.popper,
-            }
-            } {
-                ...attributes.popper
-                }>
+            <Popout targetRef={tagAddreferenceRef} isOpen={istagAddOpen} close={tagAddclose}>
                 {
-                    istagAddOpen &&
-                    <>
-                        {
-                            props.tagAddPopout
-                        }
-                    </>
+                    props.tagAddPopout
                 }
-            </div>
-            <div ref={menupopperRef} style={{
-                ...menustyles.popper,
-            }
-            } {
-                ...menuattributes.popper
-                }>
-                {
-                    ismenuOpen &&
-                    <>
-                        {
-                            <WorkClickMenuPopout
-                                work={props.data}
-                                onDelete={(work) => { props.onDeleteWork(work) }}
-                                tagAddPopout={props.tagAddPopout}
-                            />
-                        }
-                    </>
-                }
-            </div>
+            </Popout>
+            <Popout targetRef={menureferenceRef} isOpen={ismenuOpen} close={menuclose}>
+                <WorkClickMenuPopout
+                    work={props.data}
+                    onDelete={(work) => { props.onDeleteWork(work) }}
+                    tagAddPopout={props.tagAddPopout}
+                />
+            </Popout>
         </div>
     )
 }

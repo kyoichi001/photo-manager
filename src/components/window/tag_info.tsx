@@ -9,7 +9,7 @@ interface TagInfoProps {
     tag?: TagData
     deleteTag: (tag: TagData | undefined) => void
     onChangeTagName: (tag: TagData | undefined, newName: string) => void
-    onChangeColor: (tag: TagData | undefined, newValue: Color) => void
+    onChangeColor: (tag: TagData | undefined, newValue: number) => void
 }
 
 export default function TagInfo(props: TagInfoProps) {
@@ -38,10 +38,10 @@ export default function TagInfo(props: TagInfoProps) {
                 </div>
                 <p>色</p>
                 <input type="color" id="color" name="color"
-                    value={Col.toHexString(props.tag.color)}
-                    onChange={(e) => props.onChangeColor(props.tag, Col.str2Color(e.target.value))}>
+                    value={Col.numbertoHexString(props.tag.color)}
+                    onChange={(e) => props.onChangeColor(props.tag, Col.hexstringToColor(e.target.value))}>
                 </input>
-                <p>{Col.toHexString(props.tag.color)}</p>
+                <p>{Col.numbertoHexString(props.tag.color)}</p>
                 <p>作成日：**/**/**</p>
                 <p>ID {props.tag.id}</p>
                 <button onClick={() => props.deleteTag(props.tag)}>

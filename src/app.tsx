@@ -7,6 +7,7 @@ import MainScene from './components/scenes/main_scene';
 import SettingsScene from './components/scenes/settings_scene';
 import TagManageScene from './components/scenes/tag_manage_scene';
 import { SceneName } from './common/context';
+import { getSaveFileDirectory } from './saveload';
 
 function App() {
   const [_, setState] = useState('');
@@ -16,8 +17,9 @@ function App() {
   useEffect(() => {
     //非同期処理はuseEffect内で書くべき（useEffectが書かれているコンポーネントは２回実行されるらしい）
     console.log("rendering")
-    window.myAPI.createTable()
     console.log("app create finished")
+    window.myAPI.createDirectory(getSaveFileDirectory())
+
     // イベントリスナーを追加
     const removeListener = window.myAPI.onReceiveMessage(
       (message: string) => {
