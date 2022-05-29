@@ -7,7 +7,12 @@ interface FilterTagProps {
     data: TagData
     isChecked: boolean
 }
-
+/**
+ * タグのアクティブ・非アクティブを切り替えられるボタン
+ * フィルター用
+ * @param props 
+ * @returns 
+ */
 export default function FilterTag(props: FilterTagProps) {
     var col = props.isChecked ? 0xFFFFFF : props.data.color
     var c = Col.brightness(Col.int2Color(col)) < 0.5 ? "tagname-dark" : "tagname-light"

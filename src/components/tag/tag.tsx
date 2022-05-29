@@ -28,7 +28,7 @@ export default function Tag(props: TagProps) {
         >
             <div className={c}>
                 <div className='tag-removebutton clickable-component' style={buttonStyle} onClick={() => props.onTagRemove(props.data)}>
-                    x
+                    {mouseOver ? "x" : ""}
                 </div>
                 <div>
                     {props.data.name}
