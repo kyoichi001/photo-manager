@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import AppMenu from './components/window/app_menu';
 import './css/App.css';
 import './css/common.css';
+import "./input.css"
 import MainScene from './components/scenes/main_scene';
 import SettingsScene from './components/scenes/settings_scene';
 import TagManageScene from './components/scenes/tag_manage_scene';
@@ -55,6 +56,7 @@ function App() {
         <div className="col-10">
           {dom}
         </div>
+        <div className='text-red-400'>Hello tailwind</div>
       </div>
     </div>
   );

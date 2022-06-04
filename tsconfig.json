@@ -1,18 +1,22 @@
 {
+  "extends": "./tsconfig.paths.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "esModuleInterop": true,
+    "moduleResolution": "Node",
+    "lib": [
+      "DOM",
+      "ESNext"
+    ],
+    "strict": true,
+    "sourceMap": true,
+    "jsx": "react-jsx"
+  },
+  "ts-node": {
     "compilerOptions": {
-      "target": "ESNext",
-      "module": "ESNext",
-      "esModuleInterop": true,
-      "moduleResolution": "Node",
-      "lib": ["DOM", "ESNext"],
-      "strict": true,
-      "sourceMap": true,
-      "jsx": "react-jsx"
-    },
-    "ts-node": {
-      "compilerOptions": {
-        "target": "ES2015",
-        "module": "CommonJS"
-      }
+      "target": "ES2015",
+      "module": "CommonJS"
     }
   }
+}

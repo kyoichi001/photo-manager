@@ -11,6 +11,10 @@ const isDev = process.env.NODE_ENV === 'development';
 
 // 共通設定
 const common: Configuration = {
+  plugins: [
+    require('tailwindcss'),
+    require('autoprefixer'),
+  ],
   // モード切替
   mode: isDev ? 'development' : 'production',
   node: {
@@ -67,6 +71,18 @@ const common: Configuration = {
               sourceMap: isDev,
             },
           },
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                ident: 'postcss',
+                plugins: [
+                  require('tailwindcss'),
+                  require('autoprefixer'),
+                ],
+              },
+            }
+          }
         ],
       },
       {
