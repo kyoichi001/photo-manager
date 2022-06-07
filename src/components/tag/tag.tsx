@@ -5,6 +5,7 @@ import Popout from '../popout/popout';
 import { useClickAway, useDisclosure, useKeypress } from '../popout/popout_hooks';
 import TagClickMenuPopout from '../popout/tag_click_menu_popout';
 import TagData from './tag_data';
+import { XIcon } from '@heroicons/react/solid';
 
 interface TagProps {
     data: TagData
@@ -28,7 +29,7 @@ export default function Tag(props: TagProps) {
         >
             <div className={c}>
                 <button className='px-1' style={buttonStyle} onClick={() => props.onTagRemove(props.data)}>
-                    x
+                    <XIcon className='h-3 w-3 inline-block' />
                 </button>
                 <div>
                     {props.data.name}

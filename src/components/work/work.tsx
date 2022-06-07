@@ -7,6 +7,7 @@ import { useClickAway, useDisclosure, useKeypress } from '../popout/popout_hooks
 import TagAddPopout from '../popout/tag_add_popout';
 import WorkClickMenuPopout from '../popout/work_click_menu_popout';
 import Popout from '../popout/popout';
+import { SearchIcon } from '@heroicons/react/solid';
 
 interface WorkProps {
     data: WorkData
@@ -49,7 +50,9 @@ export default function Work(props: WorkProps) {
         }} ref={menureferenceRef}>
             <div className='max-h-48 overflow-hidden relative rounded-t-sm'>
                 <img className='' src={props.data.image} alt="t" />
-                <div className='shadow bg-gray-600 hover:bg-gray-700 bg-opacity-50 absolute bottom-0 left-0 w-min px-1 backdrop-filter backdrop-blur-sm' onClick={() => props.onWorkPreview(props.data)}>+</div>
+                <div className='shadow bg-gray-600 hover:bg-gray-700 bg-opacity-50 absolute bottom-0 left-0 w-min p-1 backdrop-filter backdrop-blur-sm' onClick={() => props.onWorkPreview(props.data)}>
+                    <SearchIcon className="h-5 w-5 text-gray-200" />
+                </div>
             </div>
             <div className='flex p-1 gap-1'>
                 {tags}
