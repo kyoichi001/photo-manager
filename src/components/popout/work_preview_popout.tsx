@@ -1,9 +1,6 @@
 import React, { ChangeEvent, useMemo, useState } from 'react';
 import TagData from '../tag/tag_data';
-import '../../css/work.css';
-import '../../css/common.css';
 import WorkData from '../work/work_data';
-import "../../css/popouts.css"
 
 
 interface WorkPreviewPopoutProps {

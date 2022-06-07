@@ -6,8 +6,6 @@ import TagData from '../tag/tag_data';
 import FileInfo from '../window/file_info';
 import WorksWindow from '../window/works_window';
 import WorkData, { __errorWork } from '../work/work_data';
-import "../../css/common.css"
-import "../../css/main_scene.css"
 
 interface MainSceneData {
     tags: TagData[]
@@ -82,8 +80,6 @@ export default function MainScene() {
         alignItems: 'center',
         padding: 0,
         margin: 0,
-        borderWidth: 2,
-        borderRadius: 2,
         outline: 'none',
         transition: 'border .24s ease-in-out'
     };
@@ -91,11 +87,15 @@ export default function MainScene() {
     const acceptStyle: React.CSSProperties = {
         borderColor: '#00e676',
         borderStyle: 'dashed',
+        borderWidth: 2,
+        borderRadius: 2,
     };
 
     const rejectStyle: React.CSSProperties = {
         borderColor: '#ff1744',
         borderStyle: 'dashed',
+        borderWidth: 2,
+        borderRadius: 2,
     };
 
     const style: React.CSSProperties = useMemo(() => ({
@@ -109,11 +109,11 @@ export default function MainScene() {
     ]);
 
     return (
-        <div className="main-scene">
-            <div {...getRootProps({ style })}>
+        <div className="h-full">
+            <div {...getRootProps({ style })} className="h-full cursor-default">
                 <input {...getInputProps()} />
-                <div className='view row' >
-                    <div className='app-works-window col-9'>
+                <div className='grid grid-cols-12 gap-1 h-full w-full' >
+                    <div className='col-span-9 bg-gray-600 h-full overflow-y-auto'>
                         <WorksWindow
                             workManager={workManager}
                             tagManager={tagManager}
@@ -122,7 +122,7 @@ export default function MainScene() {
                             onWorkSelected={(work) => selectWork(work)}
                         />
                     </div>
-                    <div className='app-file-info col-3'>
+                    <div className='col-span-3 bg-gray-600 h-full p-2'>
                         <FileInfo
                             work={selectedWork}
                             idToTag={(id) => data.tags.find((t) => t.id === id)}

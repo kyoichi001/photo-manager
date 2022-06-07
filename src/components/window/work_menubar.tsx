@@ -2,7 +2,6 @@ import React, { CSSProperties, useMemo, useRef, useState } from 'react';
 import { usePopper } from 'react-popper';
 import WorkFilterPopout from '../popout/work_filter_popout';
 import TagData from '../tag/tag_data';
-import "../../css/popouts.css"
 import { useClickAway, useDisclosure, useKeypress } from '../popout/popout_hooks';
 import Popout from '../popout/popout';
 
@@ -22,7 +21,7 @@ export default function WorkMenubar(props: WorkMenubarProps) {
     const [searchKeyword, setSearchKeyword] = useState("")
 
     return (
-        <div className='work-menubar'>
+        <div className='sticky top-0 bg-gray-600 bg-opacity-75 w-full p-2 backdrop-filter backdrop-blur-sm z-50 drop-shadow-md'>
             <input type="text" id='text' name='text'
                 placeholder="ファイル名検索"
                 value={searchKeyword}

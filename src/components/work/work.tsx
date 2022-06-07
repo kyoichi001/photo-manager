@@ -1,7 +1,5 @@
 import React, { CSSProperties, useMemo, useRef, useState } from 'react';
 import Tag from '../tag/tag';
-import '../../css/work.css';
-import '../../css/popouts.css';
 import WorkData from './work_data';
 import TagData from '../tag/tag_data';
 import { Popper, usePopper } from 'react-popper';
@@ -24,7 +22,7 @@ export default function Work(props: WorkProps) {
     const menureferenceRef = useRef<HTMLDivElement | null>(null);
     const { isOpen: ismenuOpen, open: menuopen, close: menuclose } = useDisclosure(false);
 
-    const tagAddreferenceRef = useRef<HTMLButtonElement | null>(null);
+    const tagAddreferenceRef = useRef<HTMLDivElement | null>(null);
     const { isOpen: istagAddOpen, open: tagAddopen, close: tagAddclose } = useDisclosure(false);
 
     const tags = useMemo(() => {
@@ -45,20 +43,17 @@ export default function Work(props: WorkProps) {
     }, [props.data.tags])
 
     return (
-        <div className='work' onClick={() => { props.onSelected(props.data) }} onContextMenu={(e) => {
+        <div className='work h-min bg-gray-500 rounded-sm' onClick={() => { props.onSelected(props.data) }} onContextMenu={(e) => {
             e.preventDefault();
             menuopen()
         }} ref={menureferenceRef}>
-            <div className=' p-2 work-bg'>
-                <div className='work-thumb-container'>
-                    <img className='work-thumb clickable-component' src={props.data.image} alt="t" />
-                    <button className='work-preview-button' onClick={() => props.onWorkPreview(props.data)}>+</button>
-                </div>
-                <div className='work-title'><p>{props.data.title}</p></div>
-                <div className='tags'>
-                    {tags}
-                    <button onClick={tagAddopen} ref={tagAddreferenceRef}>+</button>
-                </div>
+            <div className='max-h-48 overflow-hidden relative rounded-t-sm'>
+                <img className='' src={props.data.image} alt="t" />
+                <div className='shadow bg-gray-600 hover:bg-gray-700 bg-opacity-50 absolute bottom-0 left-0 w-min px-1 backdrop-filter backdrop-blur-sm' onClick={() => props.onWorkPreview(props.data)}>+</div>
+            </div>
+            <div className='flex p-1 gap-1'>
+                {tags}
+                <div className='bg-gray-300 hover:bg-gray-400 rounded-sm shadow' onClick={tagAddopen} ref={tagAddreferenceRef}>+</div>
             </div>
             <Popout targetRef={tagAddreferenceRef} isOpen={istagAddOpen} close={tagAddclose}>
                 {

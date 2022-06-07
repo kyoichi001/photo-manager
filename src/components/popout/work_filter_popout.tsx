@@ -1,9 +1,6 @@
 import React, { ChangeEvent, useMemo, useState } from 'react';
 import FilterTag from '../tag/filter_tag';
 import TagData from '../tag/tag_data';
-import '../../css/tag.css';
-import "../../css/common.css"
-//import "../../css/popouts.css"
 
 
 interface WorkFilterPopoutProps {
@@ -21,18 +18,19 @@ export default function WorkFilterPopout(props: WorkFilterPopoutProps) {
     }
 
     return (
-        <div className='popout popout-bg-col'>
-            <div className=''>
-                <p>フィルター</p>
-                <div className='tags'>
-                    {
-                        props.tags.map((p, i) =>
-                            <div key={p.id} onClick={() => { props.onClickTag(i, !props.activeTags[i]) }}>
-                                <FilterTag data={p} isChecked={props.activeTags[i]} ></FilterTag>
-                            </div>
-                        )
-                    }
-                </div>
+        <div className='bg-gray-400 p-1 shadow rounded-sm bg-opacity-70 backdrop-filter backdrop-blur-sm border-2 border-white'>
+            <p>フィルター</p>
+            <div className='flex gap-1'>
+                {
+                    props.tags.map((p, i) =>
+                        <div key={p.id} >
+                            <FilterTag data={p}
+                                isChecked={props.activeTags[i]}
+                                onClick={() => { props.onClickTag(i, !props.activeTags[i]) }}
+                            />
+                        </div>
+                    )
+                }
             </div>
         </div>
     )

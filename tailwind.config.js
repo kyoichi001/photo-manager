@@ -1,7 +1,10 @@
 module.exports = {
   content: ["./src/**/*.{jsx,js,ts,tsx}", "./dist/index.html"],
   theme: {
-    extend: {},
+    extend: {
+      backdropBlur: true
+
+    },
   },
   plugins: [],
 }

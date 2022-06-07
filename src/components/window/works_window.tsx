@@ -1,7 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { usePopper } from 'react-popper';
-import '../../css/works_window.css'
-import '../../css/popouts.css'
 import WorkPreviewPopout from '../popout/work_preview_popout';
 import Work from '../work/work';
 import WorkData, { __errorWork } from '../work/work_data';
@@ -82,18 +80,16 @@ export default function WorksWindow(props: WorksWindowProps) {
     })
 
     return (
-        <div className='works-window'>
-            <div className='window'>
-                <div className='works-window-container'>
-                    <WorkMenubar
-                        tags={tags}
-                        setFlag={setFlag}
-                        setKeyword={setActiveKeyword}
-                        activeTags={activeTags}
-                    />
-                    <div className='works'>
-                        {worksDOM.length === 0 ? NoWorks : worksDOM}
-                    </div>
+        <>
+            <div className=''>
+                <WorkMenubar
+                    tags={tags}
+                    setFlag={setFlag}
+                    setKeyword={setActiveKeyword}
+                    activeTags={activeTags}
+                />
+                <div className='p-2 grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2'>
+                    {worksDOM.length === 0 ? NoWorks : worksDOM}
                 </div>
             </div>
             <Popout targetRef={popoutRef} isOpen={isOpen} close={close}>
@@ -105,6 +101,6 @@ export default function WorksWindow(props: WorksWindowProps) {
                     onClose={() => close()}
                 />
             </Popout>
-        </div>
+        </>
     )
 }

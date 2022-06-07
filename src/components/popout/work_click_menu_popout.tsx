@@ -1,13 +1,10 @@
 import React, { ChangeEvent, CSSProperties, useMemo, useRef, useState } from 'react';
 import FilterTag from '../tag/filter_tag';
 import TagData from '../tag/tag_data';
-import '../../css/tag.css';
-import "../../css/common.css"
 import WorkData from '../work/work_data';
 import { useClickAway, useDisclosure, useKeypress } from './popout_hooks';
 import { usePopper } from 'react-popper';
 import Popout from './popout';
-//import "../../css/popouts.css"
 
 
 interface WorkClickMenuPopoutProps {

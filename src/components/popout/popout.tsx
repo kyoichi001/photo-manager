@@ -23,20 +23,18 @@ export default function Popout(props: PopoutProps) {
     useKeypress('Escape', props.close);
 
     return (
-        <div>
-            <div ref={popperRef} style={{
-                ...renamestyles.popper,
+        <div className='z-50' ref={popperRef} style={{
+            ...renamestyles.popper,
+        }
+        } {
+            ...renameattributes.popper
+            }>
+            {
+                props.isOpen &&
+                <div>
+                    {props.children}
+                </div>
             }
-            } {
-                ...renameattributes.popper
-                }>
-                {
-                    props.isOpen &&
-                    <div className='popout popout-bg-col'>
-                        {props.children}
-                    </div>
-                }
-            </div>
         </div>
     )
 }

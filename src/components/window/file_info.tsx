@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import '../../css/file_info.css'
 import Tag from '../tag/tag';
 import TagData from '../tag/tag_data';
 import WorkData from '../work/work_data';
@@ -34,17 +33,15 @@ export default function FileInfo(props: FileInfoProps) {
 
     return (
         <div className='file-info'>
-            <div className='window'>
-                <img className="work-thumb" src={props.work.image} alt="t" />
-                <div className='work-title'><p>{props.work.title}</p></div>
-                <div className='tags'>
-                    {tags}
-                </div>
-                <div className='work-time'><p>{(new Date(props.work.createdAt)).toLocaleDateString("ja")}</p></div>
-                <button onClick={() => props.deleteWork(props.work?.id ?? "")}>
-                    削除
-                </button>
+            <img className="work-thumb py-1" src={props.work.image} alt="t" />
+            <div className='work-title'><p>{props.work.title}</p></div>
+            <div className='flex gap-1 py-1'>
+                {tags}
             </div>
+            <div className='work-time py-1'><p>{(new Date(props.work.createdAt)).toLocaleDateString("ja")}</p></div>
+            <button className='bg-red-700 hover:bg-red-800 rounded-sm shadow text-gray-200 p-1' onClick={() => props.deleteWork(props.work?.id ?? "")}>
+                削除
+            </button>
         </div>
     )
 }

@@ -1,7 +1,5 @@
 import React, { ChangeEvent, useMemo, useState } from 'react';
 import TagData from '../tag/tag_data';
-import "../../css/common.css"
-import "../../css/popouts.css"
 
 interface TagAddPopoutProps {
     tags: TagData[]
@@ -14,20 +12,24 @@ export default function TagAddPopout(props: TagAddPopoutProps) {
     const [newtag, setNewTag] = useState('');
 
     return (
-        <div className='popout popout-bg-col tagg-add-popout'>
-            <div className=''>
-                <p>追加するタグ</p>
-                <input type="search" id="tag_search" name="tag_search" placeholder="Search or add tag" value={newtag} onChange={(e) => setNewTag(e.target.value)}></input>
-                <div className='add-new-tag'>
-                    <button onClick={() => { props.onCreateTag(newtag) }}>新規作成：{newtag}</button>
-                </div>
-                <div className='tags'>
-                    {
-                        props.tags.map((p) =>
-                            <button key={p.id} onClick={() => { props.onClickTag(p) }}>{p.name}</button>
-                        )
-                    }
-                </div>
+        <div className='bg-gray-400 p-1 shadow rounded-sm bg-opacity-75 w-full backdrop-filter backdrop-blur-sm drop-shadow-md border-2 border-white'>
+            <p className='py-1'>追加するタグ</p>
+            <input type="search" id="tag_search" name="tag_search" placeholder="Search or add tag" value={newtag} onChange={(e) => setNewTag(e.target.value)}></input>
+            {
+                newtag !== "" ?
+                    <div className='bg-gray-300 hover:bg-gray-400 rounded-sm shadow m-1 p-1'>
+                        <button onClick={() => { props.onCreateTag(newtag) }}>新規作成：{newtag}</button>
+                    </div> :
+                    <></>
+            }
+            <div className='flex gap-1'>
+                {
+                    props.tags.map((p) =>
+                        <button className='bg-gray-300 hover:bg-gray-400 rounded-sm shadow p-0.5 text-xs' key={p.id} onClick={() => { props.onClickTag(p) }}>
+                            {p.name}
+                        </button>
+                    )
+                }
             </div>
         </div>
     )

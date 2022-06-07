@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import TagManager from '../../tag_manager';
 import Tag from '../tag/tag';
 import TagData from '../tag/tag_data';
-import '../../css/common.css'
 import WorkManager from '../../work_manager';
 import WorkData from '../work/work_data';
 import TagInfo from '../window/tag_info';
