@@ -1,9 +1,6 @@
 import React, { ChangeEvent, CSSProperties, useMemo, useRef, useState } from 'react';
-import FilterTag from '../tag/filter_tag';
 import TagData from '../tag/tag_data';
-import WorkData from '../work/work_data';
 import { useClickAway, useDisclosure, useKeypress } from './popout_hooks';
-import { Popper, usePopper } from 'react-popper';
 import Popout from './popout';
 //import "../../css/popouts.css"
 

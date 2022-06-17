@@ -15,11 +15,12 @@ export default function FileInfo(props: FileInfoProps) {
 
     if (!props.work) {
         return (
-            <div className='file-info'>
-                <div className='window'>
-                    <div className='work-title'>
-                        <p>作品が選択されていません</p>
-                    </div>
+            <div className='file-info p-1'>
+                <div className='text-xl border-b-2 text-white p-2 mb-3'>
+                    FileInfo
+                </div>
+                <div className='mb-3 bg-gray-500 p-1 rounded-sm divide-y'>
+                    <div className='font-bold text-gray-100'>作品が選択されていません</div>
                 </div>
             </div>
         )
@@ -33,11 +34,24 @@ export default function FileInfo(props: FileInfoProps) {
     }
 
     return (
-        <div className='file-info'>
-            <img className="work-thumb py-1" src={props.work.image} alt="t" />
-            <div className='work-title'><p>{props.work.title}</p></div>
-            <div className='flex gap-1 py-1'>
-                {tags}
+        <div className='file-info p-1'>
+            <div className='text-xl border-b-2 text-white p-2 mb-3'>
+                FileInfo
+            </div>
+            <div className='mb-3 bg-gray-500 p-1 rounded-sm divide-y'>
+                <div className='font-bold text-gray-100'>image</div>
+                <img className="work-thumb py-1" src={props.work.image} alt="t" />
+            </div>
+            <div className='mb-3 bg-gray-500 p-1 rounded-sm divide-y'>
+                <div className='font-bold text-gray-100'>path</div>
+                <div className='break-words text-gray-100'><p>{props.work.image}</p></div>
+            </div>
+            <div className='mb-3 bg-gray-500 p-1 rounded-sm divide-y'>
+                <div className='font-bold text-gray-100'>tags ({tags.length})</div>
+
+                <div className='flex gap-1 py-1'>
+                    {tags.length === 0 ? "none" : tags}
+                </div>
             </div>
             <div className='work-time py-1'><p>{(new Date(props.work.createdAt)).toLocaleDateString("ja")}</p></div>
             <button className='bg-red-700 hover:bg-red-800 rounded-sm shadow text-gray-200 p-1' onClick={() => props.deleteWork(props.work?.id ?? "")}>

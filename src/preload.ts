@@ -44,5 +44,33 @@ contextBridge.exposeInMainWorld('myAPI', {
   },
   existsFile: (path: string) => {
     return fs.existsSync(path)
+  },
+  readDirectory: (path: string) => {
+    return fs.promises.readdir(path)
+  },
+  isDirectory: async (path: string) => {
+    let stat = await fs.promises.stat(path)
+    return stat.isDirectory()
+  },
+
+  getFilesInDirectory: async (path: string) => {
+    async function getFileFunc(p: string) {
+      let f = await fs.promises.readdir(p)//ディレクトリ内のファイルを列挙
+      let res: string[] = []
+      for (let j of f) {
+        let stat = await fs.promises.stat(p + "\\" + j)
+        if (!stat.isDirectory()) {
+          res.push(p + "\\" + j)
+        } else {
+          let fls = await getFileFunc(p + "\\" + j)
+          res = res.concat(fls)
+        }
+      }
+      return res
+    }
+    let stat = await fs.promises.stat(path)
+    if (!stat.isDirectory()) return [path]
+    let res = await getFileFunc(path)
+    return res
   }
 });

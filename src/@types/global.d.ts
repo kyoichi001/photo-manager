@@ -20,4 +20,7 @@ export interface IMyAPI {
 
   createDirectory: (path: string) => void
   existsFile: (path: string) => boolean
+  readDirectory: (path: string) => Promise<string[]>
+  isDirectory: (path: string) => Promise<boolean>
+  getFilesInDirectory: (path: string) => Promise<string[]>
 }

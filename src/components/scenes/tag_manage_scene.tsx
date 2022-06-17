@@ -3,7 +3,6 @@ import TagManager from '../../tag_manager';
 import Tag from '../tag/tag';
 import TagData from '../tag/tag_data';
 import WorkManager from '../../work_manager';
-import WorkData from '../work/work_data';
 import TagInfo from '../window/tag_info';
 
 interface TagManageSceneProps {

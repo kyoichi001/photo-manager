@@ -2,12 +2,10 @@ import React, { CSSProperties, useMemo, useRef, useState } from 'react';
 import Tag from '../tag/tag';
 import WorkData from './work_data';
 import TagData from '../tag/tag_data';
-import { Popper, usePopper } from 'react-popper';
 import { useClickAway, useDisclosure, useKeypress } from '../popout/popout_hooks';
-import TagAddPopout from '../popout/tag_add_popout';
 import WorkClickMenuPopout from '../popout/work_click_menu_popout';
 import Popout from '../popout/popout';
-import { SearchIcon } from '@heroicons/react/solid';
+import { SearchIcon, PlusIcon } from '@heroicons/react/solid';
 
 interface WorkProps {
     data: WorkData
@@ -48,15 +46,19 @@ export default function Work(props: WorkProps) {
             e.preventDefault();
             menuopen()
         }} ref={menureferenceRef}>
-            <div className='max-h-48 overflow-hidden relative rounded-t-sm'>
-                <img className='' src={props.data.image} alt="t" />
-                <div className='shadow bg-gray-600 hover:bg-gray-700 bg-opacity-50 absolute bottom-0 left-0 w-min p-1 backdrop-filter backdrop-blur-sm' onClick={() => props.onWorkPreview(props.data)}>
-                    <SearchIcon className="h-5 w-5 text-gray-200" />
+            <div className='relative rounded-t-sm'>
+                <img className='object-contain h-48 w-full' src={props.data.image} alt="t" />
+                <div className='transition duration-75 ease-linear z-10 absolute bottom-0 left-0 bg-black opacity-0 h-48 w-full hover:opacity-60'>
+                    <div className='z-20 bg-gray-600 hover:bg-gray-900 shadow rounded-sm absolute bottom-1 left-1 w-min p-1' onClick={() => props.onWorkPreview(props.data)}>
+                        <SearchIcon className="hover:text-opacity-100 h-24 w-24 text-gray-100 hover:opacity-100 hover:bg-opacity-100" />
+                    </div>
                 </div>
             </div>
             <div className='flex p-1 gap-1'>
                 {tags}
-                <div className='bg-gray-300 hover:bg-gray-400 rounded-sm shadow' onClick={tagAddopen} ref={tagAddreferenceRef}>+</div>
+                <div className='bg-gray-300 hover:bg-gray-400 rounded-sm shadow h-4' onClick={tagAddopen} ref={tagAddreferenceRef}>
+                    <PlusIcon className="h-4 w-4 text-gray-800" />
+                </div>
             </div>
             <Popout targetRef={tagAddreferenceRef} isOpen={istagAddOpen} close={tagAddclose}>
                 {

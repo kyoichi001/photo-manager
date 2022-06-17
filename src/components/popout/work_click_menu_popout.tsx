@@ -1,10 +1,8 @@
 import React, { ChangeEvent, CSSProperties, useMemo, useRef, useState } from 'react';
-import FilterTag from '../tag/filter_tag';
-import TagData from '../tag/tag_data';
 import WorkData from '../work/work_data';
 import { useClickAway, useDisclosure, useKeypress } from './popout_hooks';
-import { usePopper } from 'react-popper';
 import Popout from './popout';
+import { TrashIcon, TagIcon } from '@heroicons/react/solid';
 
 
 interface WorkClickMenuPopoutProps {
@@ -15,15 +13,19 @@ interface WorkClickMenuPopoutProps {
 
 export default function WorkClickMenuPopout(props: WorkClickMenuPopoutProps) {
 
-    const tagAddreferenceRef = useRef<HTMLLIElement | null>(null);
+    const tagAddreferenceRef = useRef<HTMLDivElement | null>(null);
     const { isOpen: istagAddOpen, open: tagAddopen, close: tagAddclose } = useDisclosure(false);
 
     return (
-        <div className='popout popout-bg-col'>
-            <ul>
-                <li onClick={() => { props.onDelete(props.work) }}><p>削除</p></li>
-                <li onClick={() => { tagAddopen() }} ref={tagAddreferenceRef}><p>タグの追加</p></li>
-            </ul>
+        <div className='bg-gray-400 p-1 shadow rounded-sm bg-opacity-75 w-full backdrop-filter backdrop-blur-sm drop-shadow-md border-2 border-white'>
+            <div className=' hover:bg-gray-500 rounded-sm shadow p-1 my-1 text-gray-100' onClick={() => { props.onDelete(props.work) }}>
+                <TrashIcon className="h-5 w-5 text-gray-200 inline-block" />
+                削除
+            </div>
+            <div className=' hover:bg-gray-500 rounded-sm shadow p-1 my-1 text-gray-100' onClick={() => { tagAddopen() }} ref={tagAddreferenceRef}>
+                <TagIcon className="h-5 w-5 text-gray-200 inline-block" />
+                タグの追加
+            </div>
 
             <Popout targetRef={tagAddreferenceRef} isOpen={istagAddOpen} close={tagAddclose}>
                 {

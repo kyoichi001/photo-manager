@@ -59,23 +59,23 @@ export default class WorkManager {
         }
     }
 
-    async addWorks(files: File[]) {
+    async addWorks(files: string[]) {
         let works = await this.getWorks()
         for (var f of files) {
-            if (f.path === "") return
-            if (works.some((work) => work.image === f.path)) return//2重追加防止
-            let w: WorkData = { id: Library.generateUuid(), title: f.name, image: f.path, createdAt: Date.now(), tags: [] }
+            if (f === "") return
+            if (works.some((work) => work.image === f)) return//2重追加防止
+            let w: WorkData = { id: Library.generateUuid(), image: f, createdAt: Date.now(), tags: [] }
             works.push(w)
         }
         await this.writeWorkData(works)
         this.onDataSaved()
     }
 
-    async addWork(file: File) {
-        if (file.path === "") return
+    async addWork(file: string) {
+        if (file === "") return
         let works = await this.getWorks()
-        if (works.some((work) => work.image === file.path)) return//2重追加防止
-        let w: WorkData = { id: Library.generateUuid(), title: file.name, image: file.path, createdAt: Date.now(), tags: [] }
+        if (works.some((work) => work.image === file)) return//2重追加防止
+        let w: WorkData = { id: Library.generateUuid(), image: file, createdAt: Date.now(), tags: [] }
         works.push(w)
         await this.writeWorkData(works)
         this.onDataSaved()

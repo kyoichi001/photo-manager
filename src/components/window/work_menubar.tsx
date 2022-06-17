@@ -25,7 +25,7 @@ export default function WorkMenubar(props: WorkMenubarProps) {
             <div className='flex gap-2'>
                 <FilterIcon className="h-5 w-5 text-gray-200 hover:text-gray-400 shadow" onClick={() => { open() }} ref={referenceRef} />
                 <SearchIcon className="h-5 w-5 text-gray-200" />
-                <input type="text" id='text' name='text'
+                <input className="bg-gray-700 text-gray-300 px-1 shadow-inner rounded-sm" type="text" id='text' name='text'
                     placeholder="ファイル名検索"
                     value={searchKeyword}
                     onChange={(e) => setSearchKeyword(e.target.value)}

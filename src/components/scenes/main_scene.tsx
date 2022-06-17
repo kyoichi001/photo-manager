@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { DropEvent, useDropzone } from 'react-dropzone';
 import TagManager from '../../tag_manager';
 import WorkManager from '../../work_manager';
 import TagData from '../tag/tag_data';
@@ -13,13 +12,14 @@ interface MainSceneData {
 }
 
 export default function MainScene() {
+    console.log("rendering main_scene")
     const [renderFlag, setRenderFlag] = useState(false)
     const [selectedWork, selectWork] = useState<WorkData | undefined>(undefined);
 
-    let tagManager = new TagManager(() => {
+    const tagManager = new TagManager(() => {
         setRenderFlag(renderFlag ? false : true)
     })
-    let workManager = new WorkManager(() => {
+    const workManager = new WorkManager(() => {
         setRenderFlag(renderFlag ? false : true)
     })
 
@@ -43,6 +43,7 @@ export default function MainScene() {
         }
         return { tags: t, works: w }
     }
+
     //https://zenn.dev/coa00/articles/d3db140113b165
     //メモリリーク対策
     useEffect(() => {
@@ -53,37 +54,8 @@ export default function MainScene() {
         return () => { isMounted = false }; // use effect cleanup to set flag false, if unmounted
     }, [renderFlag])
 
-    //https://react-dropzone.js.org/
-    const onDrop = useCallback((acceptedFiles: File[]) => {
-        console.log("on drop " + acceptedFiles.map((f) => f.name))
-        workManager.addWorks(acceptedFiles)
-    }, [])
-
-
-    const {
-        getRootProps,
-        getInputProps,
-        isFocused,
-        isDragAccept,
-        isDragReject,
-    } = useDropzone({
-        onDrop,
-        noClick: true,
-        accept: 'image/jpeg,image/png,image/jfif,image/gif',
-        multiple: true,
-    })
-
     const baseStyle: React.CSSProperties = {
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: 0,
-        margin: 0,
-        outline: 'none',
-        transition: 'border .24s ease-in-out'
     };
-
     const acceptStyle: React.CSSProperties = {
         borderColor: '#00e676',
         borderStyle: 'dashed',
@@ -98,40 +70,116 @@ export default function MainScene() {
         borderRadius: 2,
     };
 
-    const style: React.CSSProperties = useMemo(() => ({
-        ...baseStyle,
-        ...(isDragAccept ? acceptStyle : {}),
-        ...(isDragReject ? rejectStyle : {})
-    }), [
-        isFocused,
-        isDragAccept,
-        isDragReject
-    ]);
+    const [dragging, setDragging] = useState(false)
+    const onDropedFile = async (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log("on dropped count:", e.dataTransfer.files.length)
+        if (!e.dataTransfer) {
+            console.log("on dropped error!")
+            setDragging(false)
+            return
+        }
+        const draggedFiles: File[] = []
+        for (let i = 0; i < e.dataTransfer.files.length; i++) {
+            draggedFiles.push(e.dataTransfer.files[i])
+        }
+        let res: string[] = []
+        console.log("file count B:", e.dataTransfer.files.length)
+        for (let file of draggedFiles) {
+            let droppedPath = file.path
+            let files = await window.myAPI.getFilesInDirectory(droppedPath)
+            res = res.concat(files)
+        }
+        res = res.map((r) => r.toLowerCase())
+        for (let r of res) {
+            console.log("adding work", r)
+        }
+        let ext_filters = ["jpg", "png", "gif", "jpeg", "jfif", "jpe", "jfi", "jif"]
+        console.log("add works", res.filter((s) => ext_filters.includes(s.split(".").at(-1) ?? "")))
+        workManager.addWorks(res.filter((s) => ext_filters.includes(s.split(".").at(-1) ?? "")))
+        setDragging(false)
+    }
+
+    const onDraggedFile = async (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault()
+        e.stopPropagation()
+        if (!e.dataTransfer) {
+            setDragging(true)
+            return
+        }
+        let ext_filters = ["jpg", "png", "gif", "jpeg", "jfif", "jpe", "jfi", "jif"]
+        for (let i = 0; i < e.dataTransfer.files.length; i++) {
+            let droppedPath = e.dataTransfer.files[i].path.toLowerCase()
+            if (await window.myAPI.isDirectory(droppedPath)) {//もしディレクトリを含むなら無視
+                setDragging(true)
+                return
+            }
+            let file_extention = droppedPath.split(".").at(-1)
+            if (!file_extention) {//拡張子がないなら無視（そんなことある？
+                setDragging(true)
+                return
+            }
+            if (ext_filters.includes(file_extention)) {//もし画像を含むなら無視
+                setDragging(true)
+                return
+            }
+        }
+        //すべてのファイルが対応しない拡張子なら
+        setDragging(true)
+    }
+
+    const onDragExit = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault()
+        e.stopPropagation()
+        console.log("on drag leave")
+        setDragging(false)
+    }
+
+    const child = useMemo(() => {
+        console.log("rendering main_scene_children")
+        return <div className='grid grid-cols-12 gap-1 h-full w-full'>
+            <div className='col-span-9 bg-gray-600 h-full overflow-y-auto scrollbar-primary'>
+                <WorksWindow
+                    workManager={workManager}
+                    tagManager={tagManager}
+                    works={data.works}
+                    tags={data.tags}
+                    onWorkSelected={(work) => selectWork(work)}
+                />
+            </div>
+            <div className='col-span-3 bg-gray-600 h-full overflow-y-auto scrollbar-primary'>
+                <FileInfo
+                    work={selectedWork}
+                    idToTag={(id) => data.tags.find((t) => t.id === id)}
+                    deleteWork={(id) => workManager.deleteWork(id)}
+                    removeTag={(work, tag) => workManager.deleteTagFromWork(work, tag)}
+                />
+            </div>
+        </div>
+    }, [data, renderFlag, selectedWork])
 
     return (
-        <div className="h-full">
-            <div {...getRootProps({ style })} className="h-full cursor-default">
-                <input {...getInputProps()} />
-                <div className='grid grid-cols-12 gap-1 h-full w-full' >
-                    <div className='col-span-9 bg-gray-600 h-full overflow-y-auto'>
-                        <WorksWindow
-                            workManager={workManager}
-                            tagManager={tagManager}
-                            works={data.works}
-                            tags={data.tags}
-                            onWorkSelected={(work) => selectWork(work)}
-                        />
+        <div className="h-full" onDragEnter={(e) => {
+            console.log("drag enter parent")
+            onDraggedFile(e)
+        }}>
+            {
+                child
+            }
+            {
+                dragging ?
+                    <div className="z-50 h-full w-full absolute left-0 top-0"
+                        onDragOver={(e) => e.preventDefault()}
+                        onDragEnter={() => console.log("drag enter")}
+                        onDrop={onDropedFile}
+                        onDragLeave={onDragExit}>
+                        <div className='bg-blue-300 bg-opacity-60 h-full w-full flex place-content-center place-items-center' onDrop={() => console.log("drop grandchild")}>
+                            <p className='font-bold'>ここにファイルをドラッグ</p>
+                        </div>
                     </div>
-                    <div className='col-span-3 bg-gray-600 h-full p-2'>
-                        <FileInfo
-                            work={selectedWork}
-                            idToTag={(id) => data.tags.find((t) => t.id === id)}
-                            deleteWork={(id) => workManager.deleteWork(id)}
-                            removeTag={(work, tag) => workManager.deleteTagFromWork(work, tag)}
-                        />
-                    </div>
-                </div>
-            </div>
+                    : <></>
+            }
         </div>
     )
 }

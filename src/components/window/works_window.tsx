@@ -34,9 +34,9 @@ export default function WorksWindow(props: WorksWindowProps) {
             if (activeTags[i] && work.tags.find((t) => t === tags[i].id)) {
                 return true
             }
-            if (work.title.indexOf(activeKeyword) != -1) {
+            /*if (work.title.indexOf(activeKeyword) != -1) {
                 return true
-            }
+            }*/
         }
         return false
     })
@@ -88,7 +88,7 @@ export default function WorksWindow(props: WorksWindowProps) {
                     setKeyword={setActiveKeyword}
                     activeTags={activeTags}
                 />
-                <div className='p-2 grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2'>
+                <div className='p-2 grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-2'>
                     {worksDOM.length === 0 ? NoWorks : worksDOM}
                 </div>
             </div>
