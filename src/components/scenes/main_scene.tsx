@@ -74,9 +74,7 @@ export default function MainScene() {
     const onDropedFile = async (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         e.stopPropagation();
-        console.log("on dropped count:", e.dataTransfer.files.length)
         if (!e.dataTransfer) {
-            console.log("on dropped error!")
             setDragging(false)
             return
         }
@@ -85,7 +83,6 @@ export default function MainScene() {
             draggedFiles.push(e.dataTransfer.files[i])
         }
         let res: string[] = []
-        console.log("file count B:", e.dataTransfer.files.length)
         for (let file of draggedFiles) {
             let droppedPath = file.path
             let files = await window.myAPI.getFilesInDirectory(droppedPath)
@@ -93,10 +90,8 @@ export default function MainScene() {
         }
         res = res.map((r) => r.toLowerCase())
         for (let r of res) {
-            console.log("adding work", r)
         }
         let ext_filters = ["jpg", "png", "gif", "jpeg", "jfif", "jpe", "jfi", "jif"]
-        console.log("add works", res.filter((s) => ext_filters.includes(s.split(".").at(-1) ?? "")))
         workManager.addWorks(res.filter((s) => ext_filters.includes(s.split(".").at(-1) ?? "")))
         setDragging(false)
     }
@@ -132,7 +127,6 @@ export default function MainScene() {
     const onDragExit = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault()
         e.stopPropagation()
-        console.log("on drag leave")
         setDragging(false)
     }
 
@@ -161,7 +155,6 @@ export default function MainScene() {
 
     return (
         <div className="h-full" onDragEnter={(e) => {
-            console.log("drag enter parent")
             onDraggedFile(e)
         }}>
             {
@@ -171,7 +164,6 @@ export default function MainScene() {
                 dragging ?
                     <div className="z-50 h-full w-full absolute left-0 top-0"
                         onDragOver={(e) => e.preventDefault()}
-                        onDragEnter={() => console.log("drag enter")}
                         onDrop={onDropedFile}
                         onDragLeave={onDragExit}>
                         <div className='bg-blue-300 bg-opacity-60 h-full w-full flex place-content-center place-items-center' onDrop={() => console.log("drop grandchild")}>
