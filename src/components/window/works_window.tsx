@@ -94,11 +94,10 @@ export default function WorksWindow(props: WorksWindowProps) {
             </div>
             <Popout targetRef={popoutRef} isOpen={isOpen} close={close}>
                 <WorkPreviewPopout
-                    work={filteredWorks[targetWorkIndex]}
+                    works={filteredWorks}
                     idToTag={(id) => tags.find((t) => t.id === id)}
-                    onClickPrev={(id) => { setTargetWorkIndex((targetWorkIndex - 1 + worksDOM.length) % worksDOM.length) }}
-                    onClickNext={(id) => { setTargetWorkIndex((targetWorkIndex + 1) % worksDOM.length) }}
                     onClose={() => close()}
+                    startIndex={targetWorkIndex}
                 />
             </Popout>
         </>

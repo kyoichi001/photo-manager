@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Tag from '../tag/tag';
 import TagData from '../tag/tag_data';
 import WorkData from '../work/work_data';
@@ -33,6 +33,16 @@ export default function FileInfo(props: FileInfoProps) {
         tags.push(<Tag data={dat} key={dat.id} onTagRemove={(tag) => { props.removeTag(props.work?.id ?? "", tag.id) }} />)
     }
 
+    const imgRef = useRef<HTMLImageElement>(null)
+    const [imgWidth, setImgWidth] = useState<number | undefined>(undefined)
+    const [imgHeight, setImgHeight] = useState<number | undefined>(undefined)
+
+    useEffect(() => {
+        console.log("renew file_info img px")
+        setImgWidth(imgRef.current?.naturalWidth)
+        setImgHeight(imgRef.current?.naturalHeight)
+    }, [props.work.image])
+
     return (
         <div className='file-info p-1'>
             <div className='text-xl border-b-2 text-white p-2 mb-3'>
@@ -40,7 +50,8 @@ export default function FileInfo(props: FileInfoProps) {
             </div>
             <div className='mb-3 bg-gray-500 p-1 rounded-sm divide-y'>
                 <div className='font-bold text-gray-100'>image</div>
-                <img className="work-thumb py-1" src={props.work.image} alt="t" />
+                <img className="work-thumb py-1" src={props.work.image} alt="t" ref={imgRef} />
+                <div className='font-bold text-gray-100'>px : {imgHeight ?? "Loading..."} x {imgWidth ?? "Loading..."}</div>
             </div>
             <div className='mb-3 bg-gray-500 p-1 rounded-sm divide-y'>
                 <div className='font-bold text-gray-100'>path</div>

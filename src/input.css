@@ -25,4 +25,8 @@
         background: #1e293b;
         /*slate-800*/
     }
+
+    .h-screen-90 {
+        height: 90vh;
+    }
 }
