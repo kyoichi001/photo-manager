@@ -31,7 +31,6 @@ export default function WorkMenubar(props: WorkMenubarProps) {
                     onChange={(e) => setSearchKeyword(e.target.value)}
                     onKeyPress={(e) => {
                         if (e.key == 'Enter') {
-                            console.log("press enter")
                             e.preventDefault()
                             props.setKeyword(searchKeyword)
                         }

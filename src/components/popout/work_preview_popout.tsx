@@ -42,8 +42,7 @@ export default function WorkPreviewPopout(props: WorkPreviewPopoutProps) {
                         <div className='flex px-1 gap-1 '>
                             <div className='bg-gray-300 hover:bg-gray-400 rounded-sm shadow p-0.5 w-6 h-6'
                                 onClick={() => {
-                                    var i = (currentIndex - 1 + props.works.length) % props.works.length
-                                    setCurrentIndex(i)
+                                    setCurrentIndex((currentIndex - 1 + props.works.length) % props.works.length)
                                 }}>
                                 <ArrowCircleLeftIcon className=" text-gray-800" />
                             </div>
@@ -61,15 +60,13 @@ export default function WorkPreviewPopout(props: WorkPreviewPopoutProps) {
                             </div>
                             <div className='bg-gray-300 hover:bg-gray-400 rounded-sm shadow p-0.5 w-6 h-6'
                                 onClick={() => {
-                                    var i = (currentIndex + 1) % props.works.length
-                                    setCurrentIndex(i)
+                                    setCurrentIndex((currentIndex + 1) % props.works.length)
                                 }}>
                                 <ArrowCircleRightIcon className=" text-gray-800" />
                             </div>
                             <div className='bg-gray-300 hover:bg-gray-400 rounded-sm shadow p-0.5 w-6 h-6'
                                 onClick={() => {
-                                    var i = Math.floor(Math.random() * (props.works.length - 1))
-                                    setCurrentIndex(i)
+                                    setCurrentIndex(Math.floor(Math.random() * (props.works.length - 1)))
                                 }}>
                                 <SparklesIcon className=" text-gray-800" />
                             </div>
