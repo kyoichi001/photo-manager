@@ -1,6 +1,6 @@
 import React, { ChangeEvent, CSSProperties, useMemo, useRef, useState } from 'react';
-import WorkData from '../work/work_data';
-import { useClickAway, useDisclosure, useKeypress } from './popout_hooks';
+import WorkData from '../../value/work_data';
+import { useClickAway, useDisclosure, useKeypress } from '../../hooks/popout_hooks';
 import Popout from './popout';
 import { TrashIcon, TagIcon } from '@heroicons/react/solid';
 

@@ -1,4 +1,4 @@
-import IFilter from "./filter/filter_data"
+import IFilter from "./filter_data"
 import Sort from "./sort_data"
 
 export default interface ViewData {

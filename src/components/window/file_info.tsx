@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Tag from '../tag/tag';
-import TagData from '../tag/tag_data';
-import WorkData from '../work/work_data';
+import TagData from '../../value/tag_data';
+import WorkData from '../../value/work_data';
 import { TrashIcon } from '@heroicons/react/solid'
 
 interface FileInfoProps {

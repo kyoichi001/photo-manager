@@ -1,5 +1,5 @@
+import TagData from '@/value/tag_data';
 import React, { ChangeEvent, useMemo, useState } from 'react';
-import TagData from '../tag/tag_data';
 
 interface TagAddPopoutProps {
     tags: TagData[]

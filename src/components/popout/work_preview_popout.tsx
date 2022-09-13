@@ -1,8 +1,8 @@
 import { PlusIcon, ArrowCircleLeftIcon, ArrowCircleRightIcon, XCircleIcon, XIcon, RefreshIcon, SwitchHorizontalIcon, SparklesIcon } from '@heroicons/react/solid';
 import { useEffect, useState } from 'react';
 import { ProgressPlugin } from 'webpack';
-import TagData from '../tag/tag_data';
-import WorkData from '../work/work_data';
+import TagData from '../../value/tag_data';
+import WorkData from '../../value/work_data';
 
 
 interface WorkPreviewPopoutProps {

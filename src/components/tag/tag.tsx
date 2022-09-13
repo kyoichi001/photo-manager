@@ -2,9 +2,9 @@ import React, { ReactNode, useRef, useState } from 'react';
 import { usePopper } from 'react-popper';
 import { Col } from '../../common/color';
 import Popout from '../popout/popout';
-import { useClickAway, useDisclosure, useKeypress } from '../popout/popout_hooks';
+import { useClickAway, useDisclosure, useKeypress } from '../../hooks/popout_hooks';
 import TagClickMenuPopout from '../popout/tag_click_menu_popout';
-import TagData from './tag_data';
+import TagData from '../../value/tag_data';
 import { XIcon } from '@heroicons/react/solid';
 
 interface TagProps {

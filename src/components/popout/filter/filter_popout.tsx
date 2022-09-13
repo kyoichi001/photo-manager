@@ -1,5 +1,5 @@
 import FilterTag from '../../tag/filter_tag';
-import TagData from '../../tag/tag_data';
+import TagData from '../../../value/tag_data';
 
 
 interface FilterPopoutProps {

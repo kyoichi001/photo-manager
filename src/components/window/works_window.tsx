@@ -1,22 +1,18 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { usePopper } from 'react-popper';
 import WorkPreviewPopout from '../popout/work_preview_popout';
-import Work from '../work/work';
-import WorkData, { __errorWork } from '../work/work_data';
-import { useClickAway, useDisclosure, useKeypress } from '../popout/popout_hooks';
+import WorkData, { __errorWork } from '../../value/work_data';
+import { useClickAway, useDisclosure, useKeypress } from '../../hooks/popout_hooks';
 import WorkMenubar from './work_menubar';
-import WorkManager from '../../work_manager';
-import TagManager from '../../tag_manager';
-import TagAddPopout from '../popout/tag_add_popout';
-import TagData from '../tag/tag_data';
+import TagData from '../../value/tag_data';
 import Popout from '../popout/popout';
-
+import WorkFactory from '../../factory/WorkFactory';
+import TagDataFactory from '../../factory/TagDataFactory';
+import TagFactory from '../../factory/TagFactory';
 
 interface WorksWindowProps {
-    workManager: WorkManager
-    tagManager: TagManager
     works: WorkData[]
     tags: TagData[]
+    tagDataFactory: TagDataFactory
     onWorkSelected: (data: WorkData) => void
 }
 
@@ -40,6 +36,8 @@ export default function WorksWindow(props: WorksWindowProps) {
         }
         return false
     })
+    const workFactory = new WorkFactory()
+    const tagFactory = new TagFactory()
     function setFlag(index: number, flag: boolean) {
         activeTags[index] = flag
         console.log("filter tag clicked")
@@ -55,28 +53,19 @@ export default function WorksWindow(props: WorksWindowProps) {
         <p>ここにドラッグアンドドロップ</p>
     </div>
     const worksDOM = filteredWorks.map((work, index) => {
-        return <Work
-            key={work.id}
-            data={work}
-            onSelected={props.onWorkSelected}
-            idToTag={(id) => tags.find((t) => t.id === id)}
-            onWorkPreview={(data) => {
-                open();
-                setTargetWorkIndex(index);
-            }}
-            onRemoveTag={(work, tag) => {
-                props.workManager.deleteTagFromWork(work.id, tag.id);
-            }}
-            tagAddPopout={
-                <TagAddPopout
-                    tags={tags}
-                    onClickTag={(tag) => props.workManager.addTagToWork(work.id, tag.id)}
-                    onCreateTag={(name) => props.tagManager.addTag(name)}
-                />
+        const w = workFactory.create(work,
+            tagFactory,
+            props.tagDataFactory,
+            (data) => { },
+            (work, tag) => { },
+            (data) => {
+                setTargetWorkIndex(index)
+                open()
             }
-            onDeleteWork={(work) => {
-                props.workManager.deleteWork(work.id)
-            }} />
+        )
+        return <div onClick={() => props.onWorkSelected(work)} onContextMenu={() => { }}>
+            {w}
+        </div>
     })
 
     return (

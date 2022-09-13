@@ -1,8 +1,8 @@
 import React, { CSSProperties, useMemo, useRef, useState } from 'react';
 import { usePopper } from 'react-popper';
 import WorkFilterPopout from '../popout/work_filter_popout';
-import TagData from '../tag/tag_data';
-import { useClickAway, useDisclosure, useKeypress } from '../popout/popout_hooks';
+import TagData from '../../value/tag_data';
+import { useClickAway, useDisclosure, useKeypress } from '../../hooks/popout_hooks';
 import Popout from '../popout/popout';
 import { SearchIcon, FilterIcon } from '@heroicons/react/solid';
 

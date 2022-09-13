@@ -1,6 +1,6 @@
 import React, { ChangeEvent, CSSProperties, useMemo, useRef, useState } from 'react';
-import TagData from '../tag/tag_data';
-import { useClickAway, useDisclosure, useKeypress } from './popout_hooks';
+import TagData from '../../value/tag_data';
+import { useClickAway, useDisclosure, useKeypress } from '../../hooks/popout_hooks';
 import Popout from './popout';
 //import "../../css/popouts.css"
 

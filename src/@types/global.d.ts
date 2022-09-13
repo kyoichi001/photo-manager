@@ -1,7 +1,6 @@
 
-import { Color } from "../common/color";
-import TagData from "../components/tag/tag_data";
-import WorkData from "../components/work/work_data";
+import TagData from "../value/tag_data";
+import WorkData from "../value/work_data";
 
 declare global {
   interface Window {

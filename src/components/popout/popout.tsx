@@ -1,5 +1,6 @@
+
+import { useClickAway, useKeypress } from '../../hooks/popout_hooks';
 import React, { ChangeEvent, CSSProperties, ReactNode, useMemo, useRef, useState } from 'react';
-import { useClickAway, useDisclosure, useKeypress } from './popout_hooks';
 import { usePopper } from 'react-popper';
 
 interface PopoutProps {
