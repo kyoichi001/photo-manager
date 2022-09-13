@@ -1,5 +1,4 @@
 import React, { CSSProperties, useMemo, useRef, useState } from 'react';
-import { usePopper } from 'react-popper';
 import WorkFilterPopout from '../popout/work_filter_popout';
 import TagData from '../../value/tag_data';
 import { useClickAway, useDisclosure, useKeypress } from '../../hooks/popout_hooks';

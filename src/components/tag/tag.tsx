@@ -1,5 +1,4 @@
 import React, { ReactNode, useRef, useState } from 'react';
-import { usePopper } from 'react-popper';
 import { Col } from '../../common/color';
 import Popout from '../popout/popout';
 import { useClickAway, useDisclosure, useKeypress } from '../../hooks/popout_hooks';

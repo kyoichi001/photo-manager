@@ -1,8 +1,6 @@
 import React, { useMemo } from 'react';
 import { Col } from '../../common/color';
-import Tag from '../tag/tag';
 import TagData from '../../value/tag_data';
-import WorkData from '../../value/work_data';
 
 interface TagInfoProps {
     tag?: TagData

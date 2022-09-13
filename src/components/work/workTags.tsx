@@ -1,10 +1,7 @@
 import React, { CSSProperties, useMemo, useRef, useState } from 'react';
 import WorkData from '../../value/work_data';
 import TagData from '../../value/tag_data';
-import { useClickAway, useDisclosure, useKeypress } from '../../hooks/popout_hooks';
-import WorkClickMenuPopout from '../popout/work_click_menu_popout';
-import Popout from '../popout/popout';
-import { SearchIcon, PlusIcon } from '@heroicons/react/solid';
+import { PlusIcon } from '@heroicons/react/solid';
 import ITagFactory from '../../factory/iTagFactory';
 import ITagDataFactory from '../../factory/iTagDataFactory';
 

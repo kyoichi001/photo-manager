@@ -1,11 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import FileInfo from '../window/file_info';
-import WorksWindow from '../window/works_window';
 import WorkData, { __errorWork } from '../../value/work_data';
-import { useWorkManager } from '../../hooks/useWorkManager';
-import { useTagManager } from '../../hooks/useTagManager';
-import WorkDataFactory from '../../factory/WorkDataFactory';
-import TagDataFactory from '../../factory/TagDataFactory';
 
 interface DragOverlayProps {
     onDropped: (pathes: string[]) => void
