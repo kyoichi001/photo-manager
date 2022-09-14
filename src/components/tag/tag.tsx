@@ -12,9 +12,6 @@ interface TagProps {
 }
 
 export default function Tag(props: TagProps) {
-    const menureferenceRef = useRef<HTMLDivElement | null>(null);
-    const { isOpen: ismenuOpen, open: menuopen, close: menuclose } = useDisclosure(false);
-
     var col = props.data.color
     var c = Col.brightness(Col.int2Color(col)) < 0.5 ? "tagname-dark" : "tagname-light"
     c += " flex p-0.5 text-xs"
@@ -22,7 +19,7 @@ export default function Tag(props: TagProps) {
     var buttonStyle: React.CSSProperties = !mouseOver ? { color: Col.numbertoHexString(col) } : {}
 
     return (
-        <div className="rounded-md" style={{ backgroundColor: Col.numbertoHexString(col) }} ref={menureferenceRef}
+        <div className="rounded-md" style={{ backgroundColor: Col.numbertoHexString(col) }}
             onMouseOver={() => setMouseOver(true)}
             onMouseOut={() => setMouseOver(false)}
         >
@@ -34,14 +31,6 @@ export default function Tag(props: TagProps) {
                     {props.data.name}
                 </div>
             </div>
-
-            <Popout targetRef={menureferenceRef} isOpen={ismenuOpen} close={menuclose}>
-                <TagClickMenuPopout
-                    tag={props.data}
-                    onDelete={(tag: TagData) => props.onTagRemove(tag)}
-                //groupAddPopout={props.groupAddPopout}
-                />
-            </Popout>
         </div>
     )
 }
