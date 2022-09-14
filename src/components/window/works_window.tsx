@@ -63,7 +63,7 @@ export default function WorksWindow(props: WorksWindowProps) {
                 open()
             }
         )
-        return <div onClick={() => props.onWorkSelected(work)} onContextMenu={() => { }}>
+        return <div onClick={() => props.onWorkSelected(work)} onContextMenu={() => { }} key={work.id}>
             {w}
         </div>
     })

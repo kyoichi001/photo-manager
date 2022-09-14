@@ -41,10 +41,10 @@ export default function DragOverlay(props: DragOverlayProps) {
         }
         for (let i = 0; i < e.dataTransfer.files.length; i++) {
             let droppedPath = e.dataTransfer.files[i].path.toLowerCase()
-            if (await window.myAPI.isDirectory(droppedPath)) {//もしディレクトリを含むなら無視
-                setDragging(true)
-                return
-            }
+            /* if (await window.myAPI.isDirectory(droppedPath)) {//もしディレクトリを含むなら無視
+                 setDragging(true)
+                 return
+             }*/
             let file_extention = droppedPath.split(".").at(-1)
             if (!file_extention) {//拡張子がないなら無視
                 setDragging(true)

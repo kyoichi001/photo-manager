@@ -1,4 +1,3 @@
-import { getSaveFileDirectory } from "../saveload"
 import WorkData from "../value/work_data"
 import { useEffect, useState } from "react"
 
@@ -29,41 +28,13 @@ export const useWorkManager = () => {
         setData([...dat])
     }
     useEffect(() => {
-        let path = getSaveFileDirectory() + "\\works.json"
-        if (!window.myAPI.existsFile(path)) {
-            return
-        }
-        window.myAPI.readFileAsync(path).then((txt) => {
-            const json = JSON.parse(txt)
-            console.log("useWorkManager : load " + json["works"])
-            let works: any[] = json["works"]
-            let res: WorkData[] = works.map((v) => {
-                return {
-                    id: v["id"],
-                    title: "",
-                    tags: v["tags"],
-                    createdAt: v["created_at"],
-                    image: v["image"],
-                }
-            })
-            setData(res)
+        window.myAPI.getAllWorks().then((works) => {
+            setData(works)
         })
     }, [])
     useEffect(() => {
         if (!data) return
-        const path = getSaveFileDirectory() + "\\works.json"
-        if (!window.myAPI.existsFile(path)) {
-            return
-        }
-        console.log("useWorkManager : save ")
-        console.log(data)
-        let jsonData = {
-            "meta": {
-                "save_format_version": "0.0.1"
-            },
-            "works": data
-        }
-        window.myAPI.writeFileAsync(path, JSON.stringify(jsonData))
+        window.myAPI.postAllWorks(data)
     }, [data])
 
     return {

@@ -14,7 +14,7 @@ class WorkFactory implements IWorkFactory {
         onTagRemove: (work: WorkData, tag: TagData) => void,
         onWorkPreview: (data: WorkData) => void
     ) => {
-        return <div className='work h-min bg-gray-500 rounded-sm'>
+        return <div className='work h-min bg-gray-500 rounded-sm' key={data.id}>
             <WorkThumb
                 data={data}
                 onWorkPreview={onWorkPreview}

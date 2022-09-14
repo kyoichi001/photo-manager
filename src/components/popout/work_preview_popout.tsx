@@ -1,7 +1,6 @@
-import { useNavigation } from '@/hooks/useNavigation';
+import { useNavigation } from '../../hooks/useNavigation';
 import { PlusIcon, ArrowCircleLeftIcon, ArrowCircleRightIcon, XCircleIcon, XIcon, RefreshIcon, SwitchHorizontalIcon, SparklesIcon } from '@heroicons/react/solid';
 import { useEffect, useState } from 'react';
-import { ProgressPlugin } from 'webpack';
 import TagData from '../../value/tag_data';
 import WorkData from '../../value/work_data';
 
@@ -52,6 +51,9 @@ export default function WorkPreviewPopout(props: WorkPreviewPopoutProps) {
                                     onChange={(e) => setInputIndex(e.target.value)}
                                     onKeyPress={(e) => {
                                         if (e.key == 'Enter') setIndex(parseInt(inputIndex) - 1)
+                                    }}
+                                    onBlur={(e) => {
+                                        setIndex(parseInt(inputIndex) - 1)
                                     }}
                                 />
                                 <p>/{props.works.length}</p>
