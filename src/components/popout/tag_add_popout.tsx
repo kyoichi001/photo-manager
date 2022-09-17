@@ -2,7 +2,7 @@ import TagData from '@/value/tag_data';
 import React, { ChangeEvent, useMemo, useState } from 'react';
 
 interface TagAddPopoutProps {
-    tags: TagData[]
+    tags?: TagData[]
     onClickTag: (tag: TagData) => void
     onCreateTag: (name: string) => void
 }
@@ -24,11 +24,13 @@ export default function TagAddPopout(props: TagAddPopoutProps) {
             }
             <div className='flex gap-1'>
                 {
-                    props.tags.map((p) =>
-                        <button className='bg-gray-300 hover:bg-gray-400 rounded-sm shadow p-0.5 text-xs' key={p.id} onClick={() => { props.onClickTag(p) }}>
-                            {p.name}
-                        </button>
-                    )
+                    props.tags ?
+                        props.tags.map((p) =>
+                            <button className='bg-gray-300 hover:bg-gray-400 rounded-sm shadow p-0.5 text-xs' key={p.id} onClick={() => { props.onClickTag(p) }}>
+                                {p.name}
+                            </button>
+                        ) :
+                        <p>ロード中...</p>
                 }
             </div>
         </div>

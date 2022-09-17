@@ -14,8 +14,14 @@ export const useWorkManager = () => {
     }
     const addTag = (workId: string, tagId: string) => {
         if (!data) return
-        data.find((w) => w.id === workId)?.tags.push(tagId)
-        setData([...data])
+        let dat = data.map((w) => {
+            if (w.id === workId) {
+                if (w.tags.includes(tagId)) return w
+                w.tags = [...w.tags, tagId]
+            }
+            return w
+        })
+        setData([...dat])
     }
     const eraceTag = (workId: string, tagId: string) => {
         if (!data) return

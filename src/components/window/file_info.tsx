@@ -60,7 +60,7 @@ export default function FileInfo(props: FileInfoProps) {
             <div className='mb-3 bg-gray-500 p-1 rounded-sm divide-y'>
                 <div className='font-bold text-gray-100'>tags ({tags.length})</div>
 
-                <div className='flex gap-1 py-1'>
+                <div className='flex flex-wrap gap-1 py-1'>
                     {tags.length === 0 ? "none" : tags}
                 </div>
             </div>

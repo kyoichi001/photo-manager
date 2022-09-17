@@ -10,7 +10,7 @@ class WorkFactory implements IWorkFactory {
     create = (data: WorkData,
         tagFactory: ITagFactory,
         tagDataFactory: ITagDataFactory,
-        onTagPopoutOpen: (data: WorkData) => void,
+        onTagPopoutOpen: (data: WorkData, elem: Element) => void,
         onTagRemove: (work: WorkData, tag: TagData) => void,
         onWorkPreview: (data: WorkData) => void
     ) => {

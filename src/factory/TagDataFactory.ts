@@ -1,3 +1,4 @@
+import { Col } from "../common/color";
 import Library from "../common/library";
 import TagData from "../value/tag_data";
 import ITagDataFactory from "./iTagDataFactory";
@@ -12,7 +13,7 @@ class TagDataFactory implements ITagDataFactory {
         const res: TagData = {
             id: Library.generateUuid(),
             name: name,
-            color: 0,
+            color: Col.hexstringToColor("#FFFFFF"),
             children: []
         }
         return res

@@ -1,8 +1,8 @@
-import TagFilter from "../../../value/tag_filter_data";
-import TimeFilter from "../../../value/time_filter_data";
+import TagFilter from "../../../value/filter/tag_filter_data";
+import TimeFilter from "../../../value/filter/time_filter_data";
 import WorkData from "../../../value/work_data";
-import IFilter from "../../../value/filter_data";
-import NameFilter from "../../../value/name_filter_data";
+import IFilter from "../../../value/filter/filter_data";
+import NameFilter from "../../../value/filter/name_filter_data";
 
 function implementsNameFilter(arg: any): arg is NameFilter {
     return arg !== null &&

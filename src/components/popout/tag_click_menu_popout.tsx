@@ -29,9 +29,9 @@ export default function TagClickMenuPopout(props: TagClickMenuPopoutProps) {
                 <li onClick={() => { props.onDelete(props.tag) }}><p>削除</p></li>
             </ul>
 
-            <Popout targetRef={tagAddreferenceRef} isOpen={isgroupAddOpen} close={groupAddclose}>
+            <Popout targetRef={tagAddreferenceRef.current} isOpen={isgroupAddOpen} close={groupAddclose}>
             </Popout>
-            <Popout targetRef={renamereferenceRef} isOpen={isrenameOpen} close={renameclose}>
+            <Popout targetRef={renamereferenceRef.current} isOpen={isrenameOpen} close={renameclose}>
                 <div className='popout'>
                     <input type="text" value={newName} onChange={(e) => setNewName(e.target.value)} ></input>
                 </div>

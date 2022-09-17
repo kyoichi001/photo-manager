@@ -11,7 +11,7 @@ interface WorkFilterPopoutProps {
 export default function WorkFilterPopout(props: WorkFilterPopoutProps) {
 
     if (props.tags.length === 0) {
-        return <div className='no-tags'>
+        return <div className='bg-gray-400 p-1 shadow rounded-sm bg-opacity-70 backdrop-filter backdrop-blur-sm border-2 border-white'>
             <p>タグがありません</p>
         </div>
     }

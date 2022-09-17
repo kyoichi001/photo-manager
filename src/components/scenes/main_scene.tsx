@@ -7,6 +7,11 @@ import { useTagManager } from '../../hooks/useTagManager';
 import WorkDataFactory from '../../factory/WorkDataFactory';
 import TagDataFactory from '../../factory/TagDataFactory';
 import DragOverlay from './drag_overlay';
+import { useDisclosure } from '../../hooks/popout_hooks';
+import WorkClickMenuPopout from '../popout/work_click_menu_popout';
+import Popout from '../popout/popout';
+import TagAddPopout from '../popout/tag_add_popout';
+import tag_data from '@/value/tag_data';
 
 export default function MainScene() {
     console.log("rendering main_scene")
@@ -14,6 +19,9 @@ export default function MainScene() {
 
     const { data: workData, addWork, eraceWork, addTag: addTagtoWork, eraceTag: eraceTagFromWork } = useWorkManager()
     const { data: tagData, addTag, eraceTag, editTag } = useTagManager()
+    const { isOpen: isWorkContextOpen, open: openWorkContext, close: closeWorkContext } = useDisclosure(false);
+    const { isOpen: isTagAddOpen, open: openTagAdd, close: closeTagAdd } = useDisclosure(false);
+    const [contextWork, setContextWork] = useState<{ work: WorkData | null, ref: Element | null }>({ work: null, ref: null })
 
     //https://zenn.dev/coa00/articles/d3db140113b165
     //メモリリーク対策
@@ -56,6 +64,16 @@ export default function MainScene() {
                     tags={tagData}
                     tagDataFactory={tagDataFactory.current}
                     onWorkSelected={(work) => selectWork(work)}
+                    onWorkContextMenu={(work, elem) => {
+                        console.log("main_scene work contextMenu ", work, elem);
+                        setContextWork({ work: work, ref: elem });
+                        openWorkContext();
+                    }}
+                    onRemoveTagFromWork={(work, tag) => eraceTagFromWork(work.id, tag.id)}
+                    onOpenTagAddPopout={(work, elem) => {
+                        setContextWork({ work: work, ref: elem });
+                        openTagAdd()
+                    }}
                 />
             </div>
             <div className='col-span-3 bg-gray-600 h-full overflow-y-auto scrollbar-primary'>
@@ -75,6 +93,34 @@ export default function MainScene() {
                 {
                     child
                 }
+                {
+                    (contextWork.ref && contextWork.work) && <Popout targetRef={contextWork.ref} isOpen={isWorkContextOpen} close={closeWorkContext}>
+                        <WorkClickMenuPopout
+                            work={contextWork.work}
+                            onDelete={(work) => eraceWork(work.id)}
+                            tagAddPopout={
+                                <TagAddPopout
+                                    tags={tagData}
+                                    onClickTag={(tag) => { if (contextWork.work) addTagtoWork(contextWork.work.id, tag.id) }}
+                                    onCreateTag={(name) => {
+                                        const newTag = tagDataFactory.current?.create(name)
+                                        if (newTag) addTag([newTag])
+                                    }}
+                                />
+                            }
+                        />
+                    </Popout>
+                }
+                <Popout targetRef={contextWork.ref} isOpen={isTagAddOpen} close={closeTagAdd}>
+                    <TagAddPopout
+                        tags={tagData}
+                        onClickTag={(tag) => { if (contextWork.work) addTagtoWork(contextWork.work.id, tag.id) }}
+                        onCreateTag={(name) => {
+                            const newTag = tagDataFactory.current?.create(name)
+                            if (newTag) addTag([newTag])
+                        }}
+                    />
+                </Popout>
             </div>
         </DragOverlay>
     )

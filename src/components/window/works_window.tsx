@@ -14,6 +14,9 @@ interface WorksWindowProps {
     tags: TagData[]
     tagDataFactory: TagDataFactory
     onWorkSelected: (data: WorkData) => void
+    onWorkContextMenu: (data: WorkData, elem: Element) => void
+    onRemoveTagFromWork: (work: WorkData, tag: TagData) => void
+    onOpenTagAddPopout: (work: WorkData, elem: Element) => void
 }
 
 export default function WorksWindow(props: WorksWindowProps) {
@@ -56,14 +59,14 @@ export default function WorksWindow(props: WorksWindowProps) {
         const w = workFactory.create(work,
             tagFactory,
             props.tagDataFactory,
-            (data) => { },
-            (work, tag) => { },
+            (data, elem) => props.onOpenTagAddPopout(data, elem),
+            (work, tag) => props.onRemoveTagFromWork(work, tag),
             (data) => {
                 setTargetWorkIndex(index)
                 open()
             }
         )
-        return <div onClick={() => props.onWorkSelected(work)} onContextMenu={() => { }} key={work.id}>
+        return <div onClick={() => props.onWorkSelected(work)} onContextMenu={(e) => props.onWorkContextMenu(work, e.currentTarget)} key={work.id}>
             {w}
         </div>
     })
@@ -81,7 +84,7 @@ export default function WorksWindow(props: WorksWindowProps) {
                     {worksDOM.length === 0 ? NoWorks : worksDOM}
                 </div>
             </div>
-            <Popout targetRef={popoutRef} isOpen={isOpen} close={close}>
+            <Popout targetRef={popoutRef.current} isOpen={isOpen} close={close}>
                 <WorkPreviewPopout
                     works={filteredWorks}
                     idToTag={(id) => tags.find((t) => t.id === id)}

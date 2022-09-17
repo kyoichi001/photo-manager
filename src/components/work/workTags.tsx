@@ -9,7 +9,7 @@ interface WorkTagsProps {
     data: WorkData
     tagFactory: ITagFactory
     tagDataFactory: ITagDataFactory
-    onTagPopoutOpen: (data: WorkData) => void
+    onTagPopoutOpen: (data: WorkData, elem: Element) => void
     onTagRemove: (work: WorkData, tag: TagData) => void
 }
 
@@ -26,9 +26,9 @@ export default function WorkTags(props: WorkTagsProps) {
     }, [props.data.tags])
 
     return (
-        <div className='flex p-1 gap-1'>
+        <div className='flex flex-wrap p-1 gap-1'>
             {tags}
-            <div className='bg-gray-300 hover:bg-gray-400 rounded-sm shadow h-4' onClick={() => props.onTagPopoutOpen(props.data)}>
+            <div className='bg-gray-300 hover:bg-gray-400 rounded-sm shadow h-4' onClick={(e) => props.onTagPopoutOpen(props.data, e.currentTarget)}>
                 <PlusIcon className="h-4 w-4 text-gray-800" />
             </div>
         </div>

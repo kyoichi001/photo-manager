@@ -27,7 +27,7 @@ export default function WorkClickMenuPopout(props: WorkClickMenuPopoutProps) {
                 タグの追加
             </div>
 
-            <Popout targetRef={tagAddreferenceRef} isOpen={istagAddOpen} close={tagAddclose}>
+            <Popout targetRef={tagAddreferenceRef.current} isOpen={istagAddOpen} close={tagAddclose}>
                 {
                     props.tagAddPopout
                 }
