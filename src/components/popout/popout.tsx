@@ -1,9 +1,10 @@
+
+import { useClickAway, useKeypress } from '../../hooks/popout_hooks';
 import React, { ChangeEvent, CSSProperties, ReactNode, useMemo, useRef, useState } from 'react';
-import { useClickAway, useDisclosure, useKeypress } from './popout_hooks';
 import { usePopper } from 'react-popper';
 
 interface PopoutProps {
-    targetRef: React.MutableRefObject<Element | null>
+    targetRef: Element | null
     children?: ReactNode
     isOpen: boolean
     close: () => void
@@ -13,7 +14,7 @@ export default function Popout(props: PopoutProps) {
 
     const popperRef = useRef<HTMLDivElement | null>(null);
     const { styles: renamestyles, attributes: renameattributes } = usePopper(
-        props.targetRef.current,
+        props.targetRef,
         popperRef.current,
         {
             placement: 'bottom',

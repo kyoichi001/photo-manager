@@ -1,4 +1,4 @@
-import TagData from "../tag/tag_data"
+import TagData from "./tag_data"
 
 export default interface WorkData {
     id: string;

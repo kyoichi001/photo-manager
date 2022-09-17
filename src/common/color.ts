@@ -1,12 +1,4 @@
-/**
- * 色を管理するオブジェクト
- */
-export interface Color {
-    r: number;
-    g: number;
-    b: number;
-    a: number;
-}
+import { Color } from "@/value/color"
 
 /**
  * Colorオブジェクトのラッパー関数的な

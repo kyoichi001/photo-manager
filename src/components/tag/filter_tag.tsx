@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col } from '../../common/color';
-import TagData from './tag_data';
+import TagData from '../../value/tag_data';
 
 interface FilterTagProps {
     data: TagData

@@ -1,8 +1,6 @@
 import React, { useMemo } from 'react';
-import { Color, Col } from '../../common/color';
-import Tag from '../tag/tag';
-import TagData from '../tag/tag_data';
-import WorkData from '../work/work_data';
+import { Col } from '../../common/color';
+import TagData from '../../value/tag_data';
 
 interface TagInfoProps {
     tag?: TagData
@@ -16,37 +14,30 @@ export default function TagInfo(props: TagInfoProps) {
     if (!props.tag) {
         return (
             <div className='tag-info'>
-                <div className='window'>
-                    <div className='tag-title'>
-                        <p>タグが選択されていません</p>
-                    </div>
-                </div>
+                <p>タグが選択されていません</p>
             </div>
         )
     }
 
     return (
         <div className='tag-info'>
-            <div className='window'>
-
-                <div className='tag-name'>
-                    <p>タグ名</p>
-                    <input type="text" id="name" name="name"
-                        value={props.tag.name}
-                        onChange={(e) => { props.onChangeTagName(props.tag, e.target.value) }}></input>
-                </div>
-                <p>色</p>
-                <input type="color" id="color" name="color"
-                    value={Col.numbertoHexString(props.tag.color)}
-                    onChange={(e) => props.onChangeColor(props.tag, Col.hexstringToColor(e.target.value))}>
-                </input>
-                <p>{Col.numbertoHexString(props.tag.color)}</p>
-                <p>作成日：**/**/**</p>
-                <p>ID {props.tag.id}</p>
-                <button onClick={() => props.deleteTag(props.tag)}>
-                    削除
-                </button>
+            <div className='tag-name'>
+                <p>タグ名</p>
+                <input type="text" id="name" name="name"
+                    value={props.tag.name}
+                    onChange={(e) => { props.onChangeTagName(props.tag, e.target.value) }}></input>
             </div>
+            <p>色</p>
+            <input type="color" id="color" name="color"
+                value={Col.numbertoHexString(props.tag.color)}
+                onChange={(e) => props.onChangeColor(props.tag, Col.hexstringToColor(e.target.value))}>
+            </input>
+            <p>{Col.numbertoHexString(props.tag.color)}</p>
+            <p>作成日：**/**/**</p>
+            <p>ID {props.tag.id}</p>
+            <button onClick={() => props.deleteTag(props.tag)}>
+                削除
+            </button>
         </div>
     )
 }

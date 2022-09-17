@@ -1,6 +1,6 @@
 import React, { ChangeEvent, CSSProperties, useMemo, useRef, useState } from 'react';
-import WorkData from '../work/work_data';
-import { useClickAway, useDisclosure, useKeypress } from './popout_hooks';
+import WorkData from '../../value/work_data';
+import { useClickAway, useDisclosure, useKeypress } from '../../hooks/popout_hooks';
 import Popout from './popout';
 import { TrashIcon, TagIcon } from '@heroicons/react/solid';
 
@@ -27,7 +27,7 @@ export default function WorkClickMenuPopout(props: WorkClickMenuPopoutProps) {
                 タグの追加
             </div>
 
-            <Popout targetRef={tagAddreferenceRef} isOpen={istagAddOpen} close={tagAddclose}>
+            <Popout targetRef={tagAddreferenceRef.current} isOpen={istagAddOpen} close={tagAddclose}>
                 {
                     props.tagAddPopout
                 }
