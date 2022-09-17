@@ -1,6 +1,5 @@
-import FilterTag from '../tag/filter_tag';
-import TagData from '../../value/tag_data';
-
+import FilterTag from './filter_tag';
+import TagData from '../../../value/tag_data';
 
 interface WorkFilterPopoutProps {
     tags: TagData[]
@@ -17,15 +16,18 @@ export default function WorkFilterPopout(props: WorkFilterPopoutProps) {
     }
 
     return (
-        <div className='bg-gray-400 p-1 shadow rounded-sm bg-opacity-70 backdrop-filter backdrop-blur-sm border-2 border-white'>
-            <p>フィルター</p>
-            <div className='flex gap-1'>
+        <div className='bg-gray-400 shadow rounded-sm bg-opacity-70 backdrop-filter backdrop-blur-sm border-2 border-white'>
+            <p className='text-lg font-bold p-1'>フィルター</p>
+            <div className='gap-1'>
                 {
                     props.tags.map((p, i) =>
                         <div key={p.id} >
-                            <FilterTag data={p}
-                                isChecked={props.activeTags[i]}
-                                onClick={() => { props.onClickTag(i, !props.activeTags[i]) }}
+                            <FilterTag
+                                tag={p}
+                                checked={props.activeTags[i]}
+                                onChange={() => {
+                                    props.onClickTag(i, !props.activeTags[i])
+                                }}
                             />
                         </div>
                     )
