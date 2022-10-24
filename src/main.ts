@@ -1,8 +1,27 @@
 import path from 'path';
-import { BrowserWindow, app, session, protocol } from 'electron';
+import { BrowserWindow, app, session, protocol, Menu, globalShortcut } from 'electron';
 import { searchDevtools } from 'electron-search-devtools';
 
 const isDev = process.env.NODE_ENV === 'development';
+function initWindowMenu() {
+  const template: Electron.MenuItemConstructorOptions[] = [
+    {
+      label: 'ファイル',
+      submenu: [
+        {
+          label: 'Load directory',
+          click: async () => { },
+          accelerator: "Ctrl+N"
+        },
+        { role: 'quit' }
+      ]
+    },
+  ]
+
+  const menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
+}
+
 
 // 開発モードの場合はホットリロードする
 if (isDev) {
@@ -46,6 +65,9 @@ app.whenReady().then(async () => {
       });
     }
   }
+  globalShortcut.register('Alt+CommandOrControl+I', () => {
+    console.log('Electron loves global shortcuts!')
+  })
   //https://qiita.com/whitphx/items/4123784f1eb68a1d3925
   /*protocol.interceptFileProtocol('file', (req, callback) => {
     const requestedUrl = req.url.substr(7);
@@ -58,6 +80,7 @@ app.whenReady().then(async () => {
   });*/
 
   // BrowserWindow インスタンスを作成
+  initWindowMenu()
   createWindow();
 });
 

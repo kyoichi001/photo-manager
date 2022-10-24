@@ -2,8 +2,8 @@
 import { app, contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import { IPCKeys } from './common/constants';
 import fs from "fs";
-import WorkData from './value/work_data';
-import TagData from './value/tag_data';
+import WorkData from './entity/work_data';
+import TagData from './entity/tag_data';
 
 const getUseDataPath = () => {
   return process.env.APPDATA + "\\photo-manager\\data"
@@ -45,6 +45,7 @@ contextBridge.exposeInMainWorld('myAPI', {
     let res = await getFileFunc(path)
     return res
   },
+
   getAllWorks: async () => {
     let path = getUseDataPath() + "\\works.json"
     if (!fs.existsSync(path)) {
@@ -56,11 +57,8 @@ contextBridge.exposeInMainWorld('myAPI', {
     let works: any[] = json["works"]
     let res: WorkData[] = works.map((v) => {
       return {
-        id: v["id"],
-        title: "",
         tags: v["tags"],
-        createdAt: v["created_at"],
-        image: v["image"],
+        path: v["path"],
       }
     })
     return res

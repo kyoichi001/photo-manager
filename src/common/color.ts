@@ -1,4 +1,4 @@
-import { Color } from "@/value/color"
+import { Color } from "@/entity/color"
 
 /**
  * Colorオブジェクトのラッパー関数的な

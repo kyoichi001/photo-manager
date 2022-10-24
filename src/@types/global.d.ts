@@ -1,6 +1,7 @@
 
-import TagData from "../value/tag_data";
-import WorkData from "../value/work_data";
+import SaveFileData from "@/entity/saveFileData";
+import TagData from "../entity/tag_data";
+import WorkData from "../entity/work_data";
 
 declare global {
   interface Window {
@@ -12,8 +13,6 @@ export interface IMyAPI {
   onReceiveMessage: (listener: (message: string) => void) => () => void
   getFilesInDirectory: (path: string) => Promise<string[]>
 
-  getAllWorks: () => Promise<WorkData[]>
-  postAllWorks: (data: WorkData[]) => void
-  getAllTags: () => Promise<TagData[]>
-  postAllTags: (data: TagData[]) => void
+  loadInitData: () => Promise<SaveFileData | undefined>
+  saveData: (dat: SaveFileData) => Promise<void>
 }
