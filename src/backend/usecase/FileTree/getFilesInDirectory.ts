@@ -2,6 +2,7 @@ import FileData from "@/entity/filedata"
 
 export interface GetFilesInDirectoryInputData {
     path: string
+    recursive?: boolean
 }
 
 export interface GetFilesInDirectoryOutputData {

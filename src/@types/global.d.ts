@@ -11,8 +11,6 @@ declare global {
 export interface IMyAPI {
   sendMessage: (message: string) => void
   onReceiveMessage: (listener: (message: string) => void) => () => void
-  getFilesInDirectory: (path: string) => Promise<string[]>
 
-  loadInitData: () => Promise<SaveFileData | undefined>
-  saveData: (dat: SaveFileData) => Promise<void>
+
 }
