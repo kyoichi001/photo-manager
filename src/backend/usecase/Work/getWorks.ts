@@ -2,10 +2,10 @@ import WorkData from "@/entity/work_data"
 
 export interface GetWorksInputData {
     directoryPath: string
-    page: number
     recursive?: boolean
     //filters
     //sorts
+    workspacePath: string
 }
 
 export interface GetWorksOutputData {

@@ -14,9 +14,10 @@ export class GetDirectoriesInDirectoryInteractor implements IGetDirectoriesInDir
         let f = await fs.promises.readdir(input.path)//ディレクトリ内のファイルを列挙
         for (let j of f) {
             let stat = await fs.promises.stat(input.path + "\\" + j)
+
             if (stat.isDirectory()) {
                 const data: DirectoryData = {
-                    path: ""
+                    path: j
                 }
                 output.data.push(data)
             }
