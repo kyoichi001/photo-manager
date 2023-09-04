@@ -18,4 +18,6 @@ export interface IMyAPI {
   postAllTags: (tags: TagData[]) => Promise<void>,
   getWorkSpace: () => Promise<WorkSpaceData>,
   postWorkSpace: (workspace: WorkSpaceData) => Promise<void>,
+  getFilesInDirectory: (path: string) => Promise<string[]>
+  getDirectoriesInDirectory: (path: string, recursive: boolean) => Promise<string[]>
 }
