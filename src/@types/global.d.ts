@@ -1,5 +1,6 @@
 
 import SaveFileData from "@/entity/saveFileData";
+import WorkSpaceData from "@/entity/workSpaceData";
 import TagData from "../entity/tag_data";
 import WorkData from "../entity/work_data";
 
@@ -15,4 +16,6 @@ export interface IMyAPI {
   postAllWorks: (works: WorkData[]) => Promise<void>,
   getAllTags: () => Promise<TagData[]>,
   postAllTags: (tags: TagData[]) => Promise<void>,
+  getWorkSpace: () => Promise<WorkSpaceData>,
+  postWorkSpace: (workspace: WorkSpaceData) => Promise<void>,
 }
