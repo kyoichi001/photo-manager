@@ -1,4 +1,4 @@
-import { Color } from "../../entity/color"
+import Color from "../../entity/color"
 import TagData from "../../entity/tag_data"
 import { useEffect, useState } from "react"
 import SaveFileData from "@/entity/saveFileData"

@@ -18,7 +18,7 @@ export default function MainScene() {
     const [selectedWork, selectWork] = useState<WorkData | undefined>(undefined);
 
     const { data: workData, addWork, eraceWork, addTag: addTagtoWork, eraceTag: eraceTagFromWork } = useWorkManager()
-    const { data: tagData, addTag, eraceTag, editTag } = useTagManager()
+    const { data: tagData, add: addTag, erase: eraceTag, edit: editTag } = useTagManager()
     const { isOpen: isWorkContextOpen, open: openWorkContext, close: closeWorkContext } = useDisclosure(false);
     const { isOpen: isTagAddOpen, open: openTagAdd, close: closeTagAdd } = useDisclosure(false);
     const [contextWork, setContextWork] = useState<{ work: WorkData | null, ref: Element | null }>({ work: null, ref: null })

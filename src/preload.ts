@@ -21,4 +21,8 @@ contextBridge.exposeInMainWorld('myAPI', {
       ipcRenderer.removeAllListeners(IPCKeys.RECEIVE_MESSAGE);
     };
   },
+  getAllWorks: () => ipcRenderer.invoke("works/getAll"),
+  postAllWorks: () => ipcRenderer.invoke("works/postAll"),
+  getAllTags: () => ipcRenderer.invoke("tags/getAll"),
+  postAllTags: () => ipcRenderer.invoke("tags/postAll"),
 });

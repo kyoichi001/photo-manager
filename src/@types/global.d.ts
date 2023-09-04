@@ -10,7 +10,9 @@ declare global {
 }
 export interface IMyAPI {
   sendMessage: (message: string) => void
-  onReceiveMessage: (listener: (message: string) => void) => () => void
-
-
+  onReceiveMessage: (listener: (message: string) => void) => () => void,
+  getAllWorks: () => Promise<WorkData[]>,
+  postAllWorks: (works: WorkData[]) => Promise<void>,
+  getAllTags: () => Promise<TagData[]>,
+  postAllTags: (tags: TagData[]) => Promise<void>,
 }
