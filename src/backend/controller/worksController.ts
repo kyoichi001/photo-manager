@@ -5,29 +5,30 @@ import { IDeleteWorkUseCase, DeleteWorkInputData } from "../usecase/Work/deleteW
 import { IGetTagsOfWorkUseCase, GetTagsOfWorkInputData } from "../usecase/Work/getTagsOfWork";
 import { IGetWorkUseCase, GetWorkInputData } from "../usecase/Work/getWork";
 import { IRemoveTagFromWorkUseCase, RemoveTagFromWorkInputData } from "../usecase/Work/removeTagFromWork";
+import { AddTagToWorkInteractor } from "../interactor/Work/addTagToWork";
+import { GetTagsOfWorkInteractor } from "../interactor/Work/getTagsOfWork";
+import { GetWorkInteractor } from "../interactor/Work/getWork";
+import { GetWorksInteractor } from "../interactor/Work/getWorks";
+import { IGetWorksUseCase } from "../usecase/Work/getWorks";
 
 class WorksController {
+    
     private readonly addTagToWork: IAddTagToWorkUseCase;
-    private readonly createWork: ICreateWorkUseCase;
-    private readonly deleteWork: IDeleteWorkUseCase;
     private readonly getTagsOfWork: IGetTagsOfWorkUseCase;
     private readonly getWork: IGetWorkUseCase;
-    private readonly removeTagFromWork: IRemoveTagFromWorkUseCase;
+    private readonly getWorks: IGetWorksUseCase;
+    //private readonly createWork: ICreateWorkUseCase;
+    //private readonly deleteWork: IDeleteWorkUseCase;
+    //private readonly removeTagFromWork: IRemoveTagFromWorkUseCase;
 
-    constructor(
-        addTagToWork: IAddTagToWorkUseCase,
-        createWork: ICreateWorkUseCase,
-        deleteWork: IDeleteWorkUseCase,
-        getTagsOfWork: IGetTagsOfWorkUseCase,
-        getWork: IGetWorkUseCase,
-        removeTagFromWork: IRemoveTagFromWorkUseCase
-    ) {
-        this.addTagToWork = addTagToWork;
-        this.createWork = createWork;
-        this.deleteWork = deleteWork;
-        this.getTagsOfWork = getTagsOfWork;
-        this.getWork = getWork;
-        this.removeTagFromWork = removeTagFromWork;
+    constructor() {
+        this.getWorks=new GetWorksInteractor()
+        this.addTagToWork = new AddTagToWorkInteractor();
+        this.getTagsOfWork = new GetTagsOfWorkInteractor();
+        this.getWork = new GetWorkInteractor();
+        //this.createWork = createWork;
+        //this.deleteWork = deleteWork;
+        //this.removeTagFromWork = removeTagFromWork;
     }
     public AddTagToWork(workID: UUID, tagID: UUID) {
         const inputData: AddTagToWorkInputData = {
@@ -35,18 +36,6 @@ class WorksController {
             tagID: tagID
         }
         return this.addTagToWork.addTagToWork(inputData);
-    }
-    public CreateWork(path: string) {
-        const inputData: CreateWorkInputData = {
-            path: path
-        }
-        return this.createWork.createWork(inputData);
-    }
-    public DeleteWork(id: UUID) {
-        const inputData: DeleteWorkInputData = {
-            id: id
-        }
-        return this.deleteWork.deleteWork(inputData);
     }
     public GetTagsOfWork(workID: UUID) {
         const inputData: GetTagsOfWorkInputData = {
@@ -60,11 +49,23 @@ class WorksController {
         }
         return this.getWork.getWork(inputData);
     }
-    public RemoveTagFromWork(workID: UUID, tagID: UUID) {
+    /*public CreateWork(path: string) {
+        const inputData: CreateWorkInputData = {
+            path: path
+        }
+        return this.createWork.createWork(inputData);
+    }
+    public DeleteWork(id: UUID) {
+        const inputData: DeleteWorkInputData = {
+            id: id
+        }
+        return this.deleteWork.deleteWork(inputData);
+    }*/
+    /*public RemoveTagFromWork(workID: UUID, tagID: UUID) {
         const inputData: RemoveTagFromWorkInputData = {
             workID: workID,
             tagID: tagID
         }
         return this.removeTagFromWork.removeTagFromWork(inputData);
-    }
+    }*/
 }

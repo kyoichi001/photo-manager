@@ -11,13 +11,13 @@ interface TagManageSceneProps {
 
 export default function TagManageScene(props: TagManageSceneProps) {
 
-    const { data: tagData, addTag, eraceTag, editTag } = useTagManager()
+    const { data: tagData, add:addTag, erase:eraceTag, edit:editTag } = useTagManager()
     const tagDataFactory = useRef<TagDataFactory | null>(null)
     const [selectedTag, setSelectedTag] = useState<TagData | undefined>(undefined)
 
     useEffect(() => {
         if (selectedTag) {
-            editTag(selectedTag.id, selectedTag?.name, selectedTag.color)
+            editTag(selectedTag.id,selectedTag.color, selectedTag.name)
         }
     }, [selectedTag])
 

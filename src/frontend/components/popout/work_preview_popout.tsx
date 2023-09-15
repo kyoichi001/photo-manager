@@ -1,5 +1,5 @@
 import { useNavigation } from '../../hooks/useNavigation';
-import { PlusIcon, ArrowCircleLeftIcon, ArrowCircleRightIcon, XCircleIcon, XIcon, RefreshIcon, SwitchHorizontalIcon, SparklesIcon } from '@heroicons/react/solid';
+import { PlusIcon, ArrowLeftCircleIcon, ArrowRightCircleIcon, XCircleIcon, XMarkIcon, ArrowPathIcon, ArrowsUpDownIcon, SparklesIcon } from '@heroicons/react/24/solid';
 import { useEffect, useState } from 'react';
 import TagData from '../../../entity/tag_data';
 import WorkData from '../../../entity/work_data';
@@ -29,7 +29,7 @@ export default function WorkPreviewPopout(props: WorkPreviewPopoutProps) {
     return (
         <div className='relative popout workpreview-popout popout-bg-col p-1 h-screen w-screen backdrop-filter backdrop-blur-sm bg-gray-900 bg-opacity-70'>
             <div className='absolute top-2 left-2 bg-gray-300 hover:bg-gray-400 rounded-sm shadow h-7 w-7 p-0.5' onClick={() => props.onClose()}>
-                <XIcon className="w-full h-full text-gray-800" />
+                <XMarkIcon className="w-full h-full text-gray-800" />
             </div>
             <div className='flex h-full  gap-1'>
                 <div className='flex-grow h-full flex flex-col gap-1 items-center'>
@@ -41,7 +41,7 @@ export default function WorkPreviewPopout(props: WorkPreviewPopoutProps) {
                         <div className='flex px-1 gap-1 '>
                             <div className='bg-gray-300 hover:bg-gray-400 rounded-sm shadow p-0.5 w-6 h-6'
                                 onClick={() => prev()}>
-                                <ArrowCircleLeftIcon className=" text-gray-800" />
+                                <ArrowLeftCircleIcon className=" text-gray-800" />
                             </div>
                             <div className='bg-gray-300 rounded-sm p-0.5 h-6 flex gap-0.5'>
                                 <input
@@ -60,7 +60,7 @@ export default function WorkPreviewPopout(props: WorkPreviewPopoutProps) {
                             </div>
                             <div className='bg-gray-300 hover:bg-gray-400 rounded-sm shadow p-0.5 w-6 h-6'
                                 onClick={() => next()}>
-                                <ArrowCircleRightIcon className=" text-gray-800" />
+                                <ArrowRightCircleIcon className=" text-gray-800" />
                             </div>
                             <div className='bg-gray-300 hover:bg-gray-400 rounded-sm shadow p-0.5 w-6 h-6'
                                 onClick={() => {
@@ -73,7 +73,7 @@ export default function WorkPreviewPopout(props: WorkPreviewPopoutProps) {
                         <div className='flex px-1 gap-1'>
                             <div className='bg-gray-300 hover:bg-gray-400 rounded-sm shadow p-0.5 w-6 h-6'
                                 onClick={() => setHorizontalFlip(!horizontalFlip)}>
-                                <SwitchHorizontalIcon className=" text-gray-800" />
+                                <ArrowsUpDownIcon className=" text-gray-800" />
                             </div>
                         </div>
                     </div>

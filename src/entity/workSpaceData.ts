@@ -1,3 +1,7 @@
+import ViewData from "./view_data";
+
 export default interface WorkSpaceData {
-    directories: string[],
+    views: ViewData[],
+    workDataPath:string,
+    tagDataPath:string,
 }

@@ -3,7 +3,7 @@ import WorkFilterPopout from '../popout/tag_filter/work_filter_popout';
 import TagData from '../../../entity/tag_data';
 import { useClickAway, useDisclosure, useKeypress } from '../../hooks/popout_hooks';
 import Popout from '../popout/popout';
-import { SearchIcon, FilterIcon, ViewListIcon } from '@heroicons/react/solid';
+import { MagnifyingGlassIcon, FunnelIcon, ListBulletIcon } from '@heroicons/react/24/solid';
 import TextInput from '../common/text_input';
 
 interface WorkMenubarProps {
@@ -24,12 +24,12 @@ export default function WorkMenubar(props: WorkMenubarProps) {
     return (
         <div className='flex flex-row-reverse  sticky top-0 bg-gray-600 bg-opacity-75 w-full p-2 backdrop-filter backdrop-blur-sm z-50 drop-shadow-md'>
             <div className='flex gap-2'>
-                <FilterIcon className={"h-5 w-5 rounded " + (props.activeTags.includes(true) ? activeFilterStyle : normalFilterStyle)} onClick={() => { open() }} ref={referenceRef} />
+                <FunnelIcon className={"h-5 w-5 rounded " + (props.activeTags.includes(true) ? activeFilterStyle : normalFilterStyle)} onClick={() => { open() }} ref={referenceRef} />
                 {
                     //<ViewListIcon className="h-5 w-5 text-gray-200 hover:text-gray-400 shadow" />
                 }
                 <div className='flex gap-2'>
-                    <SearchIcon className="h-5 w-5 text-gray-200" />
+                    <MagnifyingGlassIcon className="h-5 w-5 text-gray-200" />
                     <TextInput
                         onEnter={(input) => props.setKeyword(input)}
                         placeHolder={'ファイル名検索'}

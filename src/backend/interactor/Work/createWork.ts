@@ -4,7 +4,7 @@ export class CreateWorkInteractor implements ICreateWorkUseCase {
     public async createWork(input: CreateWorkInputData) {
 
         const output: CreateWorkOutputData = {
-            data: undefined
+            data: {path:"",tags:[]}
         }
         return output
     }

@@ -1,6 +1,6 @@
 import TagData from '../../../../entity/tag_data';
 import Checkbox from '../../common/checkbox';
-import { TagIcon } from '@heroicons/react/solid';
+import { TagIcon } from '@heroicons/react/24/solid';
 
 
 interface FilterTagProps {

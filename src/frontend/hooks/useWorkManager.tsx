@@ -34,13 +34,13 @@ export const useWorkManager = () => {
         setData([...dat])
     }
     useEffect(() => {
-        window.myAPI.getAllWorks().then((works) => {
+        window.myAPI.getWorks().then((works) => {
             setData(works)
         })
     }, [])
     useEffect(() => {
         if (!data) return
-        window.myAPI.postAllWorks(data)
+        window.myAPI.postWorks(data)
     }, [data])
 
     return {

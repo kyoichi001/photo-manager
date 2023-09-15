@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Tag from '../tag/tag';
 import TagData from '../../../entity/tag_data';
 import WorkData from '../../../entity/work_data';
-import { TrashIcon } from '@heroicons/react/solid'
+import { TrashIcon } from '@heroicons/react/24/solid'
 
 interface FileInfoProps {
     work?: WorkData

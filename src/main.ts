@@ -1,6 +1,9 @@
 import path from 'path';
 import { BrowserWindow, app, session, protocol, Menu, globalShortcut } from 'electron';
 import { searchDevtools } from 'electron-search-devtools';
+import { WorkSpaceController } from './backend/controller/workSpaceController';
+
+var workspaceController=new WorkSpaceController()
 
 const isDev = process.env.NODE_ENV === 'development';
 function initWindowMenu() {
@@ -9,10 +12,13 @@ function initWindowMenu() {
       label: 'ファイル',
       submenu: [
         {
-          label: 'Load directory',
-          click: async () => { },
-          accelerator: "Ctrl+N"
+          label: 'Add directory',
+          click: async () => { 
+            await workspaceController.OpenDialogToAddDirectory()
+          },
+          //accelerator: "Ctrl+N"
         },
+        
         { role: 'quit' }
       ]
     },
@@ -21,7 +27,6 @@ function initWindowMenu() {
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
 }
-
 
 // 開発モードの場合はホットリロードする
 if (isDev) {

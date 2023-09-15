@@ -1,3 +1,5 @@
+import { GetDirectoriesInDirectoryInteractor } from "../interactor/FileTree/getDirectoriesInDirectory";
+import { GetFilesInDirectoryInteractor } from "../interactor/FileTree/getFilesInDirectory";
 import { GetDirectoriesInDirectoryInputData, IGetDirectoriesInDirectoryUseCase } from "../usecase/FileTree/getDirectoriesInDirectory";
 import { GetFilesInDirectoryInputData, IGetFilesInDirectoryUseCase } from "../usecase/FileTree/getFilesInDirectory";
 
@@ -5,9 +7,9 @@ export class FileTreeController {
     private readonly getDirectoriesInDirectory: IGetDirectoriesInDirectoryUseCase;
     private readonly getFilesInDirectory: IGetFilesInDirectoryUseCase;
 
-    constructor(getDirectoriesInDirectory: IGetDirectoriesInDirectoryUseCase, getFilesInDirectory: IGetFilesInDirectoryUseCase) {
-        this.getDirectoriesInDirectory = getDirectoriesInDirectory;
-        this.getFilesInDirectory = getFilesInDirectory;
+    constructor() {
+        this.getDirectoriesInDirectory = new GetDirectoriesInDirectoryInteractor();
+        this.getFilesInDirectory = new GetFilesInDirectoryInteractor();
     }
     public GetDirectoriesInDirectory(path: string) {
         const inputData: GetDirectoriesInDirectoryInputData = {

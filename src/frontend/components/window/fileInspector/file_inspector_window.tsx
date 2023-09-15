@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { TagIcon, DatabaseIcon, CogIcon } from '@heroicons/react/solid'
+import { TagIcon, CircleStackIcon, CogIcon } from '@heroicons/react/24/solid'
 import FolderData from '@/entity/folder';
 import FolderInspector from './foler_inspector';
 

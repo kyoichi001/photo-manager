@@ -3,7 +3,7 @@ import TagData from "../../entity/tag_data"
 import { useEffect, useState } from "react"
 import SaveFileData from "@/entity/saveFileData"
 
-export const useSaveData = () => {
+/*export const useSaveData = () => {
     const [data, setData] = useState<SaveFileData | undefined | null>(undefined)
     useEffect(() => {
         window.myAPI.loadInitData().then((data) => {
@@ -22,4 +22,4 @@ export const useSaveData = () => {
     return {
         data,
     }
-}
+}*/

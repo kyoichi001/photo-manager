@@ -1,4 +1,4 @@
-import { GetSaveDataInputData, GetSaveDataOutputData, IGetSaveDataUseCase } from "@/backend/usecase/WorkSpace/getsaveData"
+import { GetSaveDataInputData, GetSaveDataOutputData, IGetSaveDataUseCase } from "@/backend/usecase/WorkSpace/getSaveData"
 import fs from "fs";
 
 export class GetSaveDataInteractor implements IGetSaveDataUseCase {

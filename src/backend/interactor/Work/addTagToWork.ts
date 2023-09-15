@@ -12,7 +12,7 @@ export class AddTagToWorkInteractor implements IAddTagToWorkUseCase {
     }
 
     public async addTagToWork(input: AddTagToWorkInputData) {
-        let worksData = await this.getWorks.getWorks({ path: input.workID })
+        let worksData = await this.getWorks.getWorks({})
         let works = worksData.works
         for (let work of works) {
             if (work.path === input.workID.uuid) {

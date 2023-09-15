@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { TagIcon, DatabaseIcon, CogIcon } from '@heroicons/react/solid'
+import { TagIcon, CircleStackIcon, CogIcon } from '@heroicons/react/24/solid'
 
 interface AppMenuProps {
     onClickMenu: (menu: string) => void
@@ -14,7 +14,7 @@ export default function AppMenu(props: AppMenuProps) {
             <p className='text-xl border-b-2 text-white p-2'>App Menu</p>
             <div className={'text-white w-100 cursor-pointer p-2 ' + (props.currentScene === "all_works" ? activeClassName : normalClassName)}
                 onClick={() => props.onClickMenu("all_works")}>
-                <DatabaseIcon className='h-5 w-5 text-gray-200 inline-block m-1' />
+                <CircleStackIcon className='h-5 w-5 text-gray-200 inline-block m-1' />
                 すべての作品
             </div>
             <div className={'text-white w-100 cursor-pointer p-2 ' + (props.currentScene === "tags" ? activeClassName : normalClassName)}

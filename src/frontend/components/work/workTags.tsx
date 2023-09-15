@@ -1,7 +1,7 @@
 import React, { CSSProperties, useMemo, useRef, useState } from 'react';
 import WorkData from '../../../entity/work_data';
 import TagData from '../../../entity/tag_data';
-import { PlusIcon } from '@heroicons/react/solid';
+import { PlusIcon } from '@heroicons/react/24/solid';
 import ITagFactory from '../../factory/iTagFactory';
 import ITagDataFactory from '../../factory/iTagDataFactory';
 

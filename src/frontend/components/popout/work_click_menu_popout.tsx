@@ -2,7 +2,7 @@ import React, { ChangeEvent, CSSProperties, useMemo, useRef, useState } from 're
 import WorkData from '../../../entity/work_data';
 import { useClickAway, useDisclosure, useKeypress } from '../../hooks/popout_hooks';
 import Popout from './popout';
-import { TrashIcon, TagIcon } from '@heroicons/react/solid';
+import { TrashIcon, TagIcon } from '@heroicons/react/24/solid';
 
 
 interface WorkClickMenuPopoutProps {

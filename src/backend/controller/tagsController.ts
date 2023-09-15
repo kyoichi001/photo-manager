@@ -4,6 +4,13 @@ import { DeleteTagInputData, IDeleteTagUseCase } from "../usecase/Tag/deleteTag"
 import { GetTagInputData, IGetTagUseCase } from "../usecase/Tag/getTag";
 import { GetTagsInputData, IGetTagsUseCase } from "../usecase/Tag/getTags";
 import { IRenewTagUseCase, RenewTagInputData } from "../usecase/Tag/renewTag";
+import { CreateTagInteractor } from "../interactor/Tag/createTag";
+import { DeleteTagInteractor } from "../interactor/Tag/deleteTag";
+import { GetTagsInteractor } from "../interactor/Tag/getTags";
+import { GetTagInteractor } from "../interactor/Tag/getTag";
+import { RenewTagInteractor } from "../interactor/Tag/renewTag";
+import { IPostTagsUseCase } from "../usecase/Tag/postTags";
+import { PostTagsInteractor } from "../interactor/Tag/postTags";
 
 class TagsController {
     private readonly createTag: ICreateTagUseCase;
@@ -11,13 +18,15 @@ class TagsController {
     private readonly getTags: IGetTagsUseCase;
     private readonly getTag: IGetTagUseCase;
     private readonly renewTag: IRenewTagUseCase;
+    private readonly postTag: IPostTagsUseCase;
 
-    constructor(createTag: ICreateTagUseCase, eraceTag: IDeleteTagUseCase, getTags: IGetTagsUseCase, getTag: IGetTagUseCase, renewTag: IRenewTagUseCase) {
-        this.createTag = createTag;
-        this.deleteTag = eraceTag;
-        this.getTags = getTags;
-        this.getTag = getTag;
-        this.renewTag = renewTag;
+    constructor() {
+        this.getTags = new GetTagsInteractor();
+        this.postTag=new PostTagsInteractor();
+        this.getTag = new GetTagInteractor(this.getTags);
+        this.createTag = new CreateTagInteractor(this.getTags,this.postTag);
+        this.deleteTag = new DeleteTagInteractor(this.getTags,this.postTag);
+        this.renewTag = new RenewTagInteractor(this.getTags,this.postTag);
     }
     public AddTag(name?: string) {
         const inputData: CreateTagInputData = {
